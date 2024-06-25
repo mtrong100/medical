@@ -4,6 +4,7 @@ import {
   GENDER,
   PROFILE_IMAGE,
 } from "./constanst.js";
+import jwt from "jsonwebtoken";
 
 export const autoGeneratePassword = () => {
   const generatedPassword =
@@ -86,6 +87,6 @@ export const getEmployeeSalary = (role) => {
     case EMPLOYEE_ROLE.GUARD:
       return EMPLOYEE_SALARY.GUARD;
     default:
-      return "Lương không xác định";
+      return 100;
   }
 };

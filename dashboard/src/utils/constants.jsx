@@ -31,11 +31,6 @@ export const SIDEBAR_LINKS = [
   },
   {
     icon: "pi pi-users",
-    name: "Bác sĩ",
-    link: "/doctor",
-  },
-  {
-    icon: "pi pi-users",
     name: "Nhân viên",
     link: "/employee",
   },
@@ -102,35 +97,6 @@ export const commonSpecialtiesInPrivateClinics = [
   "Y học cổ truyền",
 ];
 
-export const accountStatus = [
-  EMPLOYEE_STATUS.ISWORKING,
-  EMPLOYEE_STATUS.ISFIRED,
-  EMPLOYEE_STATUS.ISLOCKED,
-];
-
-export const genders = [GENDER.MALE, GENDER.FEMALE];
-
-export const roles = [
-  EMPLOYEE_ROLE.DOCTOR,
-  EMPLOYEE_ROLE.ADMIN,
-  EMPLOYEE_ROLE.CASHIER,
-  EMPLOYEE_ROLE.RECEPTIONIST,
-  EMPLOYEE_ROLE.NURSE,
-  EMPLOYEE_ROLE.ACCOUNTANT,
-  EMPLOYEE_ROLE.CLEANING_STAFF,
-  EMPLOYEE_ROLE.GUARD,
-];
-
-export const salaries = [
-  EMPLOYEE_SALARY.DOCTOR,
-  EMPLOYEE_SALARY.CASHIER,
-  EMPLOYEE_SALARY.RECEPTIONIST,
-  EMPLOYEE_SALARY.NURSE,
-  EMPLOYEE_SALARY.ACCOUNTANT,
-  EMPLOYEE_SALARY.CLEANING_STAFF,
-  EMPLOYEE_SALARY.GUARD,
-];
-
 export const terminationReasons = [
   "Vi phạm kỷ luật công ty",
   "Hiệu suất làm việc thấp kéo dài",
@@ -192,4 +158,33 @@ export const MEDICINE_UNITS = [
   "Dung dịch",
   "Bột",
   "Viên nang",
+];
+
+export const accountStatus = [
+  EMPLOYEE_STATUS.ISWORKING,
+  EMPLOYEE_STATUS.ISFIRED,
+  EMPLOYEE_STATUS.ISLOCKED,
+];
+
+export const genders = [GENDER.MALE, GENDER.FEMALE];
+
+export const roles = [
+  EMPLOYEE_ROLE.DOCTOR,
+  EMPLOYEE_ROLE.ADMIN,
+  EMPLOYEE_ROLE.CASHIER,
+  EMPLOYEE_ROLE.RECEPTIONIST,
+  EMPLOYEE_ROLE.NURSE,
+  EMPLOYEE_ROLE.ACCOUNTANT,
+  EMPLOYEE_ROLE.CLEANING_STAFF,
+  EMPLOYEE_ROLE.GUARD,
+];
+
+export const salaries = [
+  EMPLOYEE_SALARY.DOCTOR,
+  EMPLOYEE_SALARY.CASHIER,
+  EMPLOYEE_SALARY.RECEPTIONIST,
+  EMPLOYEE_SALARY.NURSE,
+  EMPLOYEE_SALARY.ACCOUNTANT,
+  EMPLOYEE_SALARY.CLEANING_STAFF,
+  EMPLOYEE_SALARY.GUARD,
 ];

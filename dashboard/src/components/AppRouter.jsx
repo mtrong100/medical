@@ -15,13 +15,12 @@ const ManageMedicalService = lazy(() =>
 );
 const ManageMedicine = lazy(() => import("../pages/ManageMedicine"));
 const ManagePatient = lazy(() => import("../pages/ManagePatient"));
-const ManageDoctor = lazy(() => import("../pages/ManageDoctor"));
 const ManagePrescription = lazy(() => import("../pages/ManagePrescription"));
 const ManageRoom = lazy(() => import("../pages/ManageRoom"));
 const ManageDevice = lazy(() => import("../pages/ManageDevice"));
-const ManageEmployee = lazy(() => import("../pages/ManageDevice"));
-const UpdateDoctor = lazy(() => import("../pages/UpdateDoctor"));
-const DoctorDetail = lazy(() => import("../pages/DoctorDetail"));
+const ManageEmployee = lazy(() => import("../pages/ManageEmployee"));
+const UpdateEmployee = lazy(() => import("../pages/UpdateEmployee"));
+const EmployeeDetail = lazy(() => import("../pages/EmployeeDetail"));
 
 const MAIN_ROUTES = [
   { path: "/", element: <Dashboard /> },
@@ -31,13 +30,12 @@ const MAIN_ROUTES = [
   { path: "/medical-service", element: <ManageMedicalService /> },
   { path: "/medicine", element: <ManageMedicine /> },
   { path: "/patient", element: <ManagePatient /> },
-  { path: "/doctor", element: <ManageDoctor /> },
   { path: "/employee", element: <ManageEmployee /> },
   { path: "/prescription", element: <ManagePrescription /> },
   { path: "/room", element: <ManageRoom /> },
   { path: "/device", element: <ManageDevice /> },
-  { path: "/doctor/update/:id", element: <UpdateDoctor /> },
-  { path: "/doctor/:id", element: <DoctorDetail /> },
+  { path: "/employee/update/:id", element: <UpdateEmployee /> },
+  { path: "/employee/:id", element: <EmployeeDetail /> },
 ];
 
 const AppRouter = () => {

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { PROFILE_IMAGES } from "../utils/constanst.js";
+import { PROFILE_IMAGE } from "../utils/constanst.js";
 
 const userSchema = new mongoose.Schema(
   {
@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       required: true,
-      default: PROFILE_IMAGES.DEFAULT,
+      default: PROFILE_IMAGE.DEFAULT,
     },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlength: 6 },

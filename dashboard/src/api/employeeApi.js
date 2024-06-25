@@ -34,3 +34,8 @@ export const employeeLoginApi = async (data) => {
   const response = await axios.post("/employee/login", data);
   return response;
 };
+
+export const getAllEmployeesApi = async () => {
+  const response = await axios.get("/employee/get-all");
+  return response;
+};

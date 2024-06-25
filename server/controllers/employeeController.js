@@ -45,13 +45,13 @@ export const employeeLogin = async (req, res) => {
 
 export const createNewEmployee = async (req, res) => {
   const { role, gender, password, avatar, salary, ...data } = req.body;
-  const employeeRole = req.employee.role;
+  // const employeeRole = req.employee.role;
 
-  if (employeeRole !== EMPLOYEE_ROLE.ADMIN) {
-    return res
-      .status(400)
-      .json({ error: "Không có quyền thực hiện thao tác này" });
-  }
+  // if (employeeRole !== EMPLOYEE_ROLE.ADMIN) {
+  //   return res
+  //     .status(400)
+  //     .json({ error: "Không có quyền thực hiện thao tác này" });
+  // }
 
   try {
     const avatarUrl = getAvatarUrl(role, gender);
@@ -66,6 +66,7 @@ export const createNewEmployee = async (req, res) => {
       avatar: avatarUrl,
       salary: employeeSalary,
       password: hash,
+      role,
     });
 
     await newEmployee.save();
@@ -243,11 +244,13 @@ export const getAllEmployees = async (req, res) => {
       .sort({ createdAt: -1 });
 
     const total = await Employee.countDocuments(query);
+    const totalPages = Math.ceil(total / limit);
 
     return res.status(200).json({
-      employees,
-      total,
-      page: parseInt(page),
+      results: employees,
+      totalResutls: total,
+      totalPages,
+      currentPage: parseInt(page),
       limit: parseInt(limit),
     });
   } catch (error) {

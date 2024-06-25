@@ -1,7 +1,7 @@
-import Doctor from "./models/doctorModel.js";
+import Employee from "./models/employeeModel.js";
 import bcrypt from "bcrypt";
 
-const doctorArray = [
+const DataArray = [
   [
     {
       _id: "66781cc2156d0db697f8fd71",
@@ -19,6 +19,7 @@ const doctorArray = [
       createdAt: "2024-06-23T13:01:54.334Z",
       updatedAt: "2024-06-23T13:01:54.334Z",
       avatar: "https://avatar.iran.liara.run/public/job/doctor/male",
+      role: "Bác sĩ",
       __v: 0,
     },
     {
@@ -34,6 +35,7 @@ const doctorArray = [
       password: "password456",
       isDeleted: false,
       status: "Đang làm việc",
+      role: "Bác sĩ",
       avatar: "https://avatar.iran.liara.run/public/job/doctor/male",
       createdAt: "2024-06-23T13:20:04.132Z",
       updatedAt: "2024-06-23T13:20:04.132Z",
@@ -52,6 +54,7 @@ const doctorArray = [
       password: "password101",
       isDeleted: false,
       status: "Đang làm việc",
+      role: "Bác sĩ",
       avatar: "https://avatar.iran.liara.run/public/job/doctor/male",
       createdAt: "2024-06-23T13:21:58.946Z",
       updatedAt: "2024-06-23T13:21:58.946Z",
@@ -70,6 +73,7 @@ const doctorArray = [
       password: "password789",
       isDeleted: false,
       status: "Đang làm việc",
+      role: "Bác sĩ",
       avatar: "https://avatar.iran.liara.run/public/job/doctor/female",
       createdAt: "2024-06-23T13:22:57.459Z",
       updatedAt: "2024-06-23T13:22:57.459Z",
@@ -88,6 +92,7 @@ const doctorArray = [
       password: "password202",
       isDeleted: false,
       status: "Đang làm việc",
+      role: "Bác sĩ",
       avatar: "https://avatar.iran.liara.run/public/job/doctor/female",
       createdAt: "2024-06-23T13:23:49.486Z",
       updatedAt: "2024-06-23T13:23:49.486Z",
@@ -98,14 +103,17 @@ const doctorArray = [
 
 export const insertData = async () => {
   try {
-    for (let doctor of doctorArray[0]) {
-      const hashedPassword = await bcrypt.hash(doctor.password, 10);
-      doctor.password = hashedPassword;
-      const newDoctor = new Doctor(doctor);
-      await newDoctor.save();
+    for (let item of DataArray[0]) {
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(item.password, salt);
+      item.password = hashedPassword;
+
+      const newData = new Employee(item);
+      await newData.save();
     }
-    console.log("Doctors inserted successfully");
+
+    console.log("Data inserted successfully");
   } catch (error) {
-    console.log("Error inserting doctors:", error);
+    console.log("Error inserting Data:", error);
   }
 };

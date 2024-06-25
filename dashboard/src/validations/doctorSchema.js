@@ -1,6 +1,6 @@
 import * as yup from "yup";
 
-export const doctorSchema = yup.object().shape({
+export const employeeSchema = yup.object().shape({
   name: yup
     .string()
     .min(2, "Tên phải có ít nhất 2 ký tự")
@@ -29,7 +29,7 @@ export const doctorSchema = yup.object().shape({
     .required("Địa chỉ là bắt buộc"),
 });
 
-export const updatedDoctorSchema = yup.object().shape({
+export const updatedEmployeeSchema = yup.object().shape({
   name: yup
     .string()
     .min(2, "Tên phải có ít nhất 2 ký tự")

@@ -5,13 +5,15 @@ import { loginSchema } from "../validations/loginSchema";
 import FieldInput from "../components/FieldInput";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
-import { loginApi } from "../api/userApi";
 import { useDispatch } from "react-redux";
 import { storeCurrentUser } from "../redux/slices/userSlice";
+import { employeeLoginApi } from "../api/employeeApi";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const toast = useRef(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -30,7 +32,7 @@ const Login = () => {
     try {
       const body = { ...values };
 
-      const res = await loginApi(body);
+      const res = await employeeLoginApi(body);
 
       dispatch(storeCurrentUser(res));
 
@@ -39,6 +41,8 @@ const Login = () => {
         summary: "Đăng nhập thành công",
         life: 1500,
       });
+
+      navigate("/");
     } catch (error) {
       console.log("Error: ", error.message);
       toast.current.show({

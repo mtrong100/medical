@@ -1,10 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  firedDoctorApi,
-  getDoctorDetailApi,
-  updateDoctorApi,
-} from "../api/doctorApi";
 import TitleSection from "../components/TitleSection";
 import { Image } from "primereact/image";
 import { useForm } from "react-hook-form";
@@ -18,7 +13,9 @@ import { formatDate, parseDate } from "../utils/helper";
 import {
   accountStatus,
   commonSpecialtiesInPrivateClinics,
+  genders,
   medicalSchoolsInVietnam,
+  roles,
   terminationReasons,
 } from "../utils/constants";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -31,22 +28,28 @@ import {
 } from "firebase/storage";
 import FileInput from "../components/FileInput";
 import { Editor } from "primereact/editor";
-import { updatedDoctorSchema } from "../validations/doctorSchema";
+import { updatedEmployeeSchema } from "../validations/doctorSchema";
 import { passwordSchema } from "../validations/passwordSchema";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Divider } from "primereact/divider";
+import {
+  getEmployeeDetaillApi,
+  terminatedEmployeeApi,
+  updateEmployeeApi,
+} from "../api/employeeApi";
 
-const UpdateDoctor = () => {
-  const genders = ["Nam", "Nữ"];
-  const { id: doctorId } = useParams();
-  const [doctor, setDoctor] = useState(null);
+const UpdateEmployee = () => {
+  const { id: employeeId } = useParams();
+  const navigate = useNavigate();
+  const toast = useRef(null);
+
+  const [employee, setEmployee] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedGraduate, setSelectedGraduate] = useState(null);
   const [selectedSpecialization, setSelectedSpecialization] = useState(null);
-  const toast = useRef(null);
+  const [selectedRole, setSelectedRole] = useState(null);
   const [date, setDate] = useState(null);
-  const navigate = useNavigate();
   const [avatar, setAvatar] = useState("");
   const [isUploading, setIsUploading] = useState(false);
   const [text, setText] = useState("");
@@ -61,48 +64,63 @@ const UpdateDoctor = () => {
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onchange",
-    resolver: yupResolver(updatedDoctorSchema),
+    resolver: yupResolver(updatedEmployeeSchema),
   });
 
   useEffect(() => {
-    fetchDoctorDetail();
+    fetchEmployeeDetail();
   }, []);
 
   useEffect(() => {
-    if (doctor) {
-      reset({ ...doctor });
-      setSelectedGender(doctor.gender);
-      setSelectedGraduate(doctor.graduatedFrom);
-      setSelectedSpecialization(doctor.specialization);
-      setDate(parseDate(doctor.dateOfBirth));
-      setText(doctor.description);
-      setSelectedStatus(doctor.status);
-      setAvatar(doctor.avatar);
+    if (employee) {
+      reset({ ...employee });
+      setSelectedRole(employee.role);
+      setSelectedGender(employee.gender);
+      setSelectedGraduate(employee.graduatedFrom);
+      setSelectedSpecialization(employee.specialization);
+      setDate(parseDate(employee.dateOfBirth));
+      setText(employee.description);
+      setSelectedStatus(employee.status);
+      setAvatar(employee.avatar);
     }
-  }, [doctor, reset]);
+  }, [employee, reset]);
 
-  const fetchDoctorDetail = async () => {
+  const fetchEmployeeDetail = async () => {
     try {
       setLoading(true);
-      const res = await getDoctorDetailApi(doctorId);
-      setDoctor(res);
+      const res = await getEmployeeDetaillApi(employeeId);
+      if (res) setEmployee(res);
     } catch (error) {
       console.log("Error: ", error);
+      setEmployee(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleUpdateDoctor = async (values) => {
-    if (
-      !date ||
-      !selectedGender ||
-      !selectedGraduate ||
-      !selectedSpecialization
-    ) {
+  const handleUpdateEmployee = async (values) => {
+    if (!date) {
       toast.current.show({
         severity: "error",
-        summary: "Vui lòng điền đầy đủ vào form",
+        summary: "Vui lòng chọn ngày sinh",
+        life: 1500,
+      });
+      return;
+    }
+
+    if (!selectedGender) {
+      toast.current.show({
+        severity: "error",
+        summary: "Vui lòng chọn giới tính",
+        life: 1500,
+      });
+      return;
+    }
+
+    if (!selectedRole) {
+      toast.current.show({
+        severity: "error",
+        summary: "Vui lòng chọn vai trò",
         life: 1500,
       });
       return;
@@ -116,9 +134,10 @@ const UpdateDoctor = () => {
         specialization: selectedSpecialization,
         dateOfBirth: formatDate(date),
         avatar: avatar,
+        role: selectedRole,
       };
 
-      await updateDoctorApi(doctorId, body);
+      await updateEmployeeApi(employeeId, body);
 
       toast.current.show({
         severity: "success",
@@ -163,7 +182,7 @@ const UpdateDoctor = () => {
   const handleUpdateDescription = async () => {
     try {
       const body = { description: text };
-      await updateDoctorApi(doctorId, body);
+      await updateEmployeeApi(employeeId, body);
       toast.current.show({
         severity: "success",
         summary: "Cập nhật hoàn tất",
@@ -179,7 +198,7 @@ const UpdateDoctor = () => {
     }
   };
 
-  const handleFiredDoctor = async () => {
+  const handleTerminateEmployee = async () => {
     if (!selectedReason && !otherReason) {
       toast.current.show({
         severity: "error",
@@ -191,12 +210,12 @@ const UpdateDoctor = () => {
 
     try {
       const body = {
-        name: doctor?.name,
-        email: doctor?.email,
+        name: employee?.name,
+        email: employee?.email,
         reason: selectedReason || otherReason,
       };
 
-      await firedDoctorApi(doctorId, body);
+      await terminatedEmployeeApi(employeeId, body);
 
       toast.current.show({
         severity: "success",
@@ -216,7 +235,7 @@ const UpdateDoctor = () => {
   const handleUpdateStatus = async () => {
     try {
       const body = { status: selectedSatus };
-      await updateDoctorApi(doctorId, body);
+      await updateEmployeeApi(employeeId, body);
       toast.current.show({
         severity: "success",
         summary: "Cập nhật hoàn tất",
@@ -242,7 +261,7 @@ const UpdateDoctor = () => {
 
   return (
     <div>
-      <TitleSection>Cập nhật bác sĩ</TitleSection>
+      <TitleSection>Cập nhật nhân viên</TitleSection>
 
       <Toast ref={toast} />
 
@@ -271,7 +290,7 @@ const UpdateDoctor = () => {
             <TabView>
               <TabPanel header="Cập nhật thông tin cá nhân">
                 <div className="m-0">
-                  <form onSubmit={handleSubmit(handleUpdateDoctor)}>
+                  <form onSubmit={handleSubmit(handleUpdateEmployee)}>
                     <div className="grid grid-cols-2 gap-5">
                       <FieldInput
                         label="Tên"
@@ -326,7 +345,7 @@ const UpdateDoctor = () => {
                       </div>
 
                       <div className="flex flex-col gap-2 w-full">
-                        <label>Tốt nghiệp từ trường</label>
+                        <label>Tốt nghiệp</label>
                         <Dropdown
                           value={selectedGraduate}
                           onChange={(e) => setSelectedGraduate(e.value)}
@@ -347,6 +366,17 @@ const UpdateDoctor = () => {
                         />
                       </div>
 
+                      <div className="flex flex-col gap-2">
+                        <label>Vai trò</label>
+                        <Dropdown
+                          value={selectedRole}
+                          onChange={(e) => setSelectedRole(e.value)}
+                          options={roles}
+                          placeholder="Chọn vai trò"
+                          className="w-full "
+                        />
+                      </div>
+
                       <FieldInput
                         label="Lương cơ bản"
                         type="number"
@@ -360,7 +390,7 @@ const UpdateDoctor = () => {
                     <div className="flex items-center gap-5 justify-center mt-10">
                       <Button
                         type="button"
-                        onClick={() => navigate("/doctor")}
+                        onClick={() => navigate("/employee")}
                         label="Quay về"
                         severity="secondary"
                       />
@@ -384,7 +414,7 @@ const UpdateDoctor = () => {
                   <div className="flex items-center gap-5 justify-end mt-10">
                     <Button
                       type="button"
-                      onClick={() => navigate("/doctor")}
+                      onClick={() => navigate("/employee")}
                       label="Quay về"
                       severity="secondary"
                     />
@@ -398,7 +428,7 @@ const UpdateDoctor = () => {
               </TabPanel>
               <TabPanel header="Cập nhật mật khẩu">
                 <div className="m-0">
-                  <UpdatePassowrd doctorId={doctorId} />
+                  <UpdatePassowrd employeeId={employeeId} />
                 </div>
               </TabPanel>
               <TabPanel header="Cập nhật tài khoản">
@@ -450,7 +480,7 @@ const UpdateDoctor = () => {
                     <div className="flex items-center gap-5 justify-end">
                       <Button
                         type="button"
-                        onClick={() => navigate("/doctor")}
+                        onClick={() => navigate("/employee")}
                         label="Quay về"
                         severity="secondary"
                       />
@@ -458,7 +488,7 @@ const UpdateDoctor = () => {
                       <Button
                         type="submit"
                         label="Gửi email buộc thôi việc"
-                        onClick={handleFiredDoctor}
+                        onClick={handleTerminateEmployee}
                       />
                     </div>
                   </div>
@@ -472,9 +502,9 @@ const UpdateDoctor = () => {
   );
 };
 
-export default UpdateDoctor;
+export default UpdateEmployee;
 
-function UpdatePassowrd({ doctorId }) {
+function UpdatePassowrd({ employeeId }) {
   const {
     register,
     handleSubmit,
@@ -496,7 +526,7 @@ function UpdatePassowrd({ doctorId }) {
     try {
       const body = { ...values };
 
-      await updateDoctorApi(doctorId, body);
+      await updateEmployeeApi(employeeId, body);
 
       toast.current.show({
         severity: "success",
@@ -541,7 +571,7 @@ function UpdatePassowrd({ doctorId }) {
       <div className="flex items-center gap-5 justify-end mt-10">
         <Button
           type="button"
-          onClick={() => navigate("/doctor")}
+          onClick={() => navigate("/employee")}
           label="Quay về"
           severity="secondary"
         />

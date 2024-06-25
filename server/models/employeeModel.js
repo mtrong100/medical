@@ -14,7 +14,7 @@ const employeeSchema = new mongoose.Schema(
     address: { type: String, required: true },
     password: { type: String, required: true },
     isDeleted: { type: Boolean, default: false, required: true },
-    salary: { type: Number, required: true },
+    salary: { type: Number, required: true, default: 13000000 },
     description: { type: String },
     role: { type: String, required: true },
     status: {
