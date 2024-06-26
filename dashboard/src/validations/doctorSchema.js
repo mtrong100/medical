@@ -27,6 +27,10 @@ export const employeeSchema = yup.object().shape({
     .min(5, "Địa chỉ phải có ít nhất 5 ký tự")
     .max(200, "Địa chỉ không được vượt quá 200 ký tự")
     .required("Địa chỉ là bắt buộc"),
+  salary: yup
+    .number()
+    .min(5000000, "Lương phải lớn hơn hoặc bằng 5000000")
+    .required("Lương là bắt buộc"),
 });
 
 export const updatedEmployeeSchema = yup.object().shape({

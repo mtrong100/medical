@@ -8,7 +8,7 @@ const DashboardSidebar = () => {
   const location = useLocation();
 
   return (
-    <div className="w-[300px] border border-right h-screen p-3 shadow-sm">
+    <div className="w-[300px] border border-right h-screen p-3 shadow-sm flex-shrink-0">
       <h1 className="text-center text-3xl font-bold flex items-center gap-2 justify-center">
         Medical <FaBriefcaseMedical size={30} />
       </h1>

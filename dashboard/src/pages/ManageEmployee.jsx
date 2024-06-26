@@ -1,21 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import TitleSection from "../components/TitleSection";
 import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { employeeSchema } from "../validations/doctorSchema";
-import FieldInput from "../components/FieldInput";
-import { Calendar } from "primereact/calendar";
-import { Dropdown } from "primereact/dropdown";
 import {
   EMPLOYEE_STATUS,
+  accountStatus,
   commonSpecialtiesInPrivateClinics,
   genders,
   medicalSchoolsInVietnam,
   roles,
 } from "../utils/constants";
-import { formatDate } from "../utils/helper";
 import { Toast } from "primereact/toast";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
@@ -25,11 +18,8 @@ import { InputText } from "primereact/inputtext";
 import useDebounce from "../hooks/useDebounce";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import {
-  createNewEmployeeApi,
-  deleteEmployeeApi,
-  getAllEmployeesApi,
-} from "../api/employeeApi";
+import { deleteEmployeeApi, getAllEmployeesApi } from "../api/employeeApi";
+import { Dropdown } from "primereact/dropdown";
 
 const cols = [
   { field: "name", header: "Tên" },
@@ -45,13 +35,19 @@ const ManageEmployee = () => {
   const navigate = useNavigate();
   const toast = useRef(null);
   const dt = useRef(null);
-
-  const [visible, setVisible] = useState(false);
-  const [date, setDate] = useState(null);
-  const [selectedGender, setSelectedGender] = useState(null);
-  const [selectedGraduate, setSelectedGraduate] = useState(null);
-  const [selectedSpecialization, setSelectedSpecialization] = useState(null);
-  const [selectedRole, setSelectedRole] = useState(null);
+  const [paginator, setPaginator] = useState({
+    totalPages: 1,
+    currentPage: 1,
+    totalResults: 0,
+  });
+  const [limit, setLimit] = useState(10);
+  const [filters, setFilters] = useState({
+    graduatedFrom: "",
+    specialization: "",
+    gender: "",
+    role: "",
+    status: "",
+  });
 
   const [employees, setEmployees] = useState([]);
   const [query, setQuery] = useState("");
@@ -61,92 +57,31 @@ const ManageEmployee = () => {
     return item.name.toLowerCase().includes(queryValue.toLowerCase());
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    mode: "onchange",
-    resolver: yupResolver(employeeSchema),
-    defaultValues: {
-      name: "",
-      phoneNumber: "",
-      email: "",
-      address: "",
-    },
-  });
-
   useEffect(() => {
-    fetchEmployee();
-  }, []);
+    const fetchEmployees = async () => {
+      try {
+        const params = {
+          page: paginator.currentPage,
+          limit,
+          ...filters,
+        };
+        const res = await getAllEmployeesApi(params);
+        if (res) {
+          setEmployees(res.results);
+          setPaginator({
+            ...paginator,
+            totalResults: res.totalResults,
+            totalPages: res.totalPages,
+            currentPage: res.currentPage,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching employees:", error);
+      }
+    };
 
-  const fetchEmployee = async () => {
-    try {
-      const res = await getAllEmployeesApi();
-      if (res) setEmployees(res?.results);
-    } catch (error) {
-      console.log("Error: ", error);
-      setEmployees([]);
-    }
-  };
-
-  const handleAddNewEmployee = async (values) => {
-    if (!date) {
-      toast.current.show({
-        severity: "error",
-        summary: "Vui lòng chọn ngày sinh",
-        life: 1500,
-      });
-      return;
-    }
-
-    if (!selectedGender) {
-      toast.current.show({
-        severity: "error",
-        summary: "Vui lòng chọn giới tính",
-        life: 1500,
-      });
-      return;
-    }
-
-    if (!selectedRole) {
-      toast.current.show({
-        severity: "error",
-        summary: "Vui lòng chọn vai trò",
-        life: 1500,
-      });
-      return;
-    }
-
-    try {
-      const body = {
-        ...values,
-        gender: selectedGender,
-        graduatedFrom: selectedGraduate,
-        specialization: selectedSpecialization,
-        role: selectedRole,
-        dateOfBirth: formatDate(date),
-      };
-
-      await createNewEmployeeApi(body);
-      const res = await getAllEmployeesApi();
-      setEmployees(res?.results);
-
-      toast.current.show({
-        severity: "success",
-        summary: "Thêm mới hoàn tất",
-        life: 1500,
-      });
-    } catch (error) {
-      console.log("Error: ", error);
-      setEmployees([]);
-      toast.current.show({
-        severity: "error",
-        summary: "Lỗi",
-        life: 1500,
-      });
-    }
-  };
+    fetchEmployees();
+  }, [filters, limit, paginator.currentPage]);
 
   const handleDeleteEmployee = async (employee) => {
     const result = await Swal.fire({
@@ -325,18 +260,79 @@ const ManageEmployee = () => {
     );
   };
 
+  const resetFilter = () => {
+    setFilters({
+      graduatedFrom: "",
+      specialization: "",
+      gender: "",
+      role: "",
+      status: "",
+    });
+  };
+
+  const onPrevPage = () => {
+    if (paginator.currentPage === 1) return;
+    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage - 1 }));
+  };
+
+  const onNextPage = () => {
+    if (paginator.currentPage === paginator.totalPages) return;
+    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage + 1 }));
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
-        <TitleSection>Quản lí bác sĩ</TitleSection>
+        <TitleSection>Quản lí nhân viên</TitleSection>
         <Button
           label="Thêm mới"
           icon="pi pi-plus"
-          onClick={() => setVisible(true)}
+          onClick={() => navigate("/employee/create")}
         />
       </div>
 
-      <div className="mt-8">
+      {/* Filter */}
+      <div className="mt-5 flex items-center gap-3 flex-wrap">
+        <h1 className="text-xl font-semibold">Bộ lọc: </h1>
+        <Button onClick={resetFilter} label="Đặt lại" icon="pi pi-refresh" />
+
+        <Dropdown
+          value={filters.gender}
+          onChange={(e) => setFilters({ ...filters, gender: e.value })}
+          options={genders}
+          placeholder="Chọn giới tính"
+        />
+
+        <Dropdown
+          value={filters.graduatedFrom}
+          onChange={(e) => setFilters({ ...filters, graduatedFrom: e.value })}
+          options={medicalSchoolsInVietnam}
+          placeholder="Chọn trường đã tốt nghiệp"
+        />
+
+        <Dropdown
+          value={filters.specialization}
+          onChange={(e) => setFilters({ ...filters, specialization: e.value })}
+          options={commonSpecialtiesInPrivateClinics}
+          placeholder="Chọn chuyên khoa"
+        />
+
+        <Dropdown
+          value={filters.role}
+          onChange={(e) => setFilters({ ...filters, role: e.value })}
+          options={roles}
+          placeholder="Chọn vai trò"
+        />
+
+        <Dropdown
+          value={filters.status}
+          onChange={(e) => setFilters({ ...filters, status: e.value })}
+          options={accountStatus}
+          placeholder="Chọn trạng thái"
+        />
+      </div>
+
+      <div className="mt-5">
         <DataTable
           ref={dt}
           value={filteredEmployee}
@@ -344,19 +340,63 @@ const ManageEmployee = () => {
           scrollable
           stripedRows
           showGridlines
+          style={{ overflow: "auto" }}
         >
-          <Column field="name" header="Tên" sortable />
-          <Column field="email" header="Email" sortable />
-          <Column field="phoneNumber" header="SĐT" sortable />
-          <Column field="gender" header="Giới tính" sortable />
-          <Column field="dateOfBirth" header="Ngày sinh" sortable />
+          <Column field="_id" header="ID" sortable />
+          <Column
+            field="name"
+            header="Tên"
+            sortable
+            style={{ minWidth: "200px" }}
+          />
+          <Column
+            field="email"
+            header="Email"
+            sortable
+            style={{ minWidth: "150px" }}
+          />
+          <Column
+            field="phoneNumber"
+            header="SĐT"
+            sortable
+            style={{ minWidth: "150px" }}
+          />
+          <Column
+            field="gender"
+            header="Giới tính"
+            sortable
+            style={{ minWidth: "150px" }}
+          />
+          <Column
+            field="dateOfBirth"
+            header="Ngày sinh"
+            sortable
+            style={{ minWidth: "150px" }}
+          />
           <Column
             field="graduatedFrom"
             header="Tốt nghiệp"
             sortable
-            style={{ maxWidth: "150px" }}
+            style={{ minWidth: "200px" }}
           />
-          <Column field="specialization" header="Chuyên khoa" sortable />
+          <Column
+            field="specialization"
+            header="Chuyên khoa"
+            sortable
+            style={{ minWidth: "200px" }}
+          />
+          <Column
+            field="role"
+            header="Vai trò"
+            sortable
+            style={{ minWidth: "150px" }}
+          />
+          <Column
+            field="salary"
+            header="Lương cơ bản"
+            sortable
+            style={{ minWidth: "200px" }}
+          />
           <Column
             field="status"
             header="Trạng thái"
@@ -373,123 +413,15 @@ const ManageEmployee = () => {
         </DataTable>
       </div>
 
-      <Dialog
-        header="Form thêm mới nhân viên"
-        visible={visible}
-        style={{ width: "35vw" }}
-        onHide={() => {
-          if (!visible) return;
-          setVisible(false);
-        }}
-      >
-        <form
-          onSubmit={handleSubmit(handleAddNewEmployee)}
-          className="m-0 space-y-5"
-        >
-          <FieldInput
-            label="Tên"
-            type="text"
-            name="name"
-            htmlFor="name"
-            register={register}
-            errorMessage={errors?.name?.message}
-          />
-
-          <FieldInput
-            label="Số điện thoại"
-            type="phoneNumber"
-            name="phoneNumber"
-            htmlFor="phoneNumber"
-            register={register}
-            errorMessage={errors?.phoneNumber?.message}
-          />
-          <FieldInput
-            label="Địa chỉ"
-            type="address"
-            name="address"
-            htmlFor="address"
-            register={register}
-            errorMessage={errors?.address?.message}
-          />
-          <FieldInput
-            label="Email"
-            type="email"
-            name="email"
-            htmlFor="email"
-            register={register}
-            errorMessage={errors?.email?.message}
-          />
-          <FieldInput
-            label="Mật khẩu"
-            type="password"
-            name="password"
-            htmlFor="password"
-            register={register}
-            errorMessage={errors?.password?.message}
-          />
-
-          <div className="flex flex-col gap-2">
-            <label>Ngày sinh</label>
-            <Calendar
-              id="buttondisplay"
-              value={date}
-              onChange={(e) => setDate(e.value)}
-              showIcon
-            />
+      {paginator.totalResults > limit && (
+        <div className="flex items-center  justify-end mt-8 gap-2">
+          <Button onClick={onPrevPage} icon="pi pi-angle-left" />
+          <div className="flex items-center gap-2 text-xl  font-semibold">
+            <p>{paginator.currentPage}</p> / <p>{paginator.totalPages}</p>
           </div>
-
-          <div className="flex flex-col gap-2">
-            <label>Giới tính</label>
-            <Dropdown
-              value={selectedGender}
-              onChange={(e) => setSelectedGender(e.value)}
-              options={genders}
-              placeholder="Chọn giới tính"
-              className="w-full "
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label>Tốt nghiệp</label>
-            <Dropdown
-              value={selectedGraduate}
-              onChange={(e) => setSelectedGraduate(e.value)}
-              options={medicalSchoolsInVietnam}
-              placeholder="Chọn trường đã tốt nghiệp"
-              className="w-full "
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label>Chuyên khoa</label>
-            <Dropdown
-              value={selectedSpecialization}
-              onChange={(e) => setSelectedSpecialization(e.value)}
-              options={commonSpecialtiesInPrivateClinics}
-              placeholder="Chọn chuyên khoa"
-              className="w-full "
-            />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label>Vai trò</label>
-            <Dropdown
-              value={selectedRole}
-              onChange={(e) => setSelectedRole(e.value)}
-              options={roles}
-              placeholder="Chọn vai trò"
-              className="w-full "
-            />
-          </div>
-
-          <Button
-            type="submit"
-            label="Xác nhận"
-            className="w-full"
-            disabled={isSubmitting}
-          />
-        </form>
-      </Dialog>
+          <Button onClick={onNextPage} icon="pi pi-angle-right" />
+        </div>
+      )}
 
       <Toast ref={toast} />
     </div>

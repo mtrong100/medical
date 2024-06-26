@@ -9,7 +9,7 @@ import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
-import { formatDate, parseDate } from "../utils/helper";
+import { formatDate, formatSalary, parseDate } from "../utils/helper";
 import {
   accountStatus,
   commonSpecialtiesInPrivateClinics,

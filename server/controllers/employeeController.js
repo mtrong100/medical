@@ -248,7 +248,7 @@ export const getAllEmployees = async (req, res) => {
 
     return res.status(200).json({
       results: employees,
-      totalResutls: total,
+      totalResults: total,
       totalPages,
       currentPage: parseInt(page),
       limit: parseInt(limit),

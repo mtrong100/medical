@@ -95,6 +95,7 @@ export const commonSpecialtiesInPrivateClinics = [
   "Vật lý trị liệu",
   "Chẩn đoán hình ảnh",
   "Y học cổ truyền",
+  "Điều dưỡng",
 ];
 
 export const terminationReasons = [

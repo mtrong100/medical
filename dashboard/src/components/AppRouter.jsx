@@ -21,6 +21,7 @@ const ManageDevice = lazy(() => import("../pages/ManageDevice"));
 const ManageEmployee = lazy(() => import("../pages/ManageEmployee"));
 const UpdateEmployee = lazy(() => import("../pages/UpdateEmployee"));
 const EmployeeDetail = lazy(() => import("../pages/EmployeeDetail"));
+const AddNewEmployee = lazy(() => import("../pages/AddNewEmployee"));
 
 const MAIN_ROUTES = [
   { path: "/", element: <Dashboard /> },
@@ -36,6 +37,7 @@ const MAIN_ROUTES = [
   { path: "/device", element: <ManageDevice /> },
   { path: "/employee/update/:id", element: <UpdateEmployee /> },
   { path: "/employee/:id", element: <EmployeeDetail /> },
+  { path: "/employee/create", element: <AddNewEmployee /> },
 ];
 
 const AppRouter = () => {
