@@ -45,13 +45,13 @@ export const employeeLogin = async (req, res) => {
 
 export const createNewEmployee = async (req, res) => {
   const { role, gender, password, avatar, salary, ...data } = req.body;
-  // const employeeRole = req.employee.role;
+  const employeeRole = req.employee.role;
 
-  // if (employeeRole !== EMPLOYEE_ROLE.ADMIN) {
-  //   return res
-  //     .status(400)
-  //     .json({ error: "Không có quyền thực hiện thao tác này" });
-  // }
+  if (employeeRole !== EMPLOYEE_ROLE.ADMIN) {
+    return res
+      .status(400)
+      .json({ error: "Không có quyền thực hiện thao tác này" });
+  }
 
   try {
     const avatarUrl = getAvatarUrl(role, gender);

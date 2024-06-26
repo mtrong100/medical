@@ -340,7 +340,7 @@ const ManageEmployee = () => {
           scrollable
           stripedRows
           showGridlines
-          style={{ overflow: "auto" }}
+          emptyMessage="Không tìm thấy nhân viên"
         >
           <Column field="_id" header="ID" sortable />
           <Column

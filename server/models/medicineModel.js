@@ -2,12 +2,16 @@ import mongoose from "mongoose";
 
 const medicineSchema = new mongoose.Schema(
   {
-    medicineName: { type: String, required: true },
+    name: { type: String, required: true },
     description: { type: String },
-    dosage: { type: String },
     price: { type: Number, required: true },
     stock: { type: Number, required: true },
     unit: { type: String, required: true },
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "MedicineCategory",
+      required: true,
+    },
   },
   {
     timestamps: true,
