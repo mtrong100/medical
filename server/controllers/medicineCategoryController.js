@@ -34,7 +34,7 @@ export const deleteMedicineCategory = async (req, res) => {
     if (medicineCount > 0) {
       return res
         .status(400)
-        .json({ error: "Không thể xóa danh mục đã có thuốc" });
+        .json({ message: "Không thể xóa danh mục đã có thuốc" });
     }
 
     await MedicineCategory.findByIdAndDelete(id);

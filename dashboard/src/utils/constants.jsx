@@ -25,6 +25,11 @@ export const SIDEBAR_LINKS = [
     link: "/medicine",
   },
   {
+    icon: "pi pi-box",
+    name: "Danh mục thuốc",
+    link: "/medicine-category",
+  },
+  {
     icon: "pi pi-book",
     name: "Đơn thuốc",
     link: "/prescription",
