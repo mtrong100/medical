@@ -20,6 +20,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { deleteEmployeeApi, getAllEmployeesApi } from "../api/employeeApi";
 import { Dropdown } from "primereact/dropdown";
+import { formatCurrencyVND } from "../utils/helper";
 
 const cols = [
   { field: "name", header: "Tên" },
@@ -54,7 +55,11 @@ const ManageEmployee = () => {
   const queryValue = useDebounce(query, 500);
 
   const filteredEmployee = employees.filter((item) => {
-    return item.name.toLowerCase().includes(queryValue.toLowerCase());
+    return (
+      item.name.toLowerCase().includes(queryValue.toLowerCase()) ||
+      item.email.toLowerCase().includes(queryValue.toLowerCase()) ||
+      item._id.includes(queryValue.toLowerCase())
+    );
   });
 
   useEffect(() => {
@@ -260,6 +265,10 @@ const ManageEmployee = () => {
     );
   };
 
+  const salaryBodyTemplate = (rowData) => {
+    return <div>{formatCurrencyVND(rowData.salary)}</div>;
+  };
+
   const resetFilter = () => {
     setFilters({
       graduatedFrom: "",
@@ -293,43 +302,63 @@ const ManageEmployee = () => {
 
       {/* Filter */}
       <div className="mt-5 flex items-center gap-3 flex-wrap">
-        <h1 className="text-xl font-semibold">Bộ lọc: </h1>
-        <Button onClick={resetFilter} label="Đặt lại" icon="pi pi-refresh" />
+        <div className="flex items-center gap-2 w-[200px]">
+          <h1 className="text-xl font-semibold">Bộ lọc: </h1>
+          <Button onClick={resetFilter} label="Đặt lại" icon="pi pi-refresh" />
+        </div>
 
-        <Dropdown
-          value={filters.gender}
-          onChange={(e) => setFilters({ ...filters, gender: e.value })}
-          options={genders}
-          placeholder="Chọn giới tính"
-        />
+        <div className="flex-1 flex items-center gap-3">
+          <Dropdown
+            value={filters.gender}
+            onChange={(e) => setFilters({ ...filters, gender: e.value })}
+            options={genders}
+            placeholder="Chọn giới tính"
+            className="w-full"
+          />
 
-        <Dropdown
-          value={filters.graduatedFrom}
-          onChange={(e) => setFilters({ ...filters, graduatedFrom: e.value })}
-          options={medicalSchoolsInVietnam}
-          placeholder="Chọn trường đã tốt nghiệp"
-        />
+          <Dropdown
+            value={filters.graduatedFrom}
+            onChange={(e) => setFilters({ ...filters, graduatedFrom: e.value })}
+            options={medicalSchoolsInVietnam}
+            placeholder="Chọn trường đã tốt nghiệp"
+            className="w-full"
+            filter
+            filterPlaceholder="Tìm kiếm"
+            scrollHeight="400px"
+          />
 
-        <Dropdown
-          value={filters.specialization}
-          onChange={(e) => setFilters({ ...filters, specialization: e.value })}
-          options={commonSpecialtiesInPrivateClinics}
-          placeholder="Chọn chuyên khoa"
-        />
+          <Dropdown
+            value={filters.specialization}
+            onChange={(e) =>
+              setFilters({ ...filters, specialization: e.value })
+            }
+            options={commonSpecialtiesInPrivateClinics}
+            placeholder="Chọn chuyên khoa"
+            className="w-full"
+            filter
+            filterPlaceholder="Tìm kiếm"
+            scrollHeight="400px"
+          />
 
-        <Dropdown
-          value={filters.role}
-          onChange={(e) => setFilters({ ...filters, role: e.value })}
-          options={roles}
-          placeholder="Chọn vai trò"
-        />
+          <Dropdown
+            value={filters.role}
+            onChange={(e) => setFilters({ ...filters, role: e.value })}
+            options={roles}
+            placeholder="Chọn vai trò"
+            className="w-full"
+            filter
+            filterPlaceholder="Tìm kiếm"
+            scrollHeight="400px"
+          />
 
-        <Dropdown
-          value={filters.status}
-          onChange={(e) => setFilters({ ...filters, status: e.value })}
-          options={accountStatus}
-          placeholder="Chọn trạng thái"
-        />
+          <Dropdown
+            value={filters.status}
+            onChange={(e) => setFilters({ ...filters, status: e.value })}
+            options={accountStatus}
+            placeholder="Chọn trạng thái"
+            className="w-full"
+          />
+        </div>
       </div>
 
       <div className="mt-5">
@@ -395,6 +424,7 @@ const ManageEmployee = () => {
             field="salary"
             header="Lương cơ bản"
             sortable
+            body={salaryBodyTemplate}
             style={{ minWidth: "200px" }}
           />
           <Column
