@@ -45,13 +45,6 @@ export const employeeLogin = async (req, res) => {
 
 export const createNewEmployee = async (req, res) => {
   const { role, gender, password, avatar, salary, ...data } = req.body;
-  const employeeRole = req.employee.role;
-
-  if (employeeRole !== EMPLOYEE_ROLE.ADMIN) {
-    return res
-      .status(400)
-      .json({ error: "Không có quyền thực hiện thao tác này" });
-  }
 
   try {
     const avatarUrl = getAvatarUrl(role, gender);
@@ -81,13 +74,6 @@ export const createNewEmployee = async (req, res) => {
 export const updateEmployee = async (req, res) => {
   const { id } = req.params;
   const { password, confirmPassword, ...data } = req.body;
-  const employeeRole = req.employee.role;
-
-  if (employeeRole !== EMPLOYEE_ROLE.ADMIN) {
-    return res
-      .status(400)
-      .json({ error: "Không có quyền thực hiện thao tác này" });
-  }
 
   try {
     // Check case if update password
@@ -123,13 +109,6 @@ export const updateEmployee = async (req, res) => {
 
 export const deleteEmployee = async (req, res) => {
   const { id } = req.params;
-  const employeeRole = req.employee.role;
-
-  if (employeeRole !== EMPLOYEE_ROLE.ADMIN) {
-    return res
-      .status(400)
-      .json({ error: "Không có quyền thực hiện thao tác này" });
-  }
 
   try {
     await Employee.findByIdAndUpdate(
@@ -148,13 +127,6 @@ export const deleteEmployee = async (req, res) => {
 export const terminatedEmployee = async (req, res) => {
   const { id } = req.params;
   const { name, email, reason } = req.body;
-  const employeeRole = req.employee.role;
-
-  if (employeeRole !== EMPLOYEE_ROLE.ADMIN) {
-    return res
-      .status(400)
-      .json({ error: "Không có quyền thực hiện thao tác này" });
-  }
 
   try {
     await Employee.findByIdAndUpdate(
@@ -174,13 +146,6 @@ export const terminatedEmployee = async (req, res) => {
 
 export const lockEmployeeAccount = async (req, res) => {
   const { id } = req.params;
-  const employeeRole = req.employee.role;
-
-  if (employeeRole !== EMPLOYEE_ROLE.ADMIN) {
-    return res
-      .status(400)
-      .json({ error: "Không có quyền thực hiện thao tác này" });
-  }
 
   try {
     const updatedEmployee = await Employee.findByIdAndUpdate(

@@ -5,14 +5,15 @@ import {
   getAllMedicineCategory,
   updateMedicineCategory,
 } from "../controllers/medicineCategoryController.js";
+import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
 
 const router = express.Router();
 
-router.post("/create", createNewMedicineCategory);
+router.post("/create", verifySpecificRole, createNewMedicineCategory);
 
-router.put("/update/:id", updateMedicineCategory);
+router.put("/update/:id", verifySpecificRole, updateMedicineCategory);
 
-router.delete("/delete/:id", deleteMedicineCategory);
+router.delete("/delete/:id", verifySpecificRole, deleteMedicineCategory);
 
 router.get("/get-all", getAllMedicineCategory);
 

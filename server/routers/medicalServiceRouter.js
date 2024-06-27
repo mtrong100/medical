@@ -5,14 +5,15 @@ import {
   getAllServices,
   updateService,
 } from "../controllers/medicalServiceController.js";
+import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
 
 const router = express.Router();
 
-router.post("/create", createNewService);
+router.post("/create", verifySpecificRole, createNewService);
 
-router.put("/update/:id", updateService);
+router.put("/update/:id", verifySpecificRole, updateService);
 
-router.delete("/delete/:id", deleteService);
+router.delete("/delete/:id", verifySpecificRole, deleteService);
 
 router.get("/get-all", getAllServices);
 

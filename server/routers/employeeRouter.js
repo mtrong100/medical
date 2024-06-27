@@ -9,7 +9,7 @@ import {
   terminatedEmployee,
   updateEmployee,
 } from "../controllers/employeeController.js";
-import { protectedEmployee } from "../middlewares/protectedEmployee.js";
+import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
 
 const router = express.Router();
 
@@ -19,14 +19,14 @@ router.get("/get-all", getAllEmployees);
 
 router.get("/:id", getEmployeeDetail);
 
-router.post("/create", protectedEmployee, createNewEmployee);
+router.post("/create", verifySpecificRole, createNewEmployee);
 
-router.put("/update/:id", protectedEmployee, updateEmployee);
+router.put("/update/:id", verifySpecificRole, updateEmployee);
 
-router.delete("/delete/:id", protectedEmployee, deleteEmployee);
+router.delete("/delete/:id", verifySpecificRole, deleteEmployee);
 
-router.put("/terminated/:id", protectedEmployee, terminatedEmployee);
+router.put("/terminated/:id", verifySpecificRole, terminatedEmployee);
 
-router.put("/lock/:id", protectedEmployee, lockEmployeeAccount);
+router.put("/lock/:id", verifySpecificRole, lockEmployeeAccount);
 
 export default router;
