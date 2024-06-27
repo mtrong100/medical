@@ -3,15 +3,17 @@ import TitleSection from "../components/TitleSection";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { getAllMedicinesApi } from "../api/medicineApi";
+import { deleteMedicineApi, getAllMedicinesApi } from "../api/medicineApi";
 import useDebounce from "../hooks/useDebounce";
 import { InputText } from "primereact/inputtext";
-import { useNavigate } from "react-router-dom";
 import { formatCurrencyVND, formatDate } from "../utils/helper";
 import { Dropdown } from "primereact/dropdown";
 import { MEDICINE_UNITS } from "../utils/constants";
 import { getAllMedicineCategoriesApi } from "../api/medicineCategoryApi";
 import { font } from "../assets/font";
+import CreateNewMedicineModal from "../components/CreateNewMedicineModal";
+import UpdateMedicineModal from "../components/UpdateMedicineModal";
+import Swal from "sweetalert2";
 
 const cols = [
   { field: "_id", header: "ID" },
@@ -23,9 +25,7 @@ const cols = [
 ];
 
 const ManageMedicine = () => {
-  const navigate = useNavigate();
   const dt = useRef(null);
-  const toast = useRef(null);
   const [medicines, setMedcines] = useState([]);
   const [medicineCategories, setMedicineCategories] = useState([]);
   const [loading, setLoading] = useState([]);
@@ -35,31 +35,34 @@ const ManageMedicine = () => {
     unit: "",
     category: "",
   });
+  const [visible, setVisible] = useState(false);
+  const [visible2, setVisible2] = useState(false);
+  const [updateVal, setUpdateVal] = useState(null);
 
   useEffect(() => {
     fetchMedicineCategories();
   }, []);
 
   useEffect(() => {
-    const fetchMedicines = async () => {
-      setLoading(true);
-      try {
-        const params = {
-          ...filters,
-        };
-
-        const res = await getAllMedicinesApi(params);
-        if (res) setMedcines(res);
-      } catch (error) {
-        console.log("Error fetching medicine categories:", error);
-        setMedcines([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchMedicines();
   }, [filters]);
+
+  const fetchMedicines = async () => {
+    setLoading(true);
+    try {
+      const params = {
+        ...filters,
+      };
+
+      const res = await getAllMedicinesApi(params);
+      if (res) setMedcines(res);
+    } catch (error) {
+      console.log("Error fetching medicine categories:", error);
+      setMedcines([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchMedicineCategories = async () => {
     try {
@@ -86,11 +89,47 @@ const ManageMedicine = () => {
     });
   };
 
+  const deleteMedicine = async (medicine) => {
+    Swal.fire({
+      title: "Bạn có chắc chắn?",
+      text: `Bạn có muốn xoá thuốc ${medicine.name}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Có, xoá nó!",
+      cancelButtonText: "Không, giữ lại",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteMedicineApi(medicine._id);
+          if (res) {
+            Swal.fire("Đã xoá!", "Dữ liệu đã được xóa.", "success");
+            fetchMedicines();
+          }
+        } catch (error) {
+          console.log("Error deleting medicine:", error);
+          Swal.fire("Lỗi!", "Đã xảy ra sự cố khi xoá.", "error");
+        }
+      }
+    });
+  };
+
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex items-center gap-2">
-        <Button icon="pi pi-pencil" rounded />
-        <Button icon="pi pi-trash" rounded severity="danger" />
+        <Button
+          icon="pi pi-pencil"
+          rounded
+          onClick={() => {
+            setVisible2(true);
+            setUpdateVal(rowData);
+          }}
+        />
+        <Button
+          icon="pi pi-trash"
+          rounded
+          severity="danger"
+          onClick={() => deleteMedicine(rowData)}
+        />
       </div>
     );
   };
@@ -209,11 +248,19 @@ const ManageMedicine = () => {
     return <div>{formatCurrencyVND(rowData.price)}</div>;
   };
 
+  const totalBodyTemplate = (rowData) => {
+    return <div>{formatCurrencyVND(rowData.total || 0)} </div>;
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí thuốc</TitleSection>
-        <Button label="Thêm mới" icon="pi pi-plus" />
+        <Button
+          label="Thêm mới"
+          icon="pi pi-plus"
+          onClick={() => setVisible(true)}
+        />
       </div>
 
       {/* Filter */}
@@ -247,6 +294,7 @@ const ManageMedicine = () => {
         </div>
       </div>
 
+      {/* Render data  */}
       <div className="mt-5">
         <DataTable
           ref={dt}
@@ -269,6 +317,12 @@ const ManageMedicine = () => {
           />
           <Column field="stock" header="Tồn kho" sortable />
           <Column
+            field="total"
+            header="Tổng tiền"
+            sortable
+            body={totalBodyTemplate}
+          />
+          <Column
             field="createdAt"
             header="Ngày thêm"
             sortable
@@ -281,6 +335,21 @@ const ManageMedicine = () => {
           />
         </DataTable>
       </div>
+
+      <CreateNewMedicineModal
+        visible={visible}
+        setVisible={setVisible}
+        medicineCategories={medicineCategories}
+        fetchMedicines={fetchMedicines}
+      />
+
+      <UpdateMedicineModal
+        visible2={visible2}
+        setVisible2={setVisible2}
+        medicineCategories={medicineCategories}
+        fetchMedicines={fetchMedicines}
+        updateVal={updateVal}
+      />
     </div>
   );
 };

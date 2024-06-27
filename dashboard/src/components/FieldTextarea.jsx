@@ -1,14 +1,27 @@
 import React from "react";
 import { InputTextarea } from "primereact/inputtextarea";
 
-const FieldInput = ({ label, htmlFor, register, name, errorMessage, type }) => {
+const FieldTextarea = ({
+  label,
+  htmlFor,
+  register,
+  name,
+  errorMessage,
+  type,
+}) => {
   return (
-    <div className="flex flex-column gap-2">
+    <div className="flex flex-col gap-2">
       <label htmlFor={htmlFor}>{label}</label>
-      <InputTextarea type={type} id={htmlFor} {...register(`${name}`)} />
+      <InputTextarea
+        rows={5}
+        cols={30}
+        type={type}
+        id={htmlFor}
+        {...register(`${name}`)}
+      />
       {errorMessage && <small className="text-red-500">{errorMessage}</small>}
     </div>
   );
 };
 
-export default FieldInput;
+export default FieldTextarea;

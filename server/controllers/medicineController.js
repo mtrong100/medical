@@ -2,7 +2,14 @@ import Medicine from "../models/medicineModel.js";
 
 export const createNewMedicine = async (req, res) => {
   try {
-    const newMedicine = new Medicine(req.body);
+    const { price, stock } = req.body;
+    const total = (price * stock).toFixed(2);
+
+    const newMedicine = new Medicine({
+      ...req.body,
+      total,
+    });
+
     await newMedicine.save();
     res.status(200).json(newMedicine);
   } catch (error) {
@@ -13,13 +20,29 @@ export const createNewMedicine = async (req, res) => {
 
 export const updateMedicine = async (req, res) => {
   try {
+    const { price, stock } = req.body;
+
+    const currentMedicine = await Medicine.findById(req.params.id);
+
+    if (!currentMedicine) {
+      return res.status(404).json({ error: "Không tìm thấy thuốc" });
+    }
+
+    const newPrice = price !== undefined ? price : currentMedicine.price;
+    const newStock = stock !== undefined ? stock : currentMedicine.stock;
+    const total = parseFloat((newPrice * newStock).toFixed(2));
+
     const updatedMedicine = await Medicine.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      {
+        ...req.body,
+        total,
+      },
       {
         new: true,
       }
     );
+
     res.status(200).json(updatedMedicine);
   } catch (error) {
     console.log("Error in updateMedicine controller", error);
