@@ -62,7 +62,7 @@ export const deleteMedicine = async (req, res) => {
 
 export const getAllMedicine = async (req, res) => {
   try {
-    const { category, unit } = req.query;
+    const { page = 1, limit = 10, category, unit } = req.query;
 
     const filter = {};
 
@@ -74,11 +74,24 @@ export const getAllMedicine = async (req, res) => {
       filter.unit = unit;
     }
 
+    const skip = (page - 1) * limit;
+
     const medicines = await Medicine.find(filter)
+      .skip(skip)
+      .limit(parseInt(limit))
       .populate("category", "_id name")
       .sort({ createdAt: -1 });
 
-    return res.status(200).json(medicines);
+    const total = await Medicine.countDocuments(filter);
+    const totalPages = Math.ceil(total / limit);
+
+    return res.status(200).json({
+      results: medicines,
+      totalResults: total,
+      totalPages,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+    });
   } catch (error) {
     console.log("Error in getAllMedicine controller", error);
     return res.status(500).json({ error: "Internal server error" });

@@ -1,119 +1,108 @@
-import Employee from "./models/employeeModel.js";
-import bcrypt from "bcrypt";
+import Medicine from "./models/medicineModel.js";
 
-const DataArray = [
-  [
-    {
-      _id: "66781cc2156d0db697f8fd71",
-      name: "Nguyễn Thị Mai",
-      graduatedFrom: "Đại học Y Hải Phòng",
-      specialization: "Nhi khoa",
-      phoneNumber: "0912345678",
-      email: "nguyenthimai@gmail.com",
-      dateOfBirth: "22/08/1985",
-      gender: "Nữ",
-      address: "123 Đường ABC, Quận 1, TP. Hồ Chí Minh",
-      password: "password123",
-      isDeleted: false,
-      status: "Đang làm việc",
-      createdAt: "2024-06-23T13:01:54.334Z",
-      updatedAt: "2024-06-23T13:01:54.334Z",
-      avatar: "https://avatar.iran.liara.run/public/job/doctor/male",
-      role: "Bác sĩ",
-      __v: 0,
-    },
-    {
-      _id: "6678210422cd65799ff167ce",
-      name: "Trần Văn Bình",
-      graduatedFrom: "Đại học Y Dược TP. Hồ Chí Minh",
-      specialization: "Nội khoa",
-      phoneNumber: "0987654321",
-      email: "tranvanbinh@gmail.com",
-      dateOfBirth: "18/09/1985",
-      gender: "Nam",
-      address: "456 Đường DEF, Quận 5, TP. Hồ Chí Minh",
-      password: "password456",
-      isDeleted: false,
-      status: "Đang làm việc",
-      role: "Bác sĩ",
-      avatar: "https://avatar.iran.liara.run/public/job/doctor/male",
-      createdAt: "2024-06-23T13:20:04.132Z",
-      updatedAt: "2024-06-23T13:20:04.132Z",
-      __v: 0,
-    },
-    {
-      _id: "6678217622cd65799ff167d7",
-      name: "Phạm Minh Hoàng",
-      graduatedFrom: "Đại học Y Dược - Đại học Quốc gia Hà Nội",
-      specialization: "Ngoại khoa",
-      phoneNumber: "0933445566",
-      email: "phamminhhoang@gmail.com",
-      dateOfBirth: "29/08/1987",
-      gender: "Nam",
-      address: "101 Đường JKL, Quận 7, TP. Hồ Chí Minh",
-      password: "password101",
-      isDeleted: false,
-      status: "Đang làm việc",
-      role: "Bác sĩ",
-      avatar: "https://avatar.iran.liara.run/public/job/doctor/male",
-      createdAt: "2024-06-23T13:21:58.946Z",
-      updatedAt: "2024-06-23T13:21:58.946Z",
-      __v: 0,
-    },
-    {
-      _id: "667821b122cd65799ff167da",
-      name: "Lê Thị Hạnh",
-      graduatedFrom: "Đại học Y Dược Huế",
-      specialization: "Tai mũi họng",
-      phoneNumber: "0911223344",
-      email: "lethihanh@gmail.com",
-      dateOfBirth: "29/08/1987",
-      gender: "Nữ",
-      address: "789 Đường GHI, Quận 5, TP. Hồ Chí Minh",
-      password: "password789",
-      isDeleted: false,
-      status: "Đang làm việc",
-      role: "Bác sĩ",
-      avatar: "https://avatar.iran.liara.run/public/job/doctor/female",
-      createdAt: "2024-06-23T13:22:57.459Z",
-      updatedAt: "2024-06-23T13:22:57.459Z",
-      __v: 0,
-    },
-    {
-      _id: "667821e522cd65799ff167dd",
-      name: "Hoàng Thị Lan",
-      graduatedFrom: "Học viện Quân y",
-      specialization: "Da liễu",
-      phoneNumber: "0977556677",
-      email: "hoangthilan@gmail.com",
-      dateOfBirth: "25/05/1994",
-      gender: "Nữ",
-      address: "202 Đường MNO, Quận 9, TP. Hồ Chí Minh",
-      password: "password202",
-      isDeleted: false,
-      status: "Đang làm việc",
-      role: "Bác sĩ",
-      avatar: "https://avatar.iran.liara.run/public/job/doctor/female",
-      createdAt: "2024-06-23T13:23:49.486Z",
-      updatedAt: "2024-06-23T13:23:49.486Z",
-      __v: 0,
-    },
-  ],
+const medicinesData = [
+  {
+    name: "Montelukast",
+    description:
+      "Thuốc điều trị hen suyễn Montelukast, giảm triệu chứng khò khè, khó thở.",
+    price: 180000,
+    stock: 40,
+    unit: "Hộp",
+    category: "667bea414d1a8446ea8dfbb1", // Thuốc điều trị hen suyễn và BPTNM
+  },
+  {
+    name: "Desogestrel",
+    description:
+      "Thuốc ngừa thai Desogestrel, giảm nguy cơ mang thai không mong muốn.",
+    price: 250000,
+    stock: 30,
+    unit: "Vỉ",
+    category: "667bea364d1a8446ea8dfbaf", // Thuốc ngừa thai
+  },
+  {
+    name: "Quetiapine",
+    description:
+      "Thuốc điều trị rối loạn tâm thần Quetiapine, ổn định tâm trạng và giảm triệu chứng lo âu.",
+    price: 300000,
+    stock: 25,
+    unit: "Vỉ",
+    category: "667bea2f4d1a8446ea8dfbad", // Thuốc điều trị rối loạn tâm thần
+  },
+  {
+    name: "Calcium + Vitamin D3",
+    description:
+      "Thuốc bổ sung Canxi và Vitamin D3, giúp duy trì xương chắc khỏe.",
+    price: 120000,
+    stock: 50,
+    unit: "Hộp",
+    category: "667bea254d1a8446ea8dfbab", // Thuốc bổ sung vitamin và khoáng chất
+  },
+  {
+    name: "Ranitidine",
+    description:
+      "Thuốc điều trị dạ dày Ranitidine, giảm triệu chứng đầy hơi và tiêu chảy.",
+    price: 90000,
+    stock: 60,
+    unit: "Kem",
+    category: "667bea1e4d1a8446ea8dfba9", // Thuốc điều trị dạ dày và tiêu hóa
+  },
+  {
+    name: "Digoxin",
+    description:
+      "Thuốc chống loạn nhịp tim Digoxin, điều chỉnh nhịp tim và cải thiện tuần hoàn máu.",
+    price: 200000,
+    stock: 35,
+    unit: "Kem",
+    category: "667bea184d1a8446ea8dfba7", // Thuốc chống loạn nhịp tim
+  },
+  {
+    name: "Losartan",
+    description:
+      "Thuốc điều trị huyết áp Losartan, làm giảm huyết áp hiệu quả và bảo vệ thận.",
+    price: 150000,
+    stock: 40,
+    unit: "Vỉ",
+    category: "667bea104d1a8446ea8dfba5", // Thuốc huyết áp
+  },
+  {
+    name: "Gliclazide",
+    description:
+      "Thuốc điều trị tiểu đường Gliclazide, kiểm soát đường huyết và bảo vệ gan.",
+    price: 100000,
+    stock: 55,
+    unit: "Vỉ",
+    category: "667bea0a4d1a8446ea8dfba3", // Thuốc tiểu đường
+  },
+  {
+    name: "Phenylephrine",
+    description:
+      "Thuốc giảm ho và cảm cúm Phenylephrine, giảm ngứa mũi và nghẹt mũi hiệu quả.",
+    price: 80000,
+    stock: 70,
+    unit: "Vỉ",
+    category: "667bea024d1a8446ea8dfba1", // Thuốc giảm ho và cảm cúm
+  },
+  {
+    name: "Cetirizine",
+    description:
+      "Thuốc chống dị ứng Cetirizine, làm giảm các triệu chứng dị ứng như ngứa, chảy nước mắt.",
+    price: 120000,
+    stock: 45,
+    unit: "Vỉ",
+    category: "667be9fa4d1a8446ea8dfb9f", // Thuốc chống dị ứng
+  },
 ];
 
 export const insertData = async () => {
   try {
-    for (let item of DataArray[0]) {
-      const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hashSync(item.password, salt);
-      item.password = hashedPassword;
+    medicinesData.forEach((medicine) => {
+      const total = medicine.price * medicine.stock;
+      medicine.total = total.toFixed(2); // Định dạng kết quả với hai chữ số thập phân
+    });
 
-      const newData = new Employee(item);
-      await newData.save();
-    }
-
-    console.log("Data inserted successfully");
+    await Medicine.insertMany(medicinesData);
+    console.log("Đã chèn dữ liệu thành công");
   } catch (error) {
-    console.log("Error inserting Data:", error);
+    console.error("Lỗi khi chèn dữ liệu:", error);
   }
 };

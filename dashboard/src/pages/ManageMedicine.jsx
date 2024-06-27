@@ -14,6 +14,8 @@ import { font } from "../assets/font";
 import CreateNewMedicineModal from "../components/CreateNewMedicineModal";
 import UpdateMedicineModal from "../components/UpdateMedicineModal";
 import Swal from "sweetalert2";
+import { Dialog } from "primereact/dialog";
+import { Fieldset } from "primereact/fieldset";
 
 const cols = [
   { field: "_id", header: "ID" },
@@ -37,7 +39,15 @@ const ManageMedicine = () => {
   });
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
+  const [visible3, setVisible3] = useState(false);
   const [updateVal, setUpdateVal] = useState(null);
+  const [paginator, setPaginator] = useState({
+    totalPages: 1,
+    currentPage: 1,
+    totalResults: 0,
+  });
+  const [limit, setLimit] = useState(10);
+  const [medicineInfo, setMedicineInfo] = useState(null);
 
   useEffect(() => {
     fetchMedicineCategories();
@@ -45,17 +55,27 @@ const ManageMedicine = () => {
 
   useEffect(() => {
     fetchMedicines();
-  }, [filters]);
+  }, [filters, limit, paginator.currentPage]);
 
   const fetchMedicines = async () => {
     setLoading(true);
     try {
       const params = {
+        page: paginator.currentPage,
+        limit,
         ...filters,
       };
 
       const res = await getAllMedicinesApi(params);
-      if (res) setMedcines(res);
+      if (res) {
+        setMedcines(res.results);
+        setPaginator({
+          ...paginator,
+          totalResults: res.totalResults,
+          totalPages: res.totalPages,
+          currentPage: res.currentPage,
+        });
+      }
     } catch (error) {
       console.log("Error fetching medicine categories:", error);
       setMedcines([]);
@@ -116,6 +136,15 @@ const ManageMedicine = () => {
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex items-center gap-2">
+        <Button
+          icon="pi pi-eye"
+          rounded
+          severity="help"
+          onClick={() => {
+            setVisible3(true);
+            setMedicineInfo(rowData);
+          }}
+        />
         <Button
           icon="pi pi-pencil"
           rounded
@@ -252,6 +281,16 @@ const ManageMedicine = () => {
     return <div>{formatCurrencyVND(rowData.total || 0)} </div>;
   };
 
+  const onPrevPage = () => {
+    if (paginator.currentPage === 1) return;
+    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage - 1 }));
+  };
+
+  const onNextPage = () => {
+    if (paginator.currentPage === paginator.totalPages) return;
+    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage + 1 }));
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -307,8 +346,18 @@ const ManageMedicine = () => {
         >
           <Column field="_id" header="ID" sortable />
           <Column field="name" header="Tên" sortable />
-          <Column field="unit" header="Đơn vị" sortable />
-          <Column field="category.name" header="Danh mục" sortable />
+          <Column
+            field="unit"
+            header="Đơn vị"
+            sortable
+            style={{ width: "120px" }}
+          />
+          <Column
+            field="category.name"
+            header="Danh mục"
+            sortable
+            style={{ width: "200px" }}
+          />
           <Column
             field="price"
             header="Giá tiền"
@@ -336,6 +385,17 @@ const ManageMedicine = () => {
         </DataTable>
       </div>
 
+      {/* Paginator */}
+      {paginator.totalResults > limit && (
+        <div className="flex items-center  justify-end mt-8 gap-2">
+          <Button onClick={onPrevPage} icon="pi pi-angle-left" />
+          <div className="flex items-center gap-2 text-xl  font-semibold">
+            <p>{paginator.currentPage}</p> / <p>{paginator.totalPages}</p>
+          </div>
+          <Button onClick={onNextPage} icon="pi pi-angle-right" />
+        </div>
+      )}
+
       <CreateNewMedicineModal
         visible={visible}
         setVisible={setVisible}
@@ -350,6 +410,48 @@ const ManageMedicine = () => {
         fetchMedicines={fetchMedicines}
         updateVal={updateVal}
       />
+
+      <Dialog
+        header={`Thông tin thuốc ${medicineInfo?.name}`}
+        visible={visible3}
+        style={{ width: "50vw" }}
+        onHide={() => {
+          if (!visible3) return;
+          setVisible3(false);
+        }}
+      >
+        <div className="m-0">
+          <div className="grid grid-cols-2 gap-5">
+            <Fieldset legend="ID">
+              <p className="m-0">{medicineInfo?._id}</p>
+            </Fieldset>
+            <Fieldset legend="Tên">
+              <p className="m-0">{medicineInfo?.name}</p>
+            </Fieldset>
+            <Fieldset legend="Danh mục">
+              <p className="m-0">{medicineInfo?.category?.name}</p>
+            </Fieldset>
+            <Fieldset legend="Đơn vị">
+              <p className="m-0">{medicineInfo?.unit}</p>
+            </Fieldset>
+            <Fieldset legend="Giá tiền">
+              <p className="m-0">{formatCurrencyVND(medicineInfo?.price)}</p>
+            </Fieldset>
+            <Fieldset legend="Tồn kho">
+              <p className="m-0">{medicineInfo?.stock}</p>
+            </Fieldset>
+            <Fieldset legend="Tổng tiền">
+              <p className="m-0">{formatCurrencyVND(medicineInfo?.total)}</p>
+            </Fieldset>
+            <Fieldset legend="Ngày thêm">
+              <p className="m-0">{formatDate(medicineInfo?.createdAt)}</p>
+            </Fieldset>
+          </div>
+          <Fieldset legend="Mô tả">
+            <p className="m-0">{medicineInfo?.description}</p>
+          </Fieldset>
+        </div>
+      </Dialog>
     </div>
   );
 };
