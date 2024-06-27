@@ -13,7 +13,7 @@ const FieldTextarea = ({
     <div className="flex flex-col gap-2">
       <label htmlFor={htmlFor}>{label}</label>
       <InputTextarea
-        rows={5}
+        rows={4}
         cols={30}
         type={type}
         id={htmlFor}

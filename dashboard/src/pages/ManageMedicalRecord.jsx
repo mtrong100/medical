@@ -2,11 +2,19 @@ import React, { useEffect, useState } from "react";
 import TitleSection from "../components/TitleSection";
 import { Button } from "primereact/button";
 import useDebounce from "../hooks/useDebounce";
-import { getAllMedicalRecordsApi } from "../api/medicalRecordApi";
+import {
+  deleteMedicalRecordApi,
+  getAllMedicalRecordsApi,
+} from "../api/medicalRecordApi";
 import { DataTable } from "primereact/datatable";
 import { Column } from "jspdf-autotable";
 import { InputText } from "primereact/inputtext";
 import { formatDate } from "../utils/helper";
+import { Fieldset } from "primereact/fieldset";
+import { Dialog } from "primereact/dialog";
+import CreateNewMedicalRecordModal from "../components/CreateNewMedicalRecordModal";
+import UpdateMedicalRecordModal from "../components/UpdateMedicalRecordModal";
+import Swal from "sweetalert2";
 
 const ManageMedicalRecord = () => {
   const [loading, setLoading] = useState([]);
@@ -18,6 +26,7 @@ const ManageMedicalRecord = () => {
   const [visible3, setVisible3] = useState(false);
   const [updateVal, setUpdateVal] = useState(null);
   const [limit, setLimit] = useState(10);
+  const [recordInfo, setRecordInfo] = useState(null);
   const [paginator, setPaginator] = useState({
     totalPages: 1,
     currentPage: 1,
@@ -65,6 +74,30 @@ const ManageMedicalRecord = () => {
     }
   };
 
+  const deleteMedicalRecord = async (record) => {
+    Swal.fire({
+      title: "Bạn có chắc chắn?",
+      text: `Bạn có muốn xoá hồ sơ bệnh án này không?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Có, xoá nó!",
+      cancelButtonText: "Không, giữ lại",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteMedicalRecordApi(record._id);
+          if (res) {
+            Swal.fire("Đã xoá!", "Dữ liệu đã được xóa.", "success");
+            fetchMedicalRecords();
+          }
+        } catch (error) {
+          console.log("Error deleting medicine:", error);
+          Swal.fire("Lỗi!", "Đã xảy ra sự cố khi xoá.", "error");
+        }
+      }
+    });
+  };
+
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex items-center gap-2">
@@ -74,6 +107,7 @@ const ManageMedicalRecord = () => {
           severity="help"
           onClick={() => {
             setVisible3(true);
+            setRecordInfo(rowData);
           }}
         />
         <Button
@@ -88,7 +122,7 @@ const ManageMedicalRecord = () => {
           icon="pi pi-trash"
           rounded
           severity="danger"
-          // onClick={() => deletePatient(rowData)}
+          onClick={() => deleteMedicalRecord(rowData)}
         />
       </div>
     );
@@ -131,7 +165,7 @@ const ManageMedicalRecord = () => {
         <Button
           label="Thêm mới"
           icon="pi pi-plus"
-          // onClick={() => setVisible(true)}
+          onClick={() => setVisible(true)}
         />
       </div>
 
@@ -175,6 +209,51 @@ const ManageMedicalRecord = () => {
           <Button onClick={onNextPage} icon="pi pi-angle-right" />
         </div>
       )}
+
+      <CreateNewMedicalRecordModal
+        visible={visible}
+        setVisible={setVisible}
+        onRefresh={fetchMedicalRecords}
+      />
+      <UpdateMedicalRecordModal
+        visible2={visible2}
+        setVisible2={setVisible2}
+        onRefresh={fetchMedicalRecords}
+        updateVal={updateVal}
+      />
+
+      <Dialog
+        header={`Thông tin hồ sơ bệnh án`}
+        visible={visible3}
+        style={{ width: "50vw" }}
+        onHide={() => {
+          if (!visible3) return;
+          setVisible3(false);
+        }}
+      >
+        <div className="m-0">
+          <div className="grid grid-cols-2 gap-5">
+            <Fieldset legend="Bác sĩ khám">
+              <p className="m-0">{recordInfo?.doctor?.name}</p>
+            </Fieldset>
+            <Fieldset legend="Bệnh nhân">
+              <p className="m-0">{recordInfo?.patient?.name}</p>
+            </Fieldset>
+            <Fieldset legend="Chuẩn đoán">
+              <p className="m-0">{recordInfo?.diagnosis}</p>
+            </Fieldset>
+            <Fieldset legend="Trị liệu">
+              <p className="m-0">{recordInfo?.treatment}</p>
+            </Fieldset>
+            <Fieldset legend="Ghi chú">
+              <p className="m-0">{recordInfo?.notes}</p>
+            </Fieldset>
+            <Fieldset legend="Ngày lập hồ sơ">
+              <p className="m-0">{formatDate(recordInfo?.createdAt)}</p>
+            </Fieldset>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

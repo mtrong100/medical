@@ -9,7 +9,7 @@ export default function useGetDoctors() {
     const fetchDoctors = async () => {
       setLoading(true);
       try {
-        const res = await getAllEmployeesApi({ role: "Bác sĩ" });
+        const res = await getAllEmployeesApi({ role: "Bác sĩ" });
         if (res) setDoctors(res.results);
       } catch (error) {
         console.log("Error fetching doctors:", error);
