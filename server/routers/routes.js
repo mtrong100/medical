@@ -5,6 +5,7 @@ import medicineCategoryRouter from "./medicineCategoryRouter.js";
 import medicineRouter from "./medicineRouter.js";
 import patientRouter from "./patientRouter.js";
 import medicalServiceRouter from "./medicalServiceRouter.js";
+import medicalRecordRouter from "./medicalRecordRouter.js";
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.use("/medicine", medicineRouter);
 router.use("/medicine-category", medicineCategoryRouter);
 router.use("/patient", patientRouter);
 router.use("/medical-service", medicalServiceRouter);
+router.use("/medical-record", medicalRecordRouter);
 
 export default router;

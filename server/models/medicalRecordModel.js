@@ -2,14 +2,14 @@ import mongoose from "mongoose";
 
 const medicalRecordSchema = new mongoose.Schema(
   {
-    patientId: {
+    patient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Patient",
       required: true,
     },
-    doctorId: {
+    doctor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Doctor",
+      ref: "Employee",
       required: true,
     },
     diagnosis: { type: String, required: true },
