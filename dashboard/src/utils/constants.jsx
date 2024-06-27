@@ -31,7 +31,7 @@ export const SIDEBAR_LINKS = [
   },
   {
     icon: "pi pi-book",
-    name: "Đơn thuốc",
+    name: "Kê toa đơn thuốc",
     link: "/prescription",
   },
   {
