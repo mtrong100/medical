@@ -1,106 +1,92 @@
 import Medicine from "./models/medicineModel.js";
+import Patient from "./models/patientModel.js";
 
-const medicinesData = [
+const patientsData = [
   {
-    name: "Montelukast",
-    description:
-      "Thuốc điều trị hen suyễn Montelukast, giảm triệu chứng khò khè, khó thở.",
-    price: 180000,
-    stock: 40,
-    unit: "Hộp",
-    category: "667bea414d1a8446ea8dfbb1", // Thuốc điều trị hen suyễn và BPTNM
+    name: "Nguyễn Văn Nam",
+    dateOfBirth: "23/03/1995",
+    gender: "Nam",
+    phoneNumber: "0901234567",
+    email: "nguyenvannam@gmail.com",
+    address: "123 Đường A, Quận 1, TP.HCM",
   },
   {
-    name: "Desogestrel",
-    description:
-      "Thuốc ngừa thai Desogestrel, giảm nguy cơ mang thai không mong muốn.",
-    price: 250000,
-    stock: 30,
-    unit: "Vỉ",
-    category: "667bea364d1a8446ea8dfbaf", // Thuốc ngừa thai
+    name: "Trần Thị Lan",
+    dateOfBirth: "15/05/1985",
+    gender: "Nữ",
+    phoneNumber: "0912345678",
+    email: "tranthilan@gmail.com",
+    address: "456 Đường B, Quận 2, TP.HCM",
   },
   {
-    name: "Quetiapine",
-    description:
-      "Thuốc điều trị rối loạn tâm thần Quetiapine, ổn định tâm trạng và giảm triệu chứng lo âu.",
-    price: 300000,
-    stock: 25,
-    unit: "Vỉ",
-    category: "667bea2f4d1a8446ea8dfbad", // Thuốc điều trị rối loạn tâm thần
+    name: "Lê Hồng Phúc",
+    dateOfBirth: "10/10/1990",
+    gender: "Nam",
+    phoneNumber: "0923456789",
+    email: "lehongphuc@gmail.com",
+    address: "789 Đường C, Quận 3, TP.HCM",
   },
   {
-    name: "Calcium + Vitamin D3",
-    description:
-      "Thuốc bổ sung Canxi và Vitamin D3, giúp duy trì xương chắc khỏe.",
-    price: 120000,
-    stock: 50,
-    unit: "Hộp",
-    category: "667bea254d1a8446ea8dfbab", // Thuốc bổ sung vitamin và khoáng chất
+    name: "Phạm Văn Minh",
+    dateOfBirth: "25/12/1987",
+    gender: "Nam",
+    phoneNumber: "0934567890",
+    email: "phamvanminh@gmail.com",
+    address: "101 Đường D, Quận 4, TP.HCM",
   },
   {
-    name: "Ranitidine",
-    description:
-      "Thuốc điều trị dạ dày Ranitidine, giảm triệu chứng đầy hơi và tiêu chảy.",
-    price: 90000,
-    stock: 60,
-    unit: "Kem",
-    category: "667bea1e4d1a8446ea8dfba9", // Thuốc điều trị dạ dày và tiêu hóa
+    name: "Hoàng Thị Mai",
+    dateOfBirth: "14/02/1992",
+    gender: "Nữ",
+    phoneNumber: "0945678901",
+    email: "hoangthimai@gmail.com",
+    address: "202 Đường E, Quận 5, TP.HCM",
   },
   {
-    name: "Digoxin",
-    description:
-      "Thuốc chống loạn nhịp tim Digoxin, điều chỉnh nhịp tim và cải thiện tuần hoàn máu.",
-    price: 200000,
-    stock: 35,
-    unit: "Kem",
-    category: "667bea184d1a8446ea8dfba7", // Thuốc chống loạn nhịp tim
+    name: "Vũ Đình Hùng",
+    dateOfBirth: "30/07/1980",
+    gender: "Nam",
+    phoneNumber: "0956789012",
+    email: "vudinhhung@gmail.com",
+    address: "303 Đường F, Quận 6, TP.HCM",
   },
   {
-    name: "Losartan",
-    description:
-      "Thuốc điều trị huyết áp Losartan, làm giảm huyết áp hiệu quả và bảo vệ thận.",
-    price: 150000,
-    stock: 40,
-    unit: "Vỉ",
-    category: "667bea104d1a8446ea8dfba5", // Thuốc huyết áp
+    name: "Đặng Thị Hạnh",
+    dateOfBirth: "05/09/1975",
+    gender: "Nữ",
+    phoneNumber: "0967890123",
+    email: "dangthihanh@gmail.com",
+    address: "404 Đường G, Quận 7, TP.HCM",
   },
   {
-    name: "Gliclazide",
-    description:
-      "Thuốc điều trị tiểu đường Gliclazide, kiểm soát đường huyết và bảo vệ gan.",
-    price: 100000,
-    stock: 55,
-    unit: "Vỉ",
-    category: "667bea0a4d1a8446ea8dfba3", // Thuốc tiểu đường
+    name: "Ngô Văn Tuấn",
+    dateOfBirth: "17/11/1983",
+    gender: "Nam",
+    phoneNumber: "0978901234",
+    email: "ngovantuan@gmail.com",
+    address: "505 Đường H, Quận 8, TP.HCM",
   },
   {
-    name: "Phenylephrine",
-    description:
-      "Thuốc giảm ho và cảm cúm Phenylephrine, giảm ngứa mũi và nghẹt mũi hiệu quả.",
-    price: 80000,
-    stock: 70,
-    unit: "Vỉ",
-    category: "667bea024d1a8446ea8dfba1", // Thuốc giảm ho và cảm cúm
+    name: "Bùi Thị Ngọc",
+    dateOfBirth: "21/04/1996",
+    gender: "Nữ",
+    phoneNumber: "0989012345",
+    email: "buithingoc@gmail.com",
+    address: "606 Đường I, Quận 9, TP.HCM",
   },
   {
-    name: "Cetirizine",
-    description:
-      "Thuốc chống dị ứng Cetirizine, làm giảm các triệu chứng dị ứng như ngứa, chảy nước mắt.",
-    price: 120000,
-    stock: 45,
-    unit: "Vỉ",
-    category: "667be9fa4d1a8446ea8dfb9f", // Thuốc chống dị ứng
+    name: "Đỗ Thanh Bình",
+    dateOfBirth: "12/06/1989",
+    gender: "Nam",
+    phoneNumber: "0990123456",
+    email: "dothanhbinh@gmail.com",
+    address: "707 Đường J, Quận 10, TP.HCM",
   },
 ];
 
 export const insertData = async () => {
   try {
-    medicinesData.forEach((medicine) => {
-      const total = medicine.price * medicine.stock;
-      medicine.total = total.toFixed(2); // Định dạng kết quả với hai chữ số thập phân
-    });
-
-    await Medicine.insertMany(medicinesData);
+    await Patient.insertMany(patientsData);
     console.log("Đã chèn dữ liệu thành công");
   } catch (error) {
     console.error("Lỗi khi chèn dữ liệu:", error);

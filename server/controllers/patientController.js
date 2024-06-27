@@ -1,10 +1,10 @@
 import Patient from "../models/patientModel.js";
 
-export const createNewPatient = async (res, req) => {
+export const createNewPatient = async (req, res) => {
   try {
     const newPatient = new Patient(req.body);
     await newPatient.save();
-    res.status(200).json(newPatient);
+    return res.status(201).json(newPatient);
   } catch (error) {
     console.log("Error in createNewPatient controller", error);
     return res.status(500).json({ error: "Internal server error" });
