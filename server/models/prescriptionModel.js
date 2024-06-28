@@ -23,6 +23,7 @@ const prescriptionSchema = new mongoose.Schema(
       },
     ],
     notes: { type: String },
+    total: { type: Number, required: true },
   },
   {
     timestamps: true,

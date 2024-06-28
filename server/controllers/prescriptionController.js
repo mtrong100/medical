@@ -148,3 +148,29 @@ export const getAllPrescriptions = async (req, res) => {
     return res.status(500).json({ error: "Lỗi máy chủ nội bộ" });
   }
 };
+
+export const getPrescriptionDetail = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const prescription = await Prescription.findById(id)
+      .populate([
+        {
+          path: "patient",
+          select: "_id name",
+        },
+        {
+          path: "doctor",
+          select: "_id name",
+        },
+        {
+          path: "detail.medicine",
+          select: "_id name unit price",
+        },
+      ])
+      .sort({ createdAt: -1 });
+    return res.status(200).json(prescription);
+  } catch (error) {
+    console.log("Lỗi trong controller getPrescriptionDetail", error);
+    return res.status(500).json({ error: "Lỗi máy chủ nội bộ" });
+  }
+};

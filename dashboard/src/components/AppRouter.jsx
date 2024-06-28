@@ -22,6 +22,8 @@ const ManageEmployee = lazy(() => import("../pages/ManageEmployee"));
 const UpdateEmployee = lazy(() => import("../pages/UpdateEmployee"));
 const EmployeeDetail = lazy(() => import("../pages/EmployeeDetail"));
 const AddNewEmployee = lazy(() => import("../pages/AddNewEmployee"));
+const UpdatePrescription = lazy(() => import("../pages/UpdatePrescription"));
+const PrescriptionDetail = lazy(() => import("../pages/PrescriptionDetail"));
 const CreateNewPrescription = lazy(() =>
   import("../pages/CreateNewPrescription")
 );
@@ -46,6 +48,8 @@ const MAIN_ROUTES = [
   { path: "/employee/create", element: <AddNewEmployee /> },
   { path: "/medicine-category", element: <ManageMedicineCategory /> },
   { path: "/prescription/create", element: <CreateNewPrescription /> },
+  { path: "/prescription/update/:id", element: <UpdatePrescription /> },
+  { path: "/prescription/:id", element: <PrescriptionDetail /> },
 ];
 
 const AppRouter = () => {

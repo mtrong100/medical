@@ -5,6 +5,7 @@ import {
   createNewPrescription,
   deletePrescription,
   getAllPrescriptions,
+  getPrescriptionDetail,
   updatePrescription,
 } from "../controllers/prescriptionController.js";
 
@@ -17,5 +18,7 @@ router.put("/update/:id", verifySpecificRole, updatePrescription);
 router.delete("/delete/:id", verifySpecificRole, deletePrescription);
 
 router.get("/get-all", getAllPrescriptions);
+
+router.get("/:id", getPrescriptionDetail);
 
 export default router;

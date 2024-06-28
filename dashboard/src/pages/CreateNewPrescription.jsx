@@ -2,7 +2,6 @@ import React, { useRef, useState } from "react";
 import useGetDoctors from "../hooks/useGetDoctors";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import TitleSection from "../components/TitleSection";
@@ -13,9 +12,11 @@ import { formatCurrencyVND } from "../utils/helper";
 import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { createNewPrescriptionApi } from "../api/prescriptionApi";
+import { useNavigate } from "react-router-dom";
 
 const CreateNewPrescription = () => {
   const toast = useRef(null);
+  const navigate = useNavigate();
   const { doctors } = useGetDoctors();
   const { medicines } = useGetMedicineCollection();
   const [loading, setLoading] = useState(false);
@@ -60,20 +61,28 @@ const CreateNewPrescription = () => {
     }
 
     setLoading(true);
+
     try {
       const formatArray = medicineArray.map((item) => ({
         medicine: item._id,
         quantity: item.quantity,
       }));
 
+      const total = medicineArray.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0
+      );
+
       const body = {
         patient: form.patient,
         doctor: form.doctor,
         notes: form.notes,
         detail: formatArray,
+        total: total.toFixed(2),
       };
 
       const res = await createNewPrescriptionApi(body);
+
       if (res) {
         toast.current.show({
           severity: "success",
@@ -159,6 +168,11 @@ const CreateNewPrescription = () => {
       setMedicineArray(updatedMedicineArray);
     }
   };
+
+  const total = medicineArray.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   const priceBodyTemplate = (rowData) => {
     return <div>{formatCurrencyVND(rowData.price * rowData.quantity)}</div>;
@@ -264,12 +278,11 @@ const CreateNewPrescription = () => {
               onClick={handleAddMedicineToTable}
               type="button"
               label="Thêm thuốc"
-              disabled={loading}
             />
           </div>
         </div>
 
-        {/* Render data  */}
+        {/* Medicine table  */}
         <div className="mt-5 space-y-3">
           <h1 className="text-2xl font-semibold">
             Danh sách thuốc theo kê toa
@@ -304,6 +317,12 @@ const CreateNewPrescription = () => {
           </DataTable>
         </div>
 
+        <div className="flex items-center justify-end">
+          <p className="text-xl font-semibold">
+            Tổng tiền: {formatCurrencyVND(total)}
+          </p>
+        </div>
+
         <div className="flex flex-col gap-2">
           <label>Ghi chú</label>
           <InputTextarea
@@ -314,12 +333,22 @@ const CreateNewPrescription = () => {
           />
         </div>
 
-        <Button
-          onClick={handleCreateNewPrescription}
-          type="submit"
-          label="Xác nhận"
-          disabled={loading}
-        />
+        <div className="flex items-center justify-end gap-3">
+          <Button
+            type="submit"
+            label="Quay về"
+            className="w-[200px]"
+            severity="secondary"
+            onClick={() => navigate("/prescription")}
+          />
+          <Button
+            onClick={handleCreateNewPrescription}
+            type="submit"
+            label="Xác nhận"
+            disabled={loading}
+            className="w-[200px]"
+          />
+        </div>
       </div>
     </div>
   );
