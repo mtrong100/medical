@@ -3,6 +3,7 @@ import {
   createNewMedicine,
   deleteMedicine,
   getAllMedicine,
+  getMedicineCollection,
   updateMedicine,
 } from "../controllers/medicineController.js";
 import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
@@ -16,5 +17,7 @@ router.put("/update/:id", verifySpecificRole, updateMedicine);
 router.delete("/delete/:id", verifySpecificRole, deleteMedicine);
 
 router.get("/get-all", getAllMedicine);
+
+router.get("/get-collection", getMedicineCollection);
 
 export default router;

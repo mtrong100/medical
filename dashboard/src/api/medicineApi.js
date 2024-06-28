@@ -19,3 +19,8 @@ export const getAllMedicinesApi = async (params) => {
   const response = await axios.get("/medicine/get-all", { params });
   return response;
 };
+
+export const getMedicineCollectionApi = async () => {
+  const response = await axios.get("/medicine/get-collection");
+  return response;
+};

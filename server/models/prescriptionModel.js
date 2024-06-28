@@ -2,19 +2,19 @@ import mongoose from "mongoose";
 
 const prescriptionSchema = new mongoose.Schema(
   {
-    patientId: {
+    patient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Patient",
       required: true,
     },
-    doctorId: {
+    doctor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Doctor",
+      ref: "Employee",
       required: true,
     },
     detail: [
       {
-        medicineId: {
+        medicine: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Medicine",
           required: true,
@@ -22,7 +22,7 @@ const prescriptionSchema = new mongoose.Schema(
         quantity: { type: Number, required: true },
       },
     ],
-    notes: { type: String, required: true },
+    notes: { type: String },
   },
   {
     timestamps: true,

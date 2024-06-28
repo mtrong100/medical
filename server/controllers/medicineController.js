@@ -97,3 +97,13 @@ export const getAllMedicine = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getMedicineCollection = async (req, res) => {
+  try {
+    const medicines = await Medicine.find().populate("category", "_id name");
+    res.status(200).json(medicines);
+  } catch (error) {
+    console.log("Error in getMedicineCollection controller", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};

@@ -67,3 +67,14 @@ export const getAllPatients = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getPatientDetail = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const patient = await Patient.findById(id);
+    res.status(200).json(patient);
+  } catch (error) {
+    console.log("Error in getPatientDetail controller", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};

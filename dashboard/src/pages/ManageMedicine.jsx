@@ -30,7 +30,7 @@ const ManageMedicine = () => {
   const dt = useRef(null);
   const [medicines, setMedcines] = useState([]);
   const [medicineCategories, setMedicineCategories] = useState([]);
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
   const queryValue = useDebounce(query, 500);
   const [filters, setFilters] = useState({
