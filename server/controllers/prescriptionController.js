@@ -136,8 +136,19 @@ export const getAllPrescriptions = async (req, res) => {
     const total = await Prescription.countDocuments();
     const totalPages = Math.ceil(total / limit);
 
+    const fotmattedResults = prescriptions.map((prescription) => {
+      return {
+        _id: prescription._id,
+        patient: prescription.patient.name,
+        doctor: prescription.doctor.name,
+        total: prescription.total,
+        createdAt: prescription.createdAt,
+        updatedAt: prescription.updatedAt,
+      };
+    });
+
     return res.status(200).json({
-      results: prescriptions,
+      results: fotmattedResults,
       totalResults: total,
       totalPages,
       currentPage: parseInt(page),
@@ -164,11 +175,38 @@ export const getPrescriptionDetail = async (req, res) => {
         },
         {
           path: "detail.medicine",
-          select: "_id name unit price",
+          select: "_id name unit price category",
+          populate: {
+            path: "category",
+            select: "_id name",
+          },
         },
       ])
       .sort({ createdAt: -1 });
-    return res.status(200).json(prescription);
+
+    // Format lại phần detail
+    const formattedDetail = prescription.detail.map((item) => ({
+      _id: item.medicine._id,
+      name: item.medicine.name,
+      price: item.medicine.price,
+      unit: item.medicine.unit,
+      categoryId: item.medicine.category._id,
+      category: item.medicine.category.name,
+      quantity: item.quantity,
+    }));
+
+    const formattedPrescription = {
+      _id: prescription._id,
+      patient: prescription.patient,
+      doctor: prescription.doctor,
+      detail: formattedDetail,
+      notes: prescription.notes,
+      total: prescription.total,
+      createdAt: prescription.createdAt,
+      updatedAt: prescription.updatedAt,
+    };
+
+    return res.status(200).json(formattedPrescription);
   } catch (error) {
     console.log("Lỗi trong controller getPrescriptionDetail", error);
     return res.status(500).json({ error: "Lỗi máy chủ nội bộ" });

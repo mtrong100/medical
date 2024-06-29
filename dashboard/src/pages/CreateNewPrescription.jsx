@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import useGetDoctors from "../hooks/useGetDoctors";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
@@ -169,10 +169,12 @@ const CreateNewPrescription = () => {
     }
   };
 
-  const total = medicineArray.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+  const total = useMemo(() => {
+    return medicineArray.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0
+    );
+  }, [medicineArray]);
 
   const priceBodyTemplate = (rowData) => {
     return <div>{formatCurrencyVND(rowData.price * rowData.quantity)}</div>;
@@ -243,6 +245,16 @@ const CreateNewPrescription = () => {
               scrollHeight="300px"
             />
           </div>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label>Ghi chú</label>
+          <InputTextarea
+            value={form.notes}
+            onChange={(e) => setForm({ ...form, notes: e.target.value })}
+            rows={5}
+            cols={30}
+          />
         </div>
 
         <div className="grid grid-cols-4 gap-5">
@@ -321,16 +333,6 @@ const CreateNewPrescription = () => {
           <p className="text-xl font-semibold">
             Tổng tiền: {formatCurrencyVND(total)}
           </p>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label>Ghi chú</label>
-          <InputTextarea
-            value={form.notes}
-            onChange={(e) => setForm({ ...form, notes: e.target.value })}
-            rows={5}
-            cols={30}
-          />
         </div>
 
         <div className="flex items-center justify-end gap-3">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TitleSection from "../components/TitleSection";
 import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
@@ -12,8 +12,10 @@ import {
   deletePrescriptionApi,
   getAllPrescriptionsApi,
 } from "../api/prescriptionApi";
+import { font } from "../assets/font";
 
 const ManagePrescription = () => {
+  const dt = useRef(null);
   const navigate = useNavigate();
   const [prescriptions, setPrescriptions] = useState([]);
   const [loading, setLoading] = useState([]);
@@ -31,8 +33,8 @@ const ManagePrescription = () => {
 
     return (
       item._id.includes(queryLower) ||
-      item.patient.name.toLowerCase().includes(queryLower) ||
-      item.doctor.name.toLowerCase().includes(queryLower)
+      item.patient.toLowerCase().includes(queryLower) ||
+      item.doctor.toLowerCase().includes(queryLower)
     );
   });
 
@@ -120,8 +122,78 @@ const ManagePrescription = () => {
     );
   };
 
+  /* ================ FILE EXPORT FEATURE ================ */
+  const cols = [
+    { field: "_id", header: "ID" },
+    { field: "doctor", header: "Bác sĩ" },
+    { field: "patient", header: "Bệnh nhân" },
+    { field: "total", header: "Tổng tiền" },
+  ];
+
+  const exportColumns = cols.map((col) => ({
+    title: col.header,
+    dataKey: col.field,
+  }));
+
+  const exportCSV = (selectionOnly) => {
+    dt.current.exportCSV({ selectionOnly });
+  };
+
+  const exportPdf = () => {
+    import("jspdf").then((jsPDF) => {
+      import("jspdf-autotable").then(() => {
+        const doc = new jsPDF.default(0, 0);
+
+        // Add the custom font
+        doc.addFileToVFS("Roboto-Regular.ttf", font);
+        doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+        doc.setFont("Roboto");
+
+        doc.autoTable({
+          columns: exportColumns,
+          body: prescriptions,
+          styles: {
+            font: "Roboto",
+          },
+        });
+        doc.save("prescriptions.pdf");
+      });
+    });
+  };
+
+  const exportExcel = () => {
+    import("xlsx").then((xlsx) => {
+      const worksheet = xlsx.utils.json_to_sheet(prescriptions);
+      const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
+      const excelBuffer = xlsx.write(workbook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+
+      saveAsExcelFile(excelBuffer, "prescriptions");
+    });
+  };
+
+  const saveAsExcelFile = (buffer, fileName) => {
+    import("file-saver").then((module) => {
+      if (module && module.default) {
+        let EXCEL_TYPE =
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        let EXCEL_EXTENSION = ".xlsx";
+        const data = new Blob([buffer], {
+          type: EXCEL_TYPE,
+        });
+
+        module.default.saveAs(
+          data,
+          fileName + "_export_" + new Date().getTime() + EXCEL_EXTENSION
+        );
+      }
+    });
+  };
+
   const header = (
-    <div className="flex items-center justify-end">
+    <div className="flex items-center justify-between">
       <div className="p-inputgroup max-w-md">
         <InputText
           placeholder="Tìm kiếm"
@@ -130,8 +202,38 @@ const ManagePrescription = () => {
         />
         <Button icon="pi pi-search" />
       </div>
+
+      <div className="flex items-center flex-shrink-0  gap-5">
+        <Button
+          type="button"
+          icon="pi pi-file"
+          label="Xuất file CSV"
+          rounded
+          onClick={() => exportCSV(false)}
+          data-pr-tooltip="CSV"
+        />
+        <Button
+          type="button"
+          icon="pi pi-file-excel"
+          severity="success"
+          label="Xuất file Excel"
+          rounded
+          onClick={exportExcel}
+          data-pr-tooltip="XLS"
+        />
+        <Button
+          type="button"
+          icon="pi pi-file-pdf"
+          severity="warning"
+          label="Xuất file PDF"
+          rounded
+          onClick={exportPdf}
+          data-pr-tooltip="PDF"
+        />
+      </div>
     </div>
   );
+  /* ====================================================== */
 
   return (
     <div>
@@ -146,6 +248,7 @@ const ManagePrescription = () => {
 
       <div className="mt-5">
         <DataTable
+          ref={dt}
           scrollable
           stripedRows
           showGridlines
@@ -154,8 +257,8 @@ const ManagePrescription = () => {
           header={header}
         >
           <Column field="_id" header="Mã đơn thuốc" sortable />
-          <Column field="doctor.name" header="Bác sĩ kê toa" sortable />
-          <Column field="patient.name" header="Bệnh nhân" sortable />
+          <Column field="doctor" header="Bác sĩ kê toa" sortable />
+          <Column field="patient" header="Bệnh nhân" sortable />
           <Column
             field="total"
             header="Tổng tiền"

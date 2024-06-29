@@ -19,3 +19,8 @@ export const getAllPrescriptionsApi = async (params) => {
   const response = await axios.get("/prescription/get-all", { params });
   return response;
 };
+
+export const getPrescriptionDetailApi = async (id) => {
+  const response = await axios.get(`/prescription/${id}`);
+  return response;
+};
