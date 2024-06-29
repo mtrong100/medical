@@ -1,6 +1,6 @@
 import MedicalService from "../models/medicalServiceModel.js";
 
-export const createNewService = async (res, req) => {
+export const createNewService = async (req, res) => {
   try {
     const newService = new MedicalService(req.body);
     await newService.save();
@@ -37,7 +37,7 @@ export const deleteService = async (req, res) => {
 
 export const getAllServices = async (req, res) => {
   try {
-    const services = await MedicalService.find();
+    const services = await MedicalService.find().sort({ createdAt: -1 });
     res.status(200).json(services);
   } catch (error) {
     console.log("Error in getAllServices controller", error);

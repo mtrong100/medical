@@ -1,92 +1,65 @@
-import Medicine from "./models/medicineModel.js";
-import Patient from "./models/patientModel.js";
+import MedicalService from "./models/medicalServiceModel.js";
 
-const patientsData = [
+const rawData = [
   {
-    name: "Nguyễn Văn Nam",
-    dateOfBirth: "23/03/1995",
-    gender: "Nam",
-    phoneNumber: "0901234567",
-    email: "nguyenvannam@gmail.com",
-    address: "123 Đường A, Quận 1, TP.HCM",
+    name: "Khám tổng quát",
+    description:
+      "Khám tổng quát bao gồm kiểm tra sức khỏe toàn diện, đo huyết áp, xét nghiệm máu và nước tiểu.",
+    price: 500000,
   },
   {
-    name: "Trần Thị Lan",
-    dateOfBirth: "15/05/1985",
-    gender: "Nữ",
-    phoneNumber: "0912345678",
-    email: "tranthilan@gmail.com",
-    address: "456 Đường B, Quận 2, TP.HCM",
+    name: "Khám chuyên khoa tim mạch",
+    description:
+      "Khám và tư vấn các vấn đề liên quan đến tim mạch như đau ngực, cao huyết áp, rối loạn nhịp tim.",
+    price: 700000,
   },
   {
-    name: "Lê Hồng Phúc",
-    dateOfBirth: "10/10/1990",
-    gender: "Nam",
-    phoneNumber: "0923456789",
-    email: "lehongphuc@gmail.com",
-    address: "789 Đường C, Quận 3, TP.HCM",
+    name: "Khám chuyên khoa nội tiết",
+    description:
+      "Khám và tư vấn các bệnh liên quan đến rối loạn nội tiết như tiểu đường, rối loạn tuyến giáp.",
+    price: 650000,
   },
   {
-    name: "Phạm Văn Minh",
-    dateOfBirth: "25/12/1987",
-    gender: "Nam",
-    phoneNumber: "0934567890",
-    email: "phamvanminh@gmail.com",
-    address: "101 Đường D, Quận 4, TP.HCM",
+    name: "Siêu âm",
+    description:
+      "Siêu âm bụng, siêu âm tim, siêu âm thai, siêu âm các cơ quan nội tạng khác.",
+    price: 300000,
   },
   {
-    name: "Hoàng Thị Mai",
-    dateOfBirth: "14/02/1992",
-    gender: "Nữ",
-    phoneNumber: "0945678901",
-    email: "hoangthimai@gmail.com",
-    address: "202 Đường E, Quận 5, TP.HCM",
+    name: "Xét nghiệm máu",
+    description:
+      "Xét nghiệm công thức máu, đường huyết, mỡ máu, chức năng gan, thận.",
+    price: 200000,
   },
   {
-    name: "Vũ Đình Hùng",
-    dateOfBirth: "30/07/1980",
-    gender: "Nam",
-    phoneNumber: "0956789012",
-    email: "vudinhhung@gmail.com",
-    address: "303 Đường F, Quận 6, TP.HCM",
+    name: "Chụp X-quang",
+    description:
+      "Chụp X-quang phổi, xương, khớp để kiểm tra các tổn thương hoặc bệnh lý.",
+    price: 250000,
   },
   {
-    name: "Đặng Thị Hạnh",
-    dateOfBirth: "05/09/1975",
-    gender: "Nữ",
-    phoneNumber: "0967890123",
-    email: "dangthihanh@gmail.com",
-    address: "404 Đường G, Quận 7, TP.HCM",
+    name: "Khám nhi khoa",
+    description:
+      "Khám và tư vấn sức khỏe cho trẻ em, tiêm chủng và phát hiện sớm các bệnh lý trẻ em.",
+    price: 400000,
   },
   {
-    name: "Ngô Văn Tuấn",
-    dateOfBirth: "17/11/1983",
-    gender: "Nam",
-    phoneNumber: "0978901234",
-    email: "ngovantuan@gmail.com",
-    address: "505 Đường H, Quận 8, TP.HCM",
+    name: "Khám phụ khoa",
+    description:
+      "Khám và tư vấn các bệnh lý phụ khoa, kiểm tra sức khỏe sinh sản.",
+    price: 600000,
   },
   {
-    name: "Bùi Thị Ngọc",
-    dateOfBirth: "21/04/1996",
-    gender: "Nữ",
-    phoneNumber: "0989012345",
-    email: "buithingoc@gmail.com",
-    address: "606 Đường I, Quận 9, TP.HCM",
-  },
-  {
-    name: "Đỗ Thanh Bình",
-    dateOfBirth: "12/06/1989",
-    gender: "Nam",
-    phoneNumber: "0990123456",
-    email: "dothanhbinh@gmail.com",
-    address: "707 Đường J, Quận 10, TP.HCM",
+    name: "Khám răng hàm mặt",
+    description:
+      "Khám và điều trị các vấn đề về răng miệng, tư vấn vệ sinh răng miệng.",
+    price: 450000,
   },
 ];
 
 export const insertData = async () => {
   try {
-    await Patient.insertMany(patientsData);
+    await MedicalService.insertMany(rawData);
     console.log("Đã chèn dữ liệu thành công");
   } catch (error) {
     console.error("Lỗi khi chèn dữ liệu:", error);
