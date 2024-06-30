@@ -8,6 +8,7 @@ import medicalServiceRouter from "./medicalServiceRouter.js";
 import medicalRecordRouter from "./medicalRecordRouter.js";
 import prescriptionRouter from "./prescriptionRouter.js";
 import medicalServiceInvoiceRouter from "./medicalServiceInvoiceRouter.js";
+import appointmentRouter from "./appointmentRouter.js";
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use("/medical-service", medicalServiceRouter);
 router.use("/medical-record", medicalRecordRouter);
 router.use("/prescription", prescriptionRouter);
 router.use("/medical-service-invoice", medicalServiceInvoiceRouter);
+router.use("/appointment", appointmentRouter);
 
 export default router;

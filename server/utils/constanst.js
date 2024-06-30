@@ -68,3 +68,21 @@ export const PAYMENT_STATUS = {
   PAID: "Đã thanh toán",
   UNPAID: "Chưa thanh toán",
 };
+
+export const APPOINTMENT_STATUS = {
+  PENDING: "Đang chờ",
+  CANCELLED: "Đã hủy",
+  COMPLETED: "Đã khám",
+};
+
+export const doctorSchedules = [
+  "7:00 - 8:00",
+  "8:00 - 9:00",
+  "9:00 - 10:00",
+  "10:00 - 11:00",
+  "11:00 - 12:00",
+  "13:00 - 14:00",
+  "14:00 - 15:00",
+  "15:00 - 16:00",
+  "16:00 - 17:00",
+];

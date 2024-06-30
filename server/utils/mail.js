@@ -63,3 +63,93 @@ MedicalVip999`,
     }
   });
 };
+
+export const sendAppointmentConfirmation = (appointment) => {
+  const mailOptions = {
+    from: '"Medical 👨‍⚕️" <medicalvip99@gmail.com>',
+    to: appointment.patientEmail, // Địa chỉ email người nhận
+    subject: "Xác nhận đặt lịch hẹn",
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2 style="color: #4CAF50;">Xác nhận đặt lịch hẹn</h2>
+        <p>Xin chào <strong>${appointment.patientName}</strong>,</p>
+        <p>Cuộc hẹn của bạn đã được đặt thành công.</p>
+        <h3>Chi tiết cuộc hẹn:</h3>
+        <ul>
+          <li><strong>Bác sĩ:</strong> ${appointment.doctorName}</li>
+          <li><strong>Ngày:</strong> ${appointment.date}</li>
+          <li><strong>Thời gian:</strong> ${appointment.time}</li>
+        </ul>
+        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
+        <p>Trân trọng,</p>
+        <p><em>Phòng khám của bạn</em></p>
+      </div>
+    `,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Lỗi khi gửi email:", error);
+    } else {
+      console.log("Email đã được gửi:", info.response);
+    }
+  });
+};
+
+export const sendAppointmentUpdate = (appointment) => {
+  const mailOptions = {
+    from: '"Medical 👨‍⚕️" <medicalvip99@gmail.com>',
+    to: appointment.patientEmail,
+    subject: "Cập nhật lịch hẹn",
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2 style="color: #FFA500;">Cập nhật lịch hẹn</h2>
+        <p>Xin chào <strong>${appointment.patientName}</strong>,</p>
+        <p>Cuộc hẹn của bạn đã được cập nhật.</p>
+        <h3>Chi tiết mới:</h3>
+        <ul>
+          <li><strong>Bác sĩ:</strong> ${appointment.doctorName}</li>
+          <li><strong>Ngày:</strong> ${appointment.date}</li>
+          <li><strong>Thời gian:</strong> ${appointment.time}</li>
+        </ul>
+        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
+        <p>Trân trọng,</p>
+        <p><em>Phòng khám của bạn</em></p>
+      </div>
+    `,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Lỗi khi gửi email:", error);
+    } else {
+      console.log("Email đã được gửi:", info.response);
+    }
+  });
+};
+
+export const sendAppointmentCancellation = (appointment) => {
+  const mailOptions = {
+    from: '"Medical 👨‍⚕️" <medicalvip99@gmail.com>',
+    to: appointment.patientEmail,
+    subject: "Hủy lịch hẹn",
+    html: `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+        <h2 style="color: #FF0000;">Hủy lịch hẹn</h2>
+        <p>Xin chào <strong>${appointment.patientName}</strong>,</p>
+        <p>Cuộc hẹn của bạn đã được hủy bỏ.</p>
+        <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.</p>
+        <p>Trân trọng,</p>
+        <p><em>Phòng khám của bạn</em></p>
+      </div>
+    `,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log("Lỗi khi gửi email:", error);
+    } else {
+      console.log("Email đã được gửi:", info.response);
+    }
+  });
+};
