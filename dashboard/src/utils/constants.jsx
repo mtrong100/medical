@@ -158,6 +158,12 @@ export const PAYMENT_STATUS = {
   UNPAID: "Chưa thanh toán",
 };
 
+export const APPOINTMENT_STATUS = {
+  PENDING: "Đang chờ",
+  CANCELLED: "Đã hủy",
+  COMPLETED: "Đã khám",
+};
+
 export const MEDICINE_UNITS = [
   "Viên",
   "Vỉ",

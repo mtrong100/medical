@@ -16,8 +16,8 @@ router.put("/update/:id", verifySpecificRole, updateAppointment);
 
 router.delete("/delete/:id", verifySpecificRole, deleteAppointment);
 
-router.get("/:id", getAppointmentDetail);
-
 router.get("/get-all", getAllAppointment);
+
+router.get("/:id", getAppointmentDetail);
 
 export default router;

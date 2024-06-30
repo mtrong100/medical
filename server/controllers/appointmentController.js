@@ -169,12 +169,36 @@ export const getAppointmentDetail = async (req, res) => {
 };
 
 export const getAllAppointment = async (req, res) => {
-  try {
-    const appointments = await Appointment.find()
-      .populate("patient", "_id name email")
-      .populate("doctor", "_id name email");
+  const { page = 1, limit = 10 } = req.query;
 
-    return res.status(200).json(appointments);
+  try {
+    const skip = (page - 1) * limit;
+
+    const appointments = await Appointment.find()
+      .skip(skip)
+      .limit(parseInt(limit))
+      .populate([
+        {
+          path: "patient",
+          select: "_id name email",
+        },
+        {
+          path: "doctor",
+          select: "_id name email",
+        },
+      ])
+      .sort({ createdAt: -1 });
+
+    const total = await Appointment.countDocuments();
+    const totalPages = Math.ceil(total / limit);
+
+    return res.status(200).json({
+      results: appointments,
+      totalResults: total,
+      totalPages,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+    });
   } catch (error) {
     console.log("Lỗi trong getAllAppointment controller", error);
     return res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
