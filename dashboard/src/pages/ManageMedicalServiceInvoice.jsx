@@ -8,18 +8,18 @@ import { formatCurrencyVND, formatDate } from "../utils/helper";
 import Swal from "sweetalert2";
 import useDebounce from "../hooks/useDebounce";
 import { useNavigate } from "react-router-dom";
-import {
-  deletePrescriptionApi,
-  getAllPrescriptionsApi,
-} from "../api/prescriptionApi";
 import { font } from "../assets/font";
 import { Tag } from "primereact/tag";
 import { PAYMENT_STATUS } from "../utils/constants";
+import {
+  ddeleteMedicalServiceInvoiceApi,
+  getAllMedicalServiceInvoicesApi,
+} from "../api/medicalServiceInvoiceApi";
 
-const ManagePrescription = () => {
+const ManageMedicalServiceInvoice = () => {
   const dt = useRef(null);
   const navigate = useNavigate();
-  const [prescriptions, setPrescriptions] = useState([]);
+  const [serviceInvoices, setServiceInvoices] = useState([]);
   const [loading, setLoading] = useState([]);
   const [query, setQuery] = useState("");
   const queryValue = useDebounce(query, 500);
@@ -30,21 +30,20 @@ const ManagePrescription = () => {
     totalResults: 0,
   });
 
-  const filteredPrescriptions = prescriptions.filter((item) => {
+  const filteredServiceInvoices = serviceInvoices.filter((item) => {
     const queryLower = queryValue.toLowerCase().trim();
 
     return (
       item._id.includes(queryLower) ||
-      item.patient.toLowerCase().includes(queryLower) ||
-      item.doctor.toLowerCase().includes(queryLower)
+      item.patient.toLowerCase().includes(queryLower)
     );
   });
 
   useEffect(() => {
-    fetchPrescriptions();
+    fetchServiceInvoices();
   }, [limit, paginator.currentPage, queryValue]);
 
-  const fetchPrescriptions = async () => {
+  const fetchServiceInvoices = async () => {
     setLoading(true);
     try {
       const params = {
@@ -52,9 +51,9 @@ const ManagePrescription = () => {
         limit,
         query: queryValue,
       };
-      const res = await getAllPrescriptionsApi(params);
+      const res = await getAllMedicalServiceInvoicesApi(params);
       if (res) {
-        setPrescriptions(res.results);
+        setServiceInvoices(res.results);
         setPaginator({
           ...paginator,
           totalResults: res.totalResults,
@@ -63,17 +62,17 @@ const ManagePrescription = () => {
         });
       }
     } catch (error) {
-      console.log("Error fetching prescription:", error);
-      setPrescriptions([]);
+      console.log("Error fetching medical service invoices:", error);
+      setServiceInvoices([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDeletePrescription = (rowId) => {
+  const handleDeleteServiceInvoice = (rowId) => {
     Swal.fire({
-      title: "Xóa đơn thuốc",
-      text: "Bạn muôn xóa đơn thuốc này ?",
+      title: "Xóa phiếu dịch vụ",
+      text: "Bạn muôn xóa phiếu dịch vụ này?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -83,10 +82,10 @@ const ManagePrescription = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await deletePrescriptionApi(rowId);
+          const res = await ddeleteMedicalServiceInvoiceApi(rowId);
           if (res) {
-            Swal.fire("Đơn thuốc đã được xóa!", "", "success");
-            fetchPrescriptions();
+            Swal.fire("Phiếu dịch vụ đã được xóa!", "", "success");
+            fetchServiceInvoices();
           }
         } catch (error) {
           console.log("Error deleting prescription:", error);
@@ -109,18 +108,20 @@ const ManagePrescription = () => {
           icon="pi pi-eye"
           rounded
           severity="help"
-          onClick={() => navigate(`/prescription/${rowData._id}`)}
+          onClick={() => navigate(`/medical-service-invoice/${rowData._id}`)}
         />
         <Button
           icon="pi pi-pencil"
           rounded
-          onClick={() => navigate(`/prescription/update/${rowData._id}`)}
+          onClick={() =>
+            navigate(`/medical-service-invoice/update/${rowData._id}`)
+          }
         />
         <Button
           icon="pi pi-trash"
           rounded
           severity="danger"
-          onClick={() => handleDeletePrescription(rowData._id)}
+          onClick={() => handleDeleteServiceInvoice(rowData._id)}
         />
       </div>
     );
@@ -144,8 +145,7 @@ const ManagePrescription = () => {
 
   /* ================ FILE EXPORT FEATURE ================ */
   const cols = [
-    { field: "_id", header: "ID" },
-    { field: "doctor", header: "Bác sĩ" },
+    { field: "_id", header: "Mã phiếu dịch vụ" },
     { field: "patient", header: "Bệnh nhân" },
     { field: "total", header: "Tổng tiền" },
     { field: "status", header: "Trạng thái" },
@@ -173,26 +173,26 @@ const ManagePrescription = () => {
 
         doc.autoTable({
           columns: exportColumns,
-          body: prescriptions,
+          body: serviceInvoices,
           styles: {
             font: "Roboto",
           },
         });
-        doc.save("prescriptions.pdf");
+        doc.save("serviceInvoices.pdf");
       });
     });
   };
 
   const exportExcel = () => {
     import("xlsx").then((xlsx) => {
-      const worksheet = xlsx.utils.json_to_sheet(prescriptions);
+      const worksheet = xlsx.utils.json_to_sheet(serviceInvoices);
       const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
       const excelBuffer = xlsx.write(workbook, {
         bookType: "xlsx",
         type: "array",
       });
 
-      saveAsExcelFile(excelBuffer, "prescriptions");
+      saveAsExcelFile(excelBuffer, "serviceInvoices");
     });
   };
 
@@ -259,11 +259,11 @@ const ManagePrescription = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <TitleSection>Quản lí kê toa đơn thuốc</TitleSection>
+        <TitleSection>Quản lí phiếu dịch vụ</TitleSection>
         <Button
-          label="Thêm mới"
+          label="Tạo mới"
           icon="pi pi-plus"
-          onClick={() => navigate("/prescription/create")}
+          onClick={() => navigate("/medical-service-invoice/create")}
         />
       </div>
 
@@ -274,12 +274,12 @@ const ManagePrescription = () => {
           stripedRows
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
-          value={filteredPrescriptions}
+          value={filteredServiceInvoices}
           header={header}
         >
-          <Column field="_id" header="Mã đơn thuốc" sortable />
-          <Column field="doctor" header="Bác sĩ kê toa" sortable />
+          <Column field="_id" header="Mã phiếu dịch vụ" sortable />
           <Column field="patient" header="Bệnh nhân" sortable />
+          <Column field="detail.length" header="Số dịch vụ sử dụng" sortable />
           <Column
             field="total"
             header="Tổng tiền"
@@ -309,4 +309,4 @@ const ManagePrescription = () => {
   );
 };
 
-export default ManagePrescription;
+export default ManageMedicalServiceInvoice;

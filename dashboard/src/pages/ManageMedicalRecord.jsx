@@ -186,7 +186,7 @@ const ManageMedicalRecord = () => {
           <Column field="doctor.name" header="Bác sĩ" sortable />
           <Column field="diagnosis" header="Chuẩn đoán bệnh" sortable />
           <Column
-            field="CreatedAt"
+            field="createdAt"
             header="Ngày tạo"
             sortable
             body={createdAtBodyTemplate}

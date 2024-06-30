@@ -24,11 +24,23 @@ const EmployeeDetail = lazy(() => import("../pages/EmployeeDetail"));
 const AddNewEmployee = lazy(() => import("../pages/AddNewEmployee"));
 const UpdatePrescription = lazy(() => import("../pages/UpdatePrescription"));
 const PrescriptionDetail = lazy(() => import("../pages/PrescriptionDetail"));
+const ManageMedicalServiceInvoice = lazy(() =>
+  import("../pages/ManageMedicalServiceInvoice")
+);
 const CreateNewPrescription = lazy(() =>
   import("../pages/CreateNewPrescription")
 );
 const ManageMedicineCategory = lazy(() =>
   import("../pages/ManageMedicineCategory")
+);
+const CreateNewMedicalServiceInvoice = lazy(() =>
+  import("../pages/CreateNewMedicalServiceInvoice")
+);
+const MedicalServiceInvoiceDetail = lazy(() =>
+  import("../pages/MedicalServiceInvoiceDetail")
+);
+const UpdateMedicalServiceInvoice = lazy(() =>
+  import("../pages/UpdateMedicalServiceInvoice")
 );
 
 const MAIN_ROUTES = [
@@ -50,6 +62,22 @@ const MAIN_ROUTES = [
   { path: "/prescription/create", element: <CreateNewPrescription /> },
   { path: "/prescription/update/:id", element: <UpdatePrescription /> },
   { path: "/prescription/:id", element: <PrescriptionDetail /> },
+  {
+    path: "/medical-service-invoice",
+    element: <ManageMedicalServiceInvoice />,
+  },
+  {
+    path: "/medical-service-invoice/create",
+    element: <CreateNewMedicalServiceInvoice />,
+  },
+  {
+    path: "/medical-service-invoice/:id",
+    element: <MedicalServiceInvoiceDetail />,
+  },
+  {
+    path: "/medical-service-invoice/update/:id",
+    element: <UpdateMedicalServiceInvoice />,
+  },
 ];
 
 const AppRouter = () => {

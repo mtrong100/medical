@@ -63,3 +63,8 @@ export const EMPLOYEE_SALARY = {
   CLEANING_STAFF: 6000000,
   GUARD: 5000000,
 };
+
+export const PAYMENT_STATUS = {
+  PAID: "Đã thanh toán",
+  UNPAID: "Chưa thanh toán",
+};

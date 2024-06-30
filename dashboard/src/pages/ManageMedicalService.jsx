@@ -21,7 +21,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 const ManageMedicalService = () => {
   const dt = useRef(null);
   const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
   const queryValue = useDebounce(query, 500);
   const [visible, setVisible] = useState(false);

@@ -20,6 +20,11 @@ export const SIDEBAR_LINKS = [
     link: "/medical-service",
   },
   {
+    icon: "pi pi-book",
+    name: "Phiếu dịch vụ",
+    link: "/medical-service-invoice",
+  },
+  {
     icon: "pi pi-box",
     name: "Thuốc",
     link: "/medicine",
@@ -148,6 +153,11 @@ export const EMPLOYEE_SALARY = {
   GUARD: 5000000,
 };
 
+export const PAYMENT_STATUS = {
+  PAID: "Đã thanh toán",
+  UNPAID: "Chưa thanh toán",
+};
+
 export const MEDICINE_UNITS = [
   "Viên",
   "Vỉ",
@@ -194,3 +204,5 @@ export const salaries = [
   EMPLOYEE_SALARY.CLEANING_STAFF,
   EMPLOYEE_SALARY.GUARD,
 ];
+
+export const paymentStatus = [PAYMENT_STATUS.PAID, PAYMENT_STATUS.UNPAID];

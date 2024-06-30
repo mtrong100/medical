@@ -13,6 +13,7 @@ import { InputNumber } from "primereact/inputnumber";
 import { InputTextarea } from "primereact/inputtextarea";
 import { createNewPrescriptionApi } from "../api/prescriptionApi";
 import { useNavigate } from "react-router-dom";
+import { PAYMENT_STATUS, paymentStatus } from "../utils/constants";
 
 const CreateNewPrescription = () => {
   const toast = useRef(null);
@@ -22,6 +23,7 @@ const CreateNewPrescription = () => {
   const [loading, setLoading] = useState(false);
   const [medicineArray, setMedicineArray] = useState([]);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(PAYMENT_STATUS.UNPAID);
   const [quantity, setQuantity] = useState(1);
   const [form, setForm] = useState({
     patient: "",
@@ -245,16 +247,27 @@ const CreateNewPrescription = () => {
               scrollHeight="300px"
             />
           </div>
-        </div>
 
-        <div className="flex flex-col gap-2">
-          <label>Ghi chú</label>
-          <InputTextarea
-            value={form.notes}
-            onChange={(e) => setForm({ ...form, notes: e.target.value })}
-            rows={5}
-            cols={30}
-          />
+          <div className="flex flex-col gap-2">
+            <label>Trạng thái</label>
+            <Dropdown
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.value)}
+              options={paymentStatus}
+              placeholder="Chọn trạng thái"
+              className="w-full "
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label>Ghi chú</label>
+            <InputTextarea
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              rows={3}
+              cols={30}
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-4 gap-5">

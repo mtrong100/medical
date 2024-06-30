@@ -16,6 +16,7 @@ import {
   updatePrescriptionApi,
 } from "../api/prescriptionApi";
 import { useNavigate, useParams } from "react-router-dom";
+import { paymentStatus } from "../utils/constants";
 
 const UpdatePrescription = () => {
   const { id } = useParams();
@@ -28,6 +29,7 @@ const UpdatePrescription = () => {
   const [loading, setLoading] = useState(false);
   const [medicineArray, setMedicineArray] = useState([]);
   const [selectedMedicine, setSelectedMedicine] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [form, setForm] = useState({
     patient: "",
@@ -47,6 +49,7 @@ const UpdatePrescription = () => {
         notes: prescription.notes,
       });
       setMedicineArray(prescription?.detail);
+      setSelectedStatus(prescription?.status);
     }
   }, [prescription]);
 
@@ -113,6 +116,7 @@ const UpdatePrescription = () => {
         notes: form.notes,
         detail: formatArray,
         total: total.toFixed(2),
+        status: selectedStatus,
       };
 
       const res = await updatePrescriptionApi(id, body);
@@ -274,16 +278,27 @@ const UpdatePrescription = () => {
               scrollHeight="300px"
             />
           </div>
-        </div>
 
-        <div className="flex flex-col gap-2">
-          <label>Ghi chú</label>
-          <InputTextarea
-            value={form.notes}
-            onChange={(e) => setForm({ ...form, notes: e.target.value })}
-            rows={5}
-            cols={30}
-          />
+          <div className="flex flex-col gap-2">
+            <label>Ghi chú</label>
+            <InputTextarea
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              rows={3}
+              cols={30}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label>Trạng thái</label>
+            <Dropdown
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.value)}
+              options={paymentStatus}
+              placeholder="Chọn trạng thái"
+              className="w-full "
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-4 gap-5">

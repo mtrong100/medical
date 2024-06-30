@@ -142,6 +142,7 @@ export const getAllPrescriptions = async (req, res) => {
         patient: prescription.patient.name,
         doctor: prescription.doctor.name,
         total: prescription.total,
+        status: prescription.status,
         createdAt: prescription.createdAt,
         updatedAt: prescription.updatedAt,
       };
@@ -166,7 +167,7 @@ export const getPrescriptionDetail = async (req, res) => {
     const prescription = await Prescription.findById(id)
       .populate([
         {
-          path: "patient",
+          path: "patient",  
           select: "_id name",
         },
         {
@@ -202,6 +203,7 @@ export const getPrescriptionDetail = async (req, res) => {
       detail: formattedDetail,
       notes: prescription.notes,
       total: prescription.total,
+      status: prescription.status,
       createdAt: prescription.createdAt,
       updatedAt: prescription.updatedAt,
     };

@@ -85,6 +85,7 @@ export const getMedicalRecordDetail = async (req, res) => {
         select: "_id name",
       },
     ]);
+
     res.status(200).json(medicalRecord);
   } catch (error) {
     console.log("Error in getMedicalRecordDetail controller", error);
