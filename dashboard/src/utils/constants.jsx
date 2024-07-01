@@ -54,11 +54,11 @@ export const SIDEBAR_LINKS = [
     name: "Hồ sơ bệnh án",
     link: "/medical-record",
   },
-  {
-    icon: "pi pi-warehouse",
-    name: "Phòng khám",
-    link: "/room",
-  },
+  // {
+  //   icon: "pi pi-warehouse",
+  //   name: "Phòng khám",
+  //   link: "/room",
+  // },
   {
     icon: "pi pi-server",
     name: "Thiết bị",
@@ -222,4 +222,10 @@ export const doctorSchedules = [
   "14:00 - 15:00",
   "15:00 - 16:00",
   "16:00 - 17:00",
+];
+
+export const appointmentStatus = [
+  APPOINTMENT_STATUS.PENDING,
+  APPOINTMENT_STATUS.CANCELLED,
+  APPOINTMENT_STATUS.COMPLETED,
 ];

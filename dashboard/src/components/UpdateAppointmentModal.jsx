@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { doctorSchedules } from "../utils/constants";
+import { appointmentStatus, doctorSchedules } from "../utils/constants";
 import { Toast } from "primereact/toast";
 import { formatDate, parseDate } from "../utils/helper";
 import { Calendar } from "primereact/calendar";
@@ -24,6 +24,7 @@ const UpdateAppointmentModal = ({
     doctor: "",
     date: "",
     time: "",
+    status: "",
   });
 
   useEffect(() => {
@@ -33,6 +34,7 @@ const UpdateAppointmentModal = ({
         doctor: updateVal?.doctor?._id,
         date: parseDate(updateVal?.date),
         time: updateVal?.time,
+        status: updateVal?.status,
       });
     }
   }, [updateVal]);
@@ -50,7 +52,13 @@ const UpdateAppointmentModal = ({
       return;
     }
 
-    if (!form.doctor || !form.patient.trim() || !form.date || !form.time) {
+    if (
+      !form.doctor ||
+      !form.patient.trim() ||
+      !form.date ||
+      !form.time ||
+      !form.status
+    ) {
       toast.current.show({
         severity: "error",
         summary: "Vui lòng điền đầy đủ vào form",
@@ -67,6 +75,7 @@ const UpdateAppointmentModal = ({
         doctor: form.doctor,
         date: formatDate(form.date),
         time: form.time,
+        status: form.status,
       };
 
       const res = await updateAppointmentApi(updateVal._id, body);
@@ -88,6 +97,7 @@ const UpdateAppointmentModal = ({
     } finally {
       setVisible2(false);
       onRefresh();
+      setLoading(false);
     }
   };
 
@@ -98,14 +108,14 @@ const UpdateAppointmentModal = ({
       <Dialog
         header="Cập nhật lịch khám bệnh"
         visible={visible2}
-        style={{ width: "40vw" }}
+        style={{ width: "35vw" }}
         onHide={() => {
           if (!visible2) return;
           setVisible2(false);
         }}
       >
         <div className="m-0">
-          <div className="grid grid-cols-2 gap-5">
+          <div className="space-y-5">
             <div className="flex flex-col gap-2">
               <label htmlFor="patient">Mã bệnh nhân</label>
               <InputText
@@ -154,11 +164,22 @@ const UpdateAppointmentModal = ({
                 scrollHeight="400px"
               />
             </div>
+
+            <div className="flex flex-col gap-2">
+              <label>Trạng thái</label>
+              <Dropdown
+                value={form.status}
+                onChange={(e) => setForm({ ...form, status: e.value })}
+                options={appointmentStatus}
+                placeholder="Chọn trạng thái"
+                className="w-full "
+              />
+            </div>
           </div>
 
           <Button
             disabled={loading}
-            className="w-full"
+            className="w-full mt-6"
             type="submit"
             label="Xác nhận"
             onClick={handleUpdateAppointment}

@@ -4,18 +4,20 @@ import { Button } from "primereact/button";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import { formatCurrencyVND, formatDate } from "../utils/helper";
+import { formatDate } from "../utils/helper";
 import Swal from "sweetalert2";
 import useDebounce from "../hooks/useDebounce";
-import { useNavigate } from "react-router-dom";
 import { font } from "../assets/font";
 import { Tag } from "primereact/tag";
-import { doctorSchedules, APPOINTMENT_STATUS } from "../utils/constants";
+import { APPOINTMENT_STATUS } from "../utils/constants";
 import { Dialog } from "primereact/dialog";
 import { Fieldset } from "primereact/fieldset";
 import CreateNewAppointmentModal from "../components/CreateNewAppointmentModal";
 import UpdateAppointmentModal from "../components/UpdateAppointmentModal";
-import { getAllAppointmentsApi } from "../api/appointmentApi";
+import {
+  deleteAppointmentApi,
+  getAllAppointmentsApi,
+} from "../api/appointmentApi";
 
 const ManageAppointment = () => {
   const dt = useRef(null);
@@ -28,6 +30,7 @@ const ManageAppointment = () => {
   const [visible3, setVisible3] = useState(false);
   const [updateVal, setUpdateVal] = useState(null);
   const [limit, setLimit] = useState(10);
+  const [appointmentDetails, setAppointmentDetails] = useState(null);
   const [paginator, setPaginator] = useState({
     totalPages: 1,
     currentPage: 1,
@@ -74,7 +77,29 @@ const ManageAppointment = () => {
     );
   });
 
-  console.log(appointments);
+  const handleDelteAppointment = async (id) => {
+    Swal.fire({
+      title: "Bạn có chắc chắn?",
+      text: `Bạn có muốn lịch khám bệnh này?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Có, xoá nó!",
+      cancelButtonText: "Không, giữ lại",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await deleteAppointmentApi(id);
+          if (res) {
+            Swal.fire("Đã xoá!", "Dữ liệu đã được xóa.", "success");
+            fetchAppointments();
+          }
+        } catch (error) {
+          console.log("Error deleting medicine:", error);
+          Swal.fire("Lỗi!", "Đã xảy ra sự cố khi xoá.", "error");
+        }
+      }
+    });
+  };
 
   /* ================ FILE EXPORT FEATURE ================ */
   const cols = [
@@ -202,10 +227,56 @@ const ManageAppointment = () => {
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex items-center gap-2 ">
-        <Button icon="pi pi-eye" rounded severity="help" />
-        <Button icon="pi pi-pencil" rounded />
-        <Button icon="pi pi-trash" rounded severity="danger" />
+        <Button
+          icon="pi pi-eye"
+          rounded
+          severity="help"
+          onClick={() => {
+            setVisible3(true);
+            setAppointmentDetails(rowData);
+          }}
+        />
+        <Button
+          icon="pi pi-pencil"
+          rounded
+          onClick={() => {
+            setVisible2(true);
+            setUpdateVal(rowData);
+          }}
+        />
+        <Button
+          icon="pi pi-trash"
+          rounded
+          severity="danger"
+          onClick={() => handleDelteAppointment(rowData._id)}
+        />
       </div>
+    );
+  };
+
+  const getSeverity = (status) => {
+    switch (status) {
+      case APPOINTMENT_STATUS.PENDING:
+        return "warning";
+
+      case APPOINTMENT_STATUS.COMPLETED:
+        return "success";
+
+      case APPOINTMENT_STATUS.CANCELLED:
+        return "danger";
+
+      default:
+        return "unknown";
+    }
+  };
+
+  const statusBodyTemplate = (rowData) => {
+    return (
+      <Tag
+        value={rowData.status}
+        severity={getSeverity(rowData.status)}
+        rounded
+      />
     );
   };
 
@@ -236,7 +307,12 @@ const ManageAppointment = () => {
           <Column field="doctor.name" header="Bác sĩ" sortable />
           <Column field="date" header="Ngày khám" sortable />
           <Column field="time" header="Khung giờ" sortable />
-          <Column field="status" header="Trạng thái" sortable />
+          <Column
+            field="status"
+            header="Trạng thái"
+            sortable
+            body={statusBodyTemplate}
+          />
           <Column
             body={actionBodyTemplate}
             exportable={false}
@@ -245,9 +321,54 @@ const ManageAppointment = () => {
         </DataTable>
       </div>
 
-      <CreateNewAppointmentModal visible={visible} setVisible={setVisible} />
+      <CreateNewAppointmentModal
+        visible={visible}
+        setVisible={setVisible}
+        onRefresh={fetchAppointments}
+      />
 
-      <UpdateAppointmentModal visible2={visible2} setVisible2={setVisible2} />
+      <UpdateAppointmentModal
+        visible2={visible2}
+        setVisible2={setVisible2}
+        onRefresh={fetchAppointments}
+        updateVal={updateVal}
+      />
+
+      <Dialog
+        header={`Thông tin lịch khám bệnh`}
+        visible={visible3}
+        style={{ width: "50vw" }}
+        onHide={() => {
+          if (!visible3) return;
+          setVisible3(false);
+        }}
+      >
+        <div className="m-0">
+          <div className="grid grid-cols-2 gap-5">
+            <Fieldset legend="Mã lịch khám bệnh">
+              <p className="m-0">{appointmentDetails?._id}</p>
+            </Fieldset>
+            <Fieldset legend="Bệnh nhân">
+              <p className="m-0">{appointmentDetails?.patient?.name}</p>
+            </Fieldset>
+            <Fieldset legend="Bác sĩ">
+              <p className="m-0">{appointmentDetails?.doctor?.name}</p>
+            </Fieldset>
+            <Fieldset legend="Ngày khám">
+              <p className="m-0">{appointmentDetails?.date}</p>
+            </Fieldset>
+            <Fieldset legend="Khung giờ">
+              <p className="m-0">{appointmentDetails?.time}</p>
+            </Fieldset>
+            <Fieldset legend="Trạng thái">
+              <p className="m-0">{appointmentDetails?.status}</p>
+            </Fieldset>
+            <Fieldset legend="Ngày đặt lịch">
+              <p className="m-0">{formatDate(appointmentDetails?.createdAt)}</p>
+            </Fieldset>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

@@ -345,28 +345,28 @@ const ManagePatient = () => {
       >
         <div className="m-0">
           <div className="grid grid-cols-2 gap-5">
-            <Fieldset legend="ID">
+            <Fieldset legend="Mã bệnh nhân">
               <p className="m-0">{patientInfo?._id}</p>
             </Fieldset>
-            <Fieldset legend="Tên">
+            <Fieldset legend="Tên bệnh nhân">
               <p className="m-0">{patientInfo?.name}</p>
             </Fieldset>
-            <Fieldset legend="Tên">
+            <Fieldset legend="Ngày sinh">
               <p className="m-0">{patientInfo?.dateOfBirth}</p>
             </Fieldset>
-            <Fieldset legend="Tên">
+            <Fieldset legend="Giới tính">
               <p className="m-0">{patientInfo?.gender}</p>
             </Fieldset>
-            <Fieldset legend="Tên">
+            <Fieldset legend="SĐT">
               <p className="m-0">{patientInfo?.phoneNumber}</p>
             </Fieldset>
-            <Fieldset legend="Tên">
+            <Fieldset legend="Email">
               <p className="m-0">{patientInfo?.email}</p>
             </Fieldset>
-            <Fieldset legend="Tên">
+            <Fieldset legend="Địa chỉ">
               <p className="m-0">{patientInfo?.address}</p>
             </Fieldset>
-            <Fieldset legend="Ngày thêm">
+            <Fieldset legend="Ngày tạo">
               <p className="m-0">{formatDate(patientInfo?.createdAt)}</p>
             </Fieldset>
           </div>

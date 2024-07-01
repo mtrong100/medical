@@ -70,7 +70,7 @@ const CreateNewAppointmentModal = ({
       console.log("Error creating new appointment:", error);
       toast.current.show({
         severity: "error",
-        summary: "Lỗi",
+        summary: `Lỗi! ${error.message}`,
         life: 1500,
       });
     } finally {
