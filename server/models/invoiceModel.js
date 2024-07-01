@@ -1,14 +1,27 @@
 import mongoose from "mongoose";
+import { PAYMENT_STATUS } from "../utils/constanst.js";
 
 const invoiceSchema = new mongoose.Schema(
   {
-    patientId: {
+    patient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Patient",
       required: true,
     },
-    totalAmount: { type: Number, required: true },
-    paymentStatus: { type: String, required: true },
+    doctor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Employee",
+      required: true,
+    },
+    room: { type: String, required: true },
+    price: { type: Number, required: true },
+    healthInsurance: { type: Boolean, default: false },
+    total: { type: Number, required: true },
+    paymentStatus: {
+      type: String,
+      required: true,
+      default: PAYMENT_STATUS.UNPAID,
+    },
   },
   {
     timestamps: true,
