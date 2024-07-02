@@ -13,7 +13,6 @@ const invoiceSchema = new mongoose.Schema(
       ref: "Employee",
       required: true,
     },
-    room: { type: String, required: true },
     price: { type: Number, required: true },
     healthInsurance: { type: Boolean, default: false },
     total: { type: Number, required: true },

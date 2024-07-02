@@ -6,7 +6,6 @@ export const createNewInvoice = async (req, res) => {
   const {
     patient: patientId,
     doctor: doctorId,
-    room,
     price,
     healthInsurance,
   } = req.body;
@@ -36,7 +35,6 @@ export const createNewInvoice = async (req, res) => {
     const newInvoice = new Invoice({
       patient: patientId,
       doctor: doctorId,
-      room,
       price,
       healthInsurance,
       total: totalAmount,
@@ -57,7 +55,6 @@ export const updateInvoice = async (req, res) => {
   const {
     patient: patientId,
     doctor: doctorId,
-    room,
     price,
     healthInsurance,
     status,
@@ -89,11 +86,10 @@ export const updateInvoice = async (req, res) => {
       {
         patient: patientId,
         doctor: doctorId,
-        room,
         price,
         healthInsurance,
         total: totalAmount,
-        status,
+        paymentStatus: status,
       },
       { new: true }
     );
@@ -126,8 +122,14 @@ export const deleteInvoice = async (req, res) => {
 };
 
 export const getAllInvoices = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
   try {
+    const skip = (page - 1) * limit;
+
     const invoices = await Invoice.find()
+      .skip(skip)
+      .limit(parseInt(limit))
       .populate([
         {
           path: "patient",
@@ -140,7 +142,16 @@ export const getAllInvoices = async (req, res) => {
       ])
       .sort({ createdAt: -1 });
 
-    return res.status(200).json(invoices);
+    const total = await Invoice.countDocuments();
+    const totalPages = Math.ceil(total / limit);
+
+    return res.status(200).json({
+      results: invoices,
+      totalResults: total,
+      totalPages,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+    });
   } catch (error) {
     console.log("Error in getAllInvoices controller", error);
     return res.status(500).json({ error: "Internal server error" });
