@@ -231,7 +231,7 @@ const UpdateProfile = () => {
             <div className="flex items-center justify-end">
               <Button
                 type="submit"
-                label="Xác nhận"
+                label="Cập nhật"
                 disabled={isSubmitting}
                 className="w-[150px]"
               />

@@ -2,6 +2,8 @@ import Patient from "../models/patientModel.js";
 import bcrypt from "bcrypt";
 import { generateTokenAndSetCookie } from "../utils/helper.js";
 import { PATIENT_STATUS } from "../utils/constanst.js";
+import MedicalRecord from "../models/medicalRecordModel.js";
+import Appointment from "../models/appointmentModel.js";
 
 export const patientLogin = async (req, res) => {
   const { email, password } = req.body;
@@ -135,5 +137,62 @@ export const getPatientDetail = async (req, res) => {
   } catch (error) {
     console.log("Error in getPatientDetail controller", error);
     return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getMedicalRecordsFromPatient = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const patient = await Patient.findById(id);
+    if (!patient) {
+      return res.status(404).json({ message: "Không tìm thấy bệnh nhân" });
+    }
+
+    const medicalRecords = await MedicalRecord.find({
+      patient: id,
+    }).populate([
+      {
+        path: "patient",
+        select: "_id name",
+      },
+      {
+        path: "doctor",
+        select: "_id name",
+      },
+    ]);
+
+    return res.status(200).json(medicalRecords);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getAppointmentsFromPatient = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const patient = await Patient.findById(id);
+    if (!patient) {
+      return res.status(404).json({ message: "Không tìm thấy bệnh nhân" });
+    }
+
+    const appointments = await Appointment.find({
+      patient: id,
+    }).populate([
+      {
+        path: "patient",
+        select: "_id name",
+      },
+      {
+        path: "doctor",
+        select: "_id name",
+      },
+    ]);
+
+    return res.status(200).json(appointments);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
   }
 };

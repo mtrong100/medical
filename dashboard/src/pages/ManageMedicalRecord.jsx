@@ -17,8 +17,8 @@ import UpdateMedicalRecordModal from "../components/UpdateMedicalRecordModal";
 import Swal from "sweetalert2";
 
 const ManageMedicalRecord = () => {
-  const [loading, setLoading] = useState([]);
   const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
   const [medicalRecords, setMedicalRecords] = useState([]);
   const queryValue = useDebounce(query, 500);
   const [visible, setVisible] = useState(false);

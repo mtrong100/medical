@@ -29,3 +29,13 @@ export const getPatientDetailApi = async (id) => {
   const response = await axios.get(`/patient/${id}`);
   return response;
 };
+
+export const getMedicalRecordsFromPatientApi = async (id) => {
+  const response = await axios.get(`/patient/medical-records/${id}`);
+  return response;
+};
+
+export const getAppointmentsFromPatientApi = async (id) => {
+  const response = await axios.get(`/patient/appointments/${id}`);
+  return response;
+};
