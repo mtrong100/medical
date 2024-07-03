@@ -1,5 +1,19 @@
 import * as yup from "yup";
 
+export const loginPatientSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Email phải là địa chỉ email hợp lệ")
+    .min(5, "Email phải có ít nhất 5 ký tự")
+    .max(100, "Email không được vượt quá 100 ký tự")
+    .required("Email là bắt buộc"),
+  password: yup
+    .string()
+    .min(6, "Mật khẩu phải có ít nhất 6 ký tự.")
+    .max(20, "Mật khẩu chỉ được tối đa 20 ký tự.")
+    .required("Mật khẩu là bắt buộc."),
+});
+
 export const patientSchema = yup.object().shape({
   name: yup
     .string()
