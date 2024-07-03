@@ -1,6 +1,7 @@
 import Patient from "../models/patientModel.js";
 import bcrypt from "bcrypt";
 import { generateTokenAndSetCookie } from "../utils/helper.js";
+import { PATIENT_STATUS } from "../utils/constanst.js";
 
 export const patientLogin = async (req, res) => {
   const { email, password } = req.body;

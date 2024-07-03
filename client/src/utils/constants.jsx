@@ -19,4 +19,15 @@ export const NAV_LINKS = [
     name: "Liên hệ",
     link: "/contact",
   },
+  {
+    name: "Hồ sơ",
+    link: "/profile",
+  },
 ];
+
+export const GENDER = {
+  MALE: "Nam",
+  FEMALE: "Nữ",
+};
+
+export const genders = [GENDER.MALE, GENDER.FEMALE];

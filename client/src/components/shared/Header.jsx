@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { NAV_LINKS } from "../../utils/constants";
 import { FaHandHoldingMedical } from "react-icons/fa";
 import { Button } from "primereact/button";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
     <header className="z-50 sticky top-0">
@@ -30,14 +32,21 @@ const Header = () => {
               Medical
             </Link>
 
-            <Button
-              label="Đăng nhập"
-              raised
-              outlined
-              icon="pi pi-sign-in"
-              className="bg-white text-slate-900"
-              onClick={() => navigate("/login")}
-            />
+            {currentUser ? (
+              <p className="text-white">
+                Xin chào!{" "}
+                <strong className="text-lg">{currentUser?.name}</strong>
+              </p>
+            ) : (
+              <Button
+                label="Đăng nhập"
+                raised
+                outlined
+                icon="pi pi-sign-in"
+                className="bg-white text-slate-900"
+                onClick={() => navigate("/login")}
+              />
+            )}
           </div>
         </section>
       </div>
@@ -46,6 +55,10 @@ const Header = () => {
           <ul className="flex items-center gap-8">
             {NAV_LINKS.map((item) => {
               const isActive = item.link === location.pathname;
+
+              if (item.link === "/profile" && !currentUser) {
+                return null;
+              }
 
               return (
                 <Link

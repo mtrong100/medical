@@ -37,8 +37,6 @@ const UpdatePatient = () => {
     fetchPatientDetail();
   }, []);
 
-  console.log(patient);
-
   const fetchPatientDetail = async () => {
     setLoading(true);
     try {
