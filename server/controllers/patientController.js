@@ -1,4 +1,37 @@
 import Patient from "../models/patientModel.js";
+import bcrypt from "bcrypt";
+import { generateTokenAndSetCookie } from "../utils/helper.js";
+
+export const patientLogin = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const account = await Patient.findOne({ email });
+
+    if (account.status === PATIENT_STATUS.ISLOCKED) {
+      return res.status(400).json({ error: "Tài khoản đã bị khóa" });
+    }
+
+    if (!account) {
+      return res.status(400).json({ error: "Không tìm thấy tài khoản" });
+    }
+
+    const validPassword = bcrypt.compareSync(password, account.password);
+
+    if (!validPassword) {
+      return res.status(400).json({ error: "Sai mật khẩu" });
+    }
+
+    const payload = { userId: account._id };
+
+    generateTokenAndSetCookie(payload, res);
+
+    return res.status(200).json(account);
+  } catch (error) {
+    console.log("Error in patientLogin controller", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 export const createNewPatient = async (req, res) => {
   try {
@@ -13,11 +46,36 @@ export const createNewPatient = async (req, res) => {
 
 export const updatePatient = async (req, res) => {
   const { id } = req.params;
+  const { password, confirmPassword, ...data } = req.body;
+
   try {
-    const patient = await Patient.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    res.status(200).json(patient);
+    // Check case if update password
+    if (password && confirmPassword) {
+      const account = await Patient.findById(id);
+
+      if (!account) {
+        return res.status(404).json({ error: "Không tìm thấy tài khoản" });
+      }
+
+      if (password !== confirmPassword) {
+        return res.status(400).json({ error: "Mật khẩu không trùng khớp" });
+      }
+
+      const hashedPassword = bcrypt.hashSync(password, 10);
+      account.password = hashedPassword;
+
+      await account.save();
+
+      return res.status(200).json({ message: "Cập nhật mật khẩu thành công" });
+    }
+
+    const updatedPatient = await Patient.findByIdAndUpdate(
+      id,
+      { $set: data },
+      { new: true }
+    );
+
+    res.status(200).json(updatedPatient);
   } catch (error) {
     console.log("Error in updatePatient controller", error);
     return res.status(500).json({ error: "Internal server error" });

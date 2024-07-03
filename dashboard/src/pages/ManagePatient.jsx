@@ -7,7 +7,7 @@ import useDebounce from "../hooks/useDebounce";
 import { InputText } from "primereact/inputtext";
 import { formatDate } from "../utils/helper";
 import { Dropdown } from "primereact/dropdown";
-import { genders } from "../utils/constants";
+import { PATIENT_STATUS, genders } from "../utils/constants";
 import { font } from "../assets/font";
 import Swal from "sweetalert2";
 import { Dialog } from "primereact/dialog";
@@ -15,9 +15,11 @@ import { Fieldset } from "primereact/fieldset";
 import { deletePatientApi, getAllPatientsApi } from "../api/patientApi";
 import CreateNewPatientModal from "../components/CreateNewPatientModal";
 import UpdatePatientModal from "../components/UpdatePatientModal";
+import { useNavigate } from "react-router-dom";
+import { Tag } from "primereact/tag";
 
 const cols = [
-  { field: "_id", header: "ID" },
+  { field: "_id", header: "Mã bệnh nhân" },
   { field: "name", header: "Tên" },
   { field: "dateOfBirth", header: "Ngày sinh" },
   { field: "gender", header: "Giới tính" },
@@ -43,6 +45,7 @@ const ManagePatient = () => {
   });
   const [limit, setLimit] = useState(10);
   const [patientInfo, setPatientInfo] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fechPatients();
@@ -125,10 +128,7 @@ const ManagePatient = () => {
         <Button
           icon="pi pi-pencil"
           rounded
-          onClick={() => {
-            setVisible2(true);
-            setUpdateVal(rowData);
-          }}
+          onClick={() => navigate(`/patient/update/${rowData._id}`)}
         />
         <Button
           icon="pi pi-trash"
@@ -137,6 +137,29 @@ const ManagePatient = () => {
           onClick={() => deletePatient(rowData)}
         />
       </div>
+    );
+  };
+
+  const getSeverity = (status) => {
+    switch (status) {
+      case PATIENT_STATUS.ISACTIVE:
+        return "success";
+
+      case PATIENT_STATUS.ISLOCKED:
+        return "danger";
+
+      default:
+        return "unknown";
+    }
+  };
+
+  const statusBodyTemplate = (rowData) => {
+    return (
+      <Tag
+        value={rowData.status}
+        severity={getSeverity(rowData.status)}
+        rounded
+      />
     );
   };
 
@@ -302,6 +325,7 @@ const ManagePatient = () => {
               sortable
             />
           ))}
+          <Column body={statusBodyTemplate} header="Trạng thái" />
           <Column
             body={actionBodyTemplate}
             exportable={false}

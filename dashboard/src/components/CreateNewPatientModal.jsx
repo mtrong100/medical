@@ -30,6 +30,7 @@ const CreateNewPatientModal = ({
       phoneNumber: "",
       email: "",
       address: "",
+      password: "",
     },
   });
 
@@ -94,7 +95,7 @@ const CreateNewPatientModal = ({
       <Dialog
         header="Form thêm bệnh nhân mới"
         visible={visible}
-        style={{ width: "30vw" }}
+        style={{ width: "35vw" }}
         onHide={() => {
           if (!visible) return;
           setVisible(false);
@@ -136,6 +137,14 @@ const CreateNewPatientModal = ({
                 htmlFor="email"
                 register={register}
                 errorMessage={errors?.email?.message}
+              />
+              <FieldInput
+                label="Mật khẩu"
+                type="password"
+                name="password"
+                htmlFor="password"
+                register={register}
+                errorMessage={errors?.password?.message}
               />
 
               <div className="flex flex-col gap-2">

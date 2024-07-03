@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post("/create", verifySpecificRole, createNewPatient);
 
-router.put("/update/:id", verifySpecificRole, updatePatient);
+router.put("/update/:id", updatePatient);
 
 router.delete("/delete/:id", verifySpecificRole, deletePatient);
 

@@ -24,6 +24,7 @@ const EmployeeDetail = lazy(() => import("../pages/EmployeeDetail"));
 const AddNewEmployee = lazy(() => import("../pages/AddNewEmployee"));
 const UpdatePrescription = lazy(() => import("../pages/UpdatePrescription"));
 const PrescriptionDetail = lazy(() => import("../pages/PrescriptionDetail"));
+const UpdatePatient = lazy(() => import("../pages/UpdatePatient"));
 const ManageMedicalServiceInvoice = lazy(() =>
   import("../pages/ManageMedicalServiceInvoice")
 );
@@ -77,6 +78,10 @@ const MAIN_ROUTES = [
   {
     path: "/medical-service-invoice/update/:id",
     element: <UpdateMedicalServiceInvoice />,
+  },
+  {
+    path: "/patient/update/:id",
+    element: <UpdatePatient />,
   },
 ];
 

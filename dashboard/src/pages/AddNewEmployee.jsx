@@ -41,6 +41,7 @@ const AddNewEmployee = () => {
       phoneNumber: "",
       email: "",
       address: "",
+      password: "",
       salary: 0,
     },
   });

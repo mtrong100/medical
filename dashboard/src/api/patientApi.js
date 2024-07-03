@@ -19,3 +19,8 @@ export const getAllPatientsApi = async (params) => {
   const response = await axios.get("/patient/get-all", { params });
   return response;
 };
+
+export const getPatientDetailApi = async (id) => {
+  const response = await axios.get(`/patient/${id}`);
+  return response;
+};

@@ -5,12 +5,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import FieldInput from "./FieldInput";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { genders } from "../utils/constants";
+import { genders, patientStatus } from "../utils/constants";
 import { Toast } from "primereact/toast";
 import { patientSchema } from "../validations/patientSchema";
 import { formatDate, parseDate } from "../utils/helper";
 import { updatePatientApi } from "../api/patientApi";
 import { Calendar } from "primereact/calendar";
+import { TabView, TabPanel } from "primereact/tabview";
 
 const UpdatePatientModal = ({
   visible2,
@@ -35,6 +36,7 @@ const UpdatePatientModal = ({
   });
 
   const [selectedGender, setSelectedGender] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null);
   const [date, setDate] = useState(null);
   const toast = useRef(null);
 
@@ -47,19 +49,10 @@ const UpdatePatientModal = ({
   }, [reset, updateVal]);
 
   const handleUpdatePatient = async (values) => {
-    if (!date) {
+    if (!date || !selectedGender || !selectedStatus) {
       toast.current.show({
         severity: "error",
-        summary: "Vui lòng chọn ngày sinh",
-        life: 1500,
-      });
-      return;
-    }
-
-    if (!selectedGender) {
-      toast.current.show({
-        severity: "error",
-        summary: "Vui lòng chọn giới tính",
+        summary: "Vui lòng điền đầy đủ vào form",
         life: 1500,
       });
       return;
@@ -69,6 +62,7 @@ const UpdatePatientModal = ({
       const body = {
         ...values,
         gender: selectedGender,
+        status: selectedStatus,
         dateOfBirth: formatDate(date),
       };
 
@@ -161,6 +155,17 @@ const UpdatePatientModal = ({
                   onChange={(e) => setSelectedGender(e.value)}
                   options={genders}
                   placeholder="Chọn giới tính"
+                  className="w-full "
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label>Trạng thái</label>
+                <Dropdown
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.value)}
+                  options={patientStatus}
+                  placeholder="Chọn trạng thái"
                   className="w-full "
                 />
               </div>

@@ -127,6 +127,11 @@ export const EMPLOYEE_STATUS = {
   ISLOCKED: "Khóa tài khoản",
 };
 
+export const PATIENT_STATUS = {
+  ISACTIVE: "Đang hoạt động",
+  ISLOCKED: "Khóa tài khoản",
+};
+
 export const GENDER = {
   MALE: "Nam",
   FEMALE: "Nữ",
@@ -229,3 +234,5 @@ export const appointmentStatus = [
   APPOINTMENT_STATUS.CANCELLED,
   APPOINTMENT_STATUS.COMPLETED,
 ];
+
+export const patientStatus = [PATIENT_STATUS.ISACTIVE, PATIENT_STATUS.ISLOCKED];

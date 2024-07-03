@@ -91,6 +91,8 @@ export const updateEmployee = async (req, res) => {
       const hashedPassword = bcrypt.hashSync(password, 10);
       account.password = hashedPassword;
 
+      await account.save();
+
       return res.status(200).json({ message: "Cập nhật mật khẩu thành công" });
     }
 

@@ -32,6 +32,11 @@ export const PROFILE_IMAGE = {
   GUARD: "https://avatar.iran.liara.run/public/45",
 };
 
+export const PATIENT_STATUS = {
+  ISACTIVE: "Đang hoạt động",
+  ISLOCKED: "Khóa tài khoản",
+};
+
 export const EMPLOYEE_STATUS = {
   ISWORKING: "Đang làm việc",
   ISFIRED: "Đã nghỉ việc",
