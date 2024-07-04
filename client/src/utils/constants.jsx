@@ -31,3 +31,5 @@ export const GENDER = {
 };
 
 export const genders = [GENDER.MALE, GENDER.FEMALE];
+
+export const ADMIN_ID = "6686028822024269e6c1e813";

@@ -3,12 +3,14 @@ import Header from "../shared/Header";
 import { Outlet } from "react-router-dom";
 // import Footer from "../shared/Footer";
 // import Scrolltop from "../Scrolltop";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Chatbox from "../Chatbox";
 // import Newsletter from "../Newsletter";
 // import Chatbox from "../Chatbox";
 
 const MainLayout = () => {
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
 
   return (
     <>
@@ -16,6 +18,7 @@ const MainLayout = () => {
       <section className="page-container">
         <Outlet />
       </section>
+      {currentUser && <Chatbox />}
       {/* <Scrolltop /> */}
       {/* <Newsletter /> */}
       {/* <Footer /> */}

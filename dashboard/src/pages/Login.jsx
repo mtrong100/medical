@@ -7,8 +7,8 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { useDispatch } from "react-redux";
 import { storeCurrentUser } from "../redux/slices/userSlice";
-import { employeeLoginApi } from "../api/employeeApi";
 import { useNavigate } from "react-router-dom";
+import { loginApi } from "../api/authApi";
 
 const Login = () => {
   const toast = useRef(null);
@@ -32,17 +32,21 @@ const Login = () => {
     try {
       const body = { ...values };
 
-      const res = await employeeLoginApi(body);
+      const res = await loginApi(body);
 
-      dispatch(storeCurrentUser(res));
+      if (res) {
+        console.log(res);
 
-      toast.current.show({
-        severity: "success",
-        summary: "Đăng nhập thành công",
-        life: 1500,
-      });
+        dispatch(storeCurrentUser(res));
 
-      navigate("/");
+        toast.current.show({
+          severity: "success",
+          summary: "Đăng nhập thành công",
+          life: 1500,
+        });
+
+        navigate("/");
+      }
     } catch (error) {
       console.log("Error: ", error.message);
       toast.current.show({

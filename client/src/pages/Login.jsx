@@ -6,9 +6,9 @@ import FieldInput from "../components/FieldInput";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { Link, useNavigate } from "react-router-dom";
-import { patientLoginApi } from "../api/patientApi";
 import { useDispatch } from "react-redux";
 import { storeCurrentUser } from "../redux/slices/userSlice";
+import { loginApi } from "../api/authApi";
 
 const Login = () => {
   const {
@@ -33,7 +33,7 @@ const Login = () => {
     try {
       const body = { ...values };
 
-      const res = await patientLoginApi(body);
+      const res = await loginApi(body);
 
       if (res) {
         disppatch(storeCurrentUser(res));

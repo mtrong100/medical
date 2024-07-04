@@ -54,11 +54,11 @@ export const SIDEBAR_LINKS = [
     name: "Hồ sơ bệnh án",
     link: "/medical-record",
   },
-  // {
-  //   icon: "pi pi-warehouse",
-  //   name: "Phòng khám",
-  //   link: "/room",
-  // },
+  {
+    icon: "pi pi-comment",
+    name: "Chat",
+    link: "/chat",
+  },
   {
     icon: "pi pi-server",
     name: "Thiết bị",

@@ -1,20 +1,32 @@
 import mongoose from "mongoose";
-import { PROFILE_IMAGE } from "../utils/constanst.js";
+import {
+  ACCOUNT_PROVIDER,
+  ACCOUNT_STATUS,
+  PROFILE_IMAGE,
+  USER_ROLE,
+} from "../utils/constanst.js";
 
 const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    avatar: {
+    avatar: { type: String, required: true, default: PROFILE_IMAGE.DEFAULT },
+    dateOfBirth: { type: String },
+    gender: { type: String },
+    phoneNumber: { type: String, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    address: { type: String },
+    status: {
       type: String,
       required: true,
-      default: PROFILE_IMAGE.DEFAULT,
+      default: ACCOUNT_STATUS.ISACTIVE,
     },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true, minlength: 6 },
-    address: { type: String, default: null },
-    phoneNumber: { type: String, required: true, unique: true },
-    provider: { type: String, required: true },
-    blocked: { type: Boolean, default: false },
+    provider: {
+      type: String,
+      required: true,
+      default: ACCOUNT_PROVIDER.EMAIL_PASSWORD,
+    },
+    role: { type: String, required: true, default: USER_ROLE.USER },
     resetPasswordOtp: { type: String, default: null },
     resetPasswordExpires: { type: Date, default: null },
   },

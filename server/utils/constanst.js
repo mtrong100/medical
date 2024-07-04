@@ -32,7 +32,17 @@ export const PROFILE_IMAGE = {
   GUARD: "https://avatar.iran.liara.run/public/45",
 };
 
+export const ACCOUNT_PROVIDER = {
+  GOOGLE: "Google",
+  EMAIL_PASSWORD: "Email password",
+};
+
 export const PATIENT_STATUS = {
+  ISACTIVE: "Đang hoạt động",
+  ISLOCKED: "Khóa tài khoản",
+};
+
+export const ACCOUNT_STATUS = {
   ISACTIVE: "Đang hoạt động",
   ISLOCKED: "Khóa tài khoản",
 };
@@ -57,6 +67,15 @@ export const EMPLOYEE_ROLE = {
   ACCOUNTANT: "Kế toán",
   CLEANING_STAFF: "Nhân viên vệ sinh",
   GUARD: "Bảo vệ",
+};
+export const USER_ROLE = {
+  DOCTOR: "Bác sĩ",
+  ADMIN: "Quản trị viên",
+  CASHIER: "Thu ngân",
+  RECEPTIONIST: "Lễ tân",
+  NURSE: "Y tá",
+  ACCOUNTANT: "Kế toán",
+  USER: "Người dùng",
 };
 
 export const EMPLOYEE_SALARY = {

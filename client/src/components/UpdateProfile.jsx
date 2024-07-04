@@ -15,12 +15,15 @@ import { formatDate, parseDate } from "../utils/helper";
 import { genders } from "../utils/constants";
 import FileInput from "./FileInput";
 import FieldInput from "./FieldInput";
-import { updatePatientSchema } from "../validations/patientSchema";
 import { useSelector } from "react-redux";
 import { getPatientDetailApi, updatePatientApi } from "../api/patientApi";
 import { useDispatch } from "react-redux";
 import { storeCurrentUser } from "../redux/slices/userSlice";
 import { Image } from "primereact/image";
+import { updateUserSchema } from "../validations/userSchema";
+import { getUserDetailApi, updateUserApi } from "../api/userApi";
+import { logoutApi } from "../api/authApi";
+import { useNavigate } from "react-router-dom";
 
 const UpdateProfile = () => {
   const {
@@ -30,7 +33,7 @@ const UpdateProfile = () => {
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onchange",
-    resolver: yupResolver(updatePatientSchema),
+    resolver: yupResolver(updateUserSchema),
     defaultValues: {
       name: "",
       phoneNumber: "",
@@ -40,6 +43,7 @@ const UpdateProfile = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -48,15 +52,15 @@ const UpdateProfile = () => {
   const [isUploading, setIsUploading] = useState(false);
   const toast = useRef(null);
 
-  const fetchPatientDetail = async () => {
+  const fetchUserDetail = async () => {
     setLoading(true);
     try {
-      const res = await getPatientDetailApi(currentUser._id);
+      const res = await getUserDetailApi(currentUser._id);
       if (res) {
         dispatch(storeCurrentUser(res));
       }
     } catch (error) {
-      console.log("Error in fetchPatientDetail", error);
+      console.log("Error in fetchUserDetail", error);
     } finally {
       setLoading(false);
     }
@@ -89,13 +93,15 @@ const UpdateProfile = () => {
         dateOfBirth: formatDate(date),
       };
 
-      await updatePatientApi(currentUser._id, body);
+      const res = await updateUserApi(currentUser._id, body);
 
-      toast.current.show({
-        severity: "success",
-        summary: "Cập nhật hoàn tất",
-        life: 1500,
-      });
+      if (res) {
+        toast.current.show({
+          severity: "success",
+          summary: "Cập nhật hoàn tất",
+          life: 1500,
+        });
+      }
     } catch (error) {
       console.log("Error update profile:", error);
       toast.current.show({
@@ -104,7 +110,7 @@ const UpdateProfile = () => {
         life: 1500,
       });
     } finally {
-      fetchPatientDetail();
+      fetchUserDetail();
     }
   };
 
@@ -126,7 +132,12 @@ const UpdateProfile = () => {
       const downloadURL = await getDownloadURL(snapshot.ref);
 
       if (downloadURL) {
-        await updatePatientApi(currentUser._id, { avatar: downloadURL });
+        const res = await updateUserApi(currentUser._id, {
+          avatar: downloadURL,
+        });
+
+        console.log(res);
+
         toast.current.show({
           severity: "success",
           summary: "Cập nhật hình ảnh hoàn tất",
@@ -142,6 +153,22 @@ const UpdateProfile = () => {
       });
     } finally {
       setIsUploading(false);
+      fetchUserDetail();
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutApi();
+    } catch (error) {
+      console.log("Error logout:", error);
+      toast.current.show({
+        severity: "error",
+        summary: "Lỗi",
+        life: 1500,
+      });
+    } finally {
+      navigate("/login");
     }
   };
 
@@ -228,7 +255,14 @@ const UpdateProfile = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-5">
+              <Button
+                type="button"
+                label="Đăng xuất"
+                severity="secondary"
+                icon="pi pi-sign-out"
+                onClick={handleLogout}
+              />
               <Button
                 type="submit"
                 label="Cập nhật"

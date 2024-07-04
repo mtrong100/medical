@@ -6,11 +6,11 @@ import FieldInput from "../components/FieldInput";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { Link, useNavigate } from "react-router-dom";
-import { createNewPatientApi } from "../api/patientApi";
 import { formatDate } from "../utils/helper";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 import { genders } from "../utils/constants";
+import { registerApi } from "../api/authApi";
 
 const Register = () => {
   const {
@@ -61,7 +61,7 @@ const Register = () => {
         dateOfBirth: formatDate(date),
       };
 
-      const res = await createNewPatientApi(body);
+      const res = await registerApi(body);
 
       if (res) {
         toast.current.show({

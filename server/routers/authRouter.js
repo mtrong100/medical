@@ -12,9 +12,9 @@ const router = express.Router();
 
 router.post("/register", register);
 
-router.post("/google-login", googleLogin);
-
 router.post("/login", login);
+
+router.post("/google-login", googleLogin);
 
 router.post("/logout", logout);
 

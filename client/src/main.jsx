@@ -9,6 +9,7 @@ import "./index.css";
 import "primeicons/primeicons.css";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./utils/firebase.js";
+import { SocketContextProvider } from "./components/SocketContext.jsx";
 initializeApp(firebaseConfig);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -16,7 +17,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <PrimeReactProvider value={{ ripple: true }}>
-          <App />
+          <SocketContextProvider>
+            <App />
+          </SocketContextProvider>
         </PrimeReactProvider>
       </PersistGate>
     </Provider>

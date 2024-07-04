@@ -5,9 +5,10 @@ import {
   generateTokenAndSetCookie,
 } from "../utils/helper.js";
 import { sendOtpResetPassword } from "../utils/mail.js";
+import { ACCOUNT_PROVIDER, ACCOUNT_STATUS } from "../utils/constanst.js";
 
 export const register = async (req, res) => {
-  const { email, password, name, confirmPassword } = req.body;
+  const { email, password, confirmPassword, ...data } = req.body;
 
   try {
     const user = await User.findOne({ email });
@@ -24,15 +25,16 @@ export const register = async (req, res) => {
     const hash = bcrypt.hashSync(password, salt);
 
     const newUser = new User({
-      name,
+      ...data,
       email,
-      provider: "email & password",
       password: hash,
     });
 
     await newUser.save();
 
-    generateTokenAndSetCookie(newUser._id, res);
+    const payload = { userId: newUser._id, userRole: newUser.role };
+
+    generateTokenAndSetCookie(payload, res);
 
     return res.status(201).json({
       message: "Tạo tài khoản thành công",
@@ -44,36 +46,30 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
-
   try {
-    const user = await User.findOne({ email });
-
-    if (user.blocked) {
-      return res.status(400).json({ error: "Tài khoản của bạn đã bị khóa" });
-    }
+    const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
       return res.status(400).json({ error: "Không tìm thấy tài khoản" });
     }
 
-    const validPassword = bcrypt.compareSync(password, user.password);
+    if (user.status === ACCOUNT_STATUS.ISLOCKED) {
+      return res.status(400).json({ error: "Tài khoản của bạn đã bị khóa" });
+    }
 
+    const validPassword = bcrypt.compareSync(req.body.password, user.password);
     if (!validPassword) {
       return res.status(400).json({ error: "Sai mật khẩu" });
     }
 
-    generateTokenAndSetCookie(user._id, res);
+    const payload = { userId: user._id, userRole: user.role };
 
-    return res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      avatar: user.avatar,
-      email: user.email,
-      phone: user.phone,
-      address: user.address,
-      blocked: user.blocked,
-    });
+    generateTokenAndSetCookie(payload, res);
+
+    const { resetPasswordOtp, resetPasswordExpires, password, ...rest } =
+      user._doc;
+
+    return res.status(200).json(rest);
   } catch (error) {
     console.log("Lỗi", error.message);
     return res.status(500).json({ error: "Lỗi server" });
@@ -86,51 +82,41 @@ export const googleLogin = async (req, res) => {
   try {
     const user = await User.findOne({ email });
 
+    if (user.status === ACCOUNT_STATUS.ISLOCKED) {
+      return res.status(400).json({ error: "Tài khoản của bạn đã bị khóa" });
+    }
+
     if (!user) {
       const generatedPassword = autoGeneratePassword();
-
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(generatedPassword, salt);
 
-      // Tạo model
       const newUser = new User({
         name,
         email,
         avatar,
-        provider: "google",
+        provider: ACCOUNT_PROVIDER.GOOGLE,
         password: hash,
-        verified: true,
       });
+
       await newUser.save();
 
-      generateTokenAndSetCookie(newUser._id, res);
+      const payload = { userId: newUser._id, userRole: newUser.role };
+      generateTokenAndSetCookie(payload, res);
 
-      return res.status(200).json({
-        _id: newUser._id,
-        name: newUser.name,
-        avatar: newUser.avatar,
-        email: newUser.email,
-        phone: newUser.phone,
-        address: newUser.address,
-        blocked: newUser.blocked,
-      });
+      const { resetPasswordOtp, resetPasswordExpires, password, ...rest } =
+        newUser._doc;
+
+      return res.status(200).json(rest);
     }
 
-    if (user.blocked) {
-      return res.status(400).json({ error: "Tài khoản của bạn đã bị khóa" });
-    }
+    const payload = { userId: user._id, userRole: user.role };
+    generateTokenAndSetCookie(payload, res);
 
-    generateTokenAndSetCookie(user._id, res);
+    const { resetPasswordOtp, resetPasswordExpires, password, ...rest } =
+      user._doc;
 
-    return res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      avatar: user.avatar,
-      email: user.email,
-      phone: user.phone,
-      address: user.address,
-      blocked: user.blocked,
-    });
+    return res.status(200).json(rest);
   } catch (error) {
     console.log("Lỗi", error);
     return res.status(500).json({ error: "Lỗi server" });
@@ -139,7 +125,7 @@ export const googleLogin = async (req, res) => {
 
 export const logout = (req, res) => {
   try {
-    res.cookie("jwt", "", { maxAge: 0 });
+    res.cookie("MEDICAL_JWT", "", { maxAge: 0 });
     return res.status(200).json({ message: "Đã đăng xuất tài khoản" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
