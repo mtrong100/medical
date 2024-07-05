@@ -71,8 +71,8 @@ const ManageAppointment = () => {
     const queryLower = queryValue.toLowerCase();
 
     return (
-      item.patient.name.toLowerCase().includes(queryLower) ||
-      item.doctor.name.toLowerCase().includes(queryLower) ||
+      item.patient?.name.toLowerCase().includes(queryLower) ||
+      item.doctor?.name.toLowerCase().includes(queryLower) ||
       item._id.includes(queryLower)
     );
   });

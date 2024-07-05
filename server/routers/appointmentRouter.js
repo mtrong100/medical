@@ -6,11 +6,14 @@ import {
   getAllAppointment,
   getAppointmentDetail,
   updateAppointment,
+  bookingNewAppointment,
 } from "../controllers/appointmentController.js";
 
 const router = express.Router();
 
 router.post("/create", createNewAppointment);
+
+router.post("/booking", bookingNewAppointment);
 
 router.put("/update/:id", verifySpecificRole, updateAppointment);
 

@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 // import Scrolltop from "../Scrolltop";
 import { useDispatch, useSelector } from "react-redux";
 import Chatbox from "../Chatbox";
+import Banner from "../Banner";
 // import Newsletter from "../Newsletter";
 // import Chatbox from "../Chatbox";
 
@@ -15,7 +16,8 @@ const MainLayout = () => {
   return (
     <>
       <Header />
-      <section className="page-container">
+
+      <section>
         <Outlet />
       </section>
       {currentUser && <Chatbox />}

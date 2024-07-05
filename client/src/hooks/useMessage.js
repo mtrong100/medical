@@ -24,7 +24,6 @@ export default function useMessage() {
 
       try {
         const res = await getMessagesApi(ADMIN_ID);
-        console.log(res);
         setMessages(res);
       } catch (error) {
         console.log("Failed to fetch messages: ", error);

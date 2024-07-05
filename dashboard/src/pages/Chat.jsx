@@ -8,7 +8,7 @@ const Chat = () => {
   const { selectedConversation } = useSelector((state) => state.chat);
 
   return (
-    <div className="grid grid-cols-[minmax(0,_1fr)_350px] gap-2 items-start">
+    <div className="grid grid-cols-[minmax(0,_1fr)_350px] gap-2 items-start ">
       {selectedConversation ? <Conversation /> : <NonConvsersation />}
       <ChatSidebar />
     </div>

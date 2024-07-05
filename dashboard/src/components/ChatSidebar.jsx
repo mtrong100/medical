@@ -9,7 +9,7 @@ const ChatSidebar = () => {
   console.log("🚀 ~ ChatSidebar ~ conversation:", conversation);
 
   return (
-    <aside className="sticky top-0 max-w-[350px] bg-white overflow-y-auto border-blue-gray-100 border h-screen w-full p-4 shadow-xl shadow-blue-gray-900/5">
+    <aside className="sticky top-0  bg-white overflow-y-auto border-blue-gray-100 border h-[calc(100vh_-_20px)] w-full p-4 shadow-xl shadow-blue-gray-900/5">
       <div className="rounded-full py-3 px-5 flex items-center gap-3 border-2 border-gray-300">
         <GoSearch size={22} />
         <input

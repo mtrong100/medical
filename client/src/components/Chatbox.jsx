@@ -20,7 +20,7 @@ const Chatbox = () => {
       <div className="relative">
         <div
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center justify-center cursor-pointer rounded-full w-[50px] h-[50px] bg-red-500"
+          className="flex items-center justify-center cursor-pointer rounded-full w-[50px] h-[50px] bg-blue-600"
         >
           <IoChatbubbleEllipsesOutline size={25} color="white" />
         </div>
@@ -54,21 +54,23 @@ const Chatbox = () => {
                   ))}
               </main>
 
-              <div className="rounded-sm py-3 px-5 flex items-center gap-3 border-2 border-gray-300">
-                <input
-                  type="text"
-                  className="outline-none border-none w-full bg-transparent"
-                  placeholder="Send message..."
-                  value={val}
-                  onChange={(e) => setVal(e.target.value)}
-                />
-                <button disabled={isSending} onClick={handleSendMessage}>
-                  <IoMdSend
-                    className="cursor-pointer hover:text-red-500 opacity-50 hover:opacity-100"
-                    size={25}
+              <form>
+                <div className="rounded-sm py-3 px-5 flex items-center gap-3 border-2 border-gray-300">
+                  <input
+                    type="text"
+                    className="outline-none border-none w-full bg-transparent"
+                    placeholder="Send message..."
+                    value={val}
+                    onChange={(e) => setVal(e.target.value)}
                   />
-                </button>
-              </div>
+                  <button disabled={isSending} onClick={handleSendMessage}>
+                    <IoMdSend
+                      className="cursor-pointer hover:text-red-500 opacity-50 hover:opacity-100"
+                      size={25}
+                    />
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}

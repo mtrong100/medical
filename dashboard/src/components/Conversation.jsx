@@ -23,7 +23,7 @@ const Conversation = () => {
   }, [messages]);
 
   return (
-    <div className="w-full bg-white border ">
+    <div className="w-full bg-white  h-[calc(100vh_-_20px)] relative">
       <header className="bg-gray-100 shadow-sm border p-4 w-full rounded-sm">
         <div className="flex items-center gap-2 justify-between">
           <h3 className="font-semibold">{selectedUser?.name}</h3>
@@ -33,7 +33,7 @@ const Conversation = () => {
         </div>
       </header>
 
-      <main className="p-4 space-y-4 overflow-y-auto h-[640px]">
+      <main className="p-4 space-y-4 overflow-y-auto h-[calc(100vh_-_145px)]">
         {loading && <ProgressSpinner className="h-6 w-6" />}
 
         {!loading &&
@@ -45,7 +45,7 @@ const Conversation = () => {
           ))}
       </main>
 
-      <form>
+      <form className="mt-auto">
         <div className="rounded-sm py-3 px-5 flex items-center gap-3 border-2 border-gray-300">
           <input
             type="text"

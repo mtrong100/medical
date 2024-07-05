@@ -1,12 +1,90 @@
 import Appointment from "../models/appointmentModel.js";
 import Employee from "../models/employeeModel.js";
 import Patient from "../models/patientModel.js";
+import User from "../models/userModel.js";
 import { APPOINTMENT_STATUS } from "../utils/constanst.js";
 import {
   sendAppointmentCancellation,
   sendAppointmentConfirmation,
   sendAppointmentUpdate,
 } from "../utils/mail.js";
+
+export const bookingNewAppointment = async (req, res) => {
+  const {
+    doctor: doctorId,
+    date,
+    time,
+    email,
+    gender,
+    phoneNumber,
+    address,
+    dateOfBirth,
+  } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res
+        .status(400)
+        .json({ message: "Không tìm thấy thông tin người dùng" });
+    }
+
+    const doctor = await Employee.findById(doctorId);
+    if (!doctor) {
+      return res
+        .status(400)
+        .json({ message: "Không tìm thấy thông tin bác sĩ" });
+    }
+
+    let patient = await Patient.findById(user._id);
+    if (!patient) {
+      const newPatient = new Patient({
+        _id: user._id,
+        name: user.name,
+        avatar: user.avatar,
+        email: user.email,
+        phoneNumber,
+        address,
+        gender,
+        dateOfBirth,
+      });
+
+      patient = await newPatient.save();
+    }
+    const existingAppointment = await Appointment.findOne({
+      doctor: doctorId,
+      date,
+      time,
+    });
+    if (existingAppointment) {
+      return res.status(400).json({ message: "Trùng lịch khám" });
+    }
+
+    const newAppointment = new Appointment({
+      patient: user._id,
+      doctor: doctor._id,
+      date,
+      time,
+    });
+
+    await newAppointment.save();
+
+    const appointmentDetails = {
+      patientEmail: patient.email,
+      patientName: patient.name,
+      doctorName: doctor.name,
+      date,
+      time,
+    };
+
+    sendAppointmentConfirmation(appointmentDetails);
+
+    return res.status(201).json(newAppointment);
+  } catch (error) {
+    console.log("Error in createNewAppointment controller", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 export const createNewAppointment = async (req, res) => {
   const { doctor: doctorId, date, time, patient: patientId } = req.body;

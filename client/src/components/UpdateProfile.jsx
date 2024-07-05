@@ -16,7 +16,6 @@ import { genders } from "../utils/constants";
 import FileInput from "./FileInput";
 import FieldInput from "./FieldInput";
 import { useSelector } from "react-redux";
-import { getPatientDetailApi, updatePatientApi } from "../api/patientApi";
 import { useDispatch } from "react-redux";
 import { storeCurrentUser } from "../redux/slices/userSlice";
 import { Image } from "primereact/image";
@@ -255,19 +254,20 @@ const UpdateProfile = () => {
               </div>
             </div>
 
-            <div className="flex items-center justify-end gap-5">
+            <div className="flex items-center justify-between gap-5">
               <Button
                 type="button"
                 label="Đăng xuất"
-                severity="secondary"
+                severity="danger"
                 icon="pi pi-sign-out"
                 onClick={handleLogout}
               />
               <Button
                 type="submit"
-                label="Cập nhật"
+                severity="success"
+                label="Cập nhật hồ sơ "
                 disabled={isSubmitting}
-                className="w-[150px]"
+                icon="pi pi-user-edit"
               />
             </div>
           </form>

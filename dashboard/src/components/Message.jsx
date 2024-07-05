@@ -11,7 +11,7 @@ const Message = ({ item }) => {
     return (
       <div className="flex items-center justify-end gap-2">
         <div>
-          <div className="bg-amber-300 rounded-lg p-3 max-w-xs">
+          <div className="bg-blue-200 rounded-lg p-3 max-w-xs">
             <p className="text-sm">{item?.message}</p>
           </div>
 
@@ -38,7 +38,7 @@ const Message = ({ item }) => {
       />
 
       <div>
-        <div className="bg-gray-300 rounded-lg p-3 text-black max-w-xs">
+        <div className="bg-gray-200 rounded-lg p-3 text-black max-w-xs">
           <p className="text-sm">{item?.message}</p>
         </div>
 

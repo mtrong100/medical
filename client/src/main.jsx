@@ -10,6 +10,10 @@ import "primeicons/primeicons.css";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./utils/firebase.js";
 import { SocketContextProvider } from "./components/SocketContext.jsx";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 initializeApp(firebaseConfig);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

@@ -130,6 +130,7 @@ const CreateNewPatientModal = ({
                 register={register}
                 errorMessage={errors?.address?.message}
               />
+
               <FieldInput
                 label="Email"
                 type="email"
