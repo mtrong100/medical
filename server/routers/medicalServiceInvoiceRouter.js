@@ -6,9 +6,12 @@ import {
   getAllMedicalServiceInvoice,
   getMedicalServiceInvoiceDetail,
   updateMedicalServiceInvoice,
+  getCollection,
 } from "../controllers/medicalServiceInvoiceController.js";
 
 const router = express.Router();
+
+router.get("/collection", verifySpecificRole, getCollection);
 
 router.post("/create", verifySpecificRole, createNewMedicalServiceInvoice);
 

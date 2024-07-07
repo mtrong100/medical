@@ -282,3 +282,13 @@ export const getAllAppointment = async (req, res) => {
     return res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
   }
 };
+
+export const getCollection = async (req, res) => {
+  try {
+    const data = await Appointment.find();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Error in getCollection controller", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};

@@ -7,9 +7,12 @@ import {
   getAppointmentDetail,
   updateAppointment,
   bookingNewAppointment,
+  getCollection,
 } from "../controllers/appointmentController.js";
 
 const router = express.Router();
+
+router.get("/collection", verifySpecificRole, getCollection);
 
 router.post("/create", createNewAppointment);
 

@@ -1,6 +1,7 @@
 import Employee from "../models/employeeModel.js";
 import Invoice from "../models/invoiceModel.js";
 import Patient from "../models/patientModel.js";
+import { PAYMENT_STATUS } from "../utils/constanst.js";
 
 export const createNewInvoice = async (req, res) => {
   const {
@@ -180,6 +181,16 @@ export const getInvoiceDetail = async (req, res) => {
     return res.status(200).json(invoice);
   } catch (error) {
     console.log("Error in getInvoiceDetail controller", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getCollection = async (req, res) => {
+  try {
+    const data = await Invoice.find({ paymentStatus: PAYMENT_STATUS.PAID });
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Error in getCollection controller", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };

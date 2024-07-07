@@ -6,9 +6,12 @@ import {
   getAllInvoices,
   getInvoiceDetail,
   updateInvoice,
+  getCollection,
 } from "../controllers/invoiceController.js";
 
 const router = express.Router();
+
+router.get("/collection", verifySpecificRole, getCollection);
 
 router.post("/create", verifySpecificRole, createNewInvoice);
 

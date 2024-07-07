@@ -167,9 +167,8 @@ export const lockEmployeeAccount = async (req, res) => {
 };
 
 export const getEmployeeDetail = async (req, res) => {
-  const { id } = req.params;
-
   try {
+    const { id } = req.params;
     const employee = await Employee.findById(id);
 
     if (!employee) {
@@ -222,6 +221,16 @@ export const getAllEmployees = async (req, res) => {
     });
   } catch (error) {
     console.log("Error in getAllEmployees controller", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getCollection = async (req, res) => {
+  try {
+    const data = await Employee.find();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Error in getCollection controller", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };

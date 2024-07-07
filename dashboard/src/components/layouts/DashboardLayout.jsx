@@ -3,7 +3,7 @@ import DashboardSidebar from "../shared/DashboardSidebar";
 
 const DashboardLayout = () => {
   return (
-    <section className="relative flex items-start ">
+    <section className="relative flex items-start">
       <DashboardSidebar />
       <main className="p-4 w-full overflow-hidden">
         <Outlet />

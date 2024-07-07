@@ -4,6 +4,7 @@ import {
   deleteEmployee,
   employeeLogin,
   getAllEmployees,
+  getCollection,
   getEmployeeDetail,
   lockEmployeeAccount,
   terminatedEmployee,
@@ -12,6 +13,8 @@ import {
 import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
 
 const router = express.Router();
+
+router.get("/collection", getCollection);
 
 router.post("/login", employeeLogin);
 

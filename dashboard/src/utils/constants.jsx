@@ -66,6 +66,21 @@ export const SIDEBAR_LINKS = [
   },
 ];
 
+export const monthsArray = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 export const medicalSchoolsInVietnam = [
   "Đại học Y Hà Nội",
   "Đại học Y Dược TP. Hồ Chí Minh",

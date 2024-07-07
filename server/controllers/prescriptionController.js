@@ -1,5 +1,6 @@
 import Medicine from "../models/medicineModel.js";
 import Prescription from "../models/prescriptionModel.js";
+import { PAYMENT_STATUS } from "../utils/constanst.js";
 
 export const createNewPrescription = async (req, res) => {
   try {
@@ -167,7 +168,7 @@ export const getPrescriptionDetail = async (req, res) => {
     const prescription = await Prescription.findById(id)
       .populate([
         {
-          path: "patient",  
+          path: "patient",
           select: "_id name",
         },
         {
@@ -212,5 +213,15 @@ export const getPrescriptionDetail = async (req, res) => {
   } catch (error) {
     console.log("Lỗi trong controller getPrescriptionDetail", error);
     return res.status(500).json({ error: "Lỗi máy chủ nội bộ" });
+  }
+};
+
+export const getCollection = async (req, res) => {
+  try {
+    const data = await Prescription.find({ status: PAYMENT_STATUS.PAID });
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Error in getCollection controller", error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -7,9 +7,12 @@ import {
   getAllPrescriptions,
   getPrescriptionDetail,
   updatePrescription,
+  getCollection,
 } from "../controllers/prescriptionController.js";
 
 const router = express.Router();
+
+router.get("/collection", verifySpecificRole, getCollection);
 
 router.post("/create", verifySpecificRole, createNewPrescription);
 

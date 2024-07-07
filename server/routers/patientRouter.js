@@ -8,10 +8,13 @@ import {
   updatePatient,
   getMedicalRecordsFromPatient,
   getAppointmentsFromPatient,
+  getCollection,
 } from "../controllers/patientController.js";
 import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
 
 const router = express.Router();
+
+router.get("/collection", verifySpecificRole, getCollection);
 
 router.post("/create", verifySpecificRole, createNewPatient);
 

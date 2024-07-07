@@ -1,4 +1,5 @@
 import MedicalServiceInvoice from "../models/medicalServiceInvoiceModel.js";
+import { PAYMENT_STATUS } from "../utils/constanst.js";
 
 export const createNewMedicalServiceInvoice = async (req, res) => {
   try {
@@ -121,6 +122,18 @@ export const getAllMedicalServiceInvoice = async (req, res) => {
     });
   } catch (error) {
     console.log("Error in getAllMedicalServiceInvoice controller", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getCollection = async (req, res) => {
+  try {
+    const data = await MedicalServiceInvoice.find({
+      status: PAYMENT_STATUS.PAID,
+    });
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Error in getCollection controller", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 };
