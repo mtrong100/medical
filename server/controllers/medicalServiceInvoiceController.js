@@ -1,19 +1,20 @@
 import MedicalServiceInvoice from "../models/medicalServiceInvoiceModel.js";
 import { PAYMENT_STATUS } from "../utils/constanst.js";
 
-export const createNewMedicalServiceInvoice = async (req, res) => {
+export const createMedicalServiceInvoice = async (req, res) => {
   try {
     const newMedicalServiceInvoice = new MedicalServiceInvoice(req.body);
     await newMedicalServiceInvoice.save();
     return res.status(201).json(newMedicalServiceInvoice);
   } catch (error) {
-    console.log("Error in createNewMedicalServiceInvoice controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller createMedicalServiceInvoice", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const updateMedicalServiceInvoice = async (req, res) => {
   const { id } = req.params;
+
   try {
     const medicalServiceInvoice = await MedicalServiceInvoice.findByIdAndUpdate(
       id,
@@ -22,26 +23,26 @@ export const updateMedicalServiceInvoice = async (req, res) => {
     );
     res.status(200).json(medicalServiceInvoice);
   } catch (error) {
-    console.log("Error in updateMedicalServiceInvoice controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller updateMedicalServiceInvoice", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const deleteMedicalServiceInvoice = async (req, res) => {
   const { id } = req.params;
+
   try {
-    const medicalServiceInvoice = await MedicalServiceInvoice.findByIdAndDelete(
-      id
-    );
-    res.status(200).json(medicalServiceInvoice);
+    await MedicalServiceInvoice.findByIdAndDelete(id);
+    res.status(200).json({ message: "Xóa hoàn tất" });
   } catch (error) {
-    console.log("Error in deleteMedicalServiceInvoice controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller deleteMedicalServiceInvoice", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const getMedicalServiceInvoiceDetail = async (req, res) => {
   const { id } = req.params;
+
   try {
     const medicalServiceInvoice = await MedicalServiceInvoice.findById(id)
       .populate([
@@ -70,16 +71,18 @@ export const getMedicalServiceInvoiceDetail = async (req, res) => {
 
     return res.status(200).json(formattedResults);
   } catch (error) {
-    console.log("Error in getMedicalServiceInvoiceDetail controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getMedicalServiceInvoiceDetail", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const getAllMedicalServiceInvoice = async (req, res) => {
+export const getMedicalServiceInvoices = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
 
   try {
     const skip = (page - 1) * limit;
+    const total = await MedicalServiceInvoice.countDocuments();
+    const totalPages = Math.ceil(total / limit);
 
     const medicalServiceInvoices = await MedicalServiceInvoice.find()
       .skip(skip)
@@ -89,9 +92,6 @@ export const getAllMedicalServiceInvoice = async (req, res) => {
         { path: "detail.service", select: "_id name price" },
       ])
       .sort({ createdAt: -1 });
-
-    const total = await MedicalServiceInvoice.countDocuments();
-    const totalPages = Math.ceil(total / limit);
 
     const formattedResults = medicalServiceInvoices.map((item) => {
       const formattedDetails = item.detail.map((detailItem) => {
@@ -121,8 +121,8 @@ export const getAllMedicalServiceInvoice = async (req, res) => {
       limit: parseInt(limit),
     });
   } catch (error) {
-    console.log("Error in getAllMedicalServiceInvoice controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getMedicalServiceInvoices", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -133,7 +133,7 @@ export const getCollection = async (req, res) => {
     });
     return res.status(200).json(data);
   } catch (error) {
-    console.log("Error in getCollection controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getCollection", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };

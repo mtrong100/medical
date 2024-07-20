@@ -1,49 +1,16 @@
 import Patient from "../models/patientModel.js";
-import bcrypt from "bcrypt";
-import { generateTokenAndSetCookie } from "../utils/helper.js";
-import { PATIENT_STATUS } from "../utils/constanst.js";
 import MedicalRecord from "../models/medicalRecordModel.js";
+import bcrypt from "bcrypt";
 import Appointment from "../models/appointmentModel.js";
 
-export const patientLogin = async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-    const account = await Patient.findOne({ email });
-
-    if (account.status === PATIENT_STATUS.ISLOCKED) {
-      return res.status(400).json({ error: "Tài khoản đã bị khóa" });
-    }
-
-    if (!account) {
-      return res.status(400).json({ error: "Không tìm thấy tài khoản" });
-    }
-
-    const validPassword = bcrypt.compareSync(password, account.password);
-
-    if (!validPassword) {
-      return res.status(400).json({ error: "Sai mật khẩu" });
-    }
-
-    const payload = { userId: account._id };
-
-    generateTokenAndSetCookie(payload, res);
-
-    return res.status(200).json(account);
-  } catch (error) {
-    console.log("Error in patientLogin controller", error);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-export const createNewPatient = async (req, res) => {
+export const createPatient = async (req, res) => {
   try {
     const newPatient = new Patient(req.body);
     await newPatient.save();
     return res.status(201).json(newPatient);
   } catch (error) {
-    console.log("Error in createNewPatient controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller createPatient", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -57,11 +24,11 @@ export const updatePatient = async (req, res) => {
       const account = await Patient.findById(id);
 
       if (!account) {
-        return res.status(404).json({ error: "Không tìm thấy tài khoản" });
+        return res.status(404).json({ message: "Không tìm thấy tài khoản" });
       }
 
       if (password !== confirmPassword) {
-        return res.status(400).json({ error: "Mật khẩu không trùng khớp" });
+        return res.status(400).json({ message: "Mật khẩu không trùng khớp" });
       }
 
       const hashedPassword = bcrypt.hashSync(password, 10);
@@ -78,43 +45,47 @@ export const updatePatient = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json(updatedPatient);
+    return res.status(200).json(updatedPatient);
   } catch (error) {
-    console.log("Error in updatePatient controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller updatePatient", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const deletePatient = async (req, res) => {
   const { id } = req.params;
+
   try {
-    const patient = await Patient.findByIdAndDelete(id);
-    res.status(200).json(patient);
+    await Patient.findByIdAndDelete(id);
+    return res.status(200).json({ message: "Xóa thành công" });
   } catch (error) {
-    console.log("Error in deletePatient controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller deletePatient", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const getAllPatients = async (req, res) => {
-  try {
-    const { page = 1, limit = 10, gender } = req.query;
+export const getPatients = async (req, res) => {
+  const { page = 1, limit = 10, gender, status } = req.query;
 
+  try {
     const filter = {};
 
     if (gender) {
       filter.gender = gender;
     }
 
+    if (status) {
+      filter.status = status;
+    }
+
     const skip = (page - 1) * limit;
+    const total = await Patient.countDocuments(filter);
+    const totalPages = Math.ceil(total / limit);
 
     const patients = await Patient.find(filter)
       .skip(skip)
       .limit(parseInt(limit))
       .sort({ createdAt: -1 });
-
-    const total = await Patient.countDocuments(filter);
-    const totalPages = Math.ceil(total / limit);
 
     return res.status(200).json({
       results: patients,
@@ -124,26 +95,29 @@ export const getAllPatients = async (req, res) => {
       limit: parseInt(limit),
     });
   } catch (error) {
-    console.log("Error in getAllPatients controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getPatients", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const getPatientDetail = async (req, res) => {
   const { id } = req.params;
+
   try {
     const patient = await Patient.findById(id);
-    res.status(200).json(patient);
+    return res.status(200).json(patient);
   } catch (error) {
-    console.log("Error in getPatientDetail controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getPatientDetail", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const getMedicalRecordsFromPatient = async (req, res) => {
   const { id } = req.params;
+
   try {
     const patient = await Patient.findById(id);
+
     if (!patient) {
       return res.status(404).json({ message: "Không tìm thấy bệnh nhân" });
     }
@@ -163,8 +137,8 @@ export const getMedicalRecordsFromPatient = async (req, res) => {
 
     return res.status(200).json(medicalRecords);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    console.log("Lỗi tại controller getMedicalRecordsFromPatient", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -192,17 +166,17 @@ export const getAppointmentsFromPatient = async (req, res) => {
 
     return res.status(200).json(appointments);
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Server error" });
+    console.log("Lỗi tại controller getAppointmentsFromPatient", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const getCollection = async (req, res) => {
   try {
-    const data = await Patient.find();
-    return res.status(200).json(data);
+    const patients = await Patient.find();
+    return res.status(200).json(patients);
   } catch (error) {
-    console.log("Error in getCollection controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getCollection", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };

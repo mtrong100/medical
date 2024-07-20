@@ -5,49 +5,29 @@ export const SIDEBAR_LINKS = [
     link: "/",
   },
   {
+    icon: "pi pi-comment",
+    name: "Tin nhắn",
+    link: "/chat",
+  },
+  {
     icon: "pi pi-calendar",
     name: "Lịch khám",
     link: "/appointment",
   },
   {
     icon: "pi pi-receipt",
-    name: "Hóa đơn",
+    name: "Hóa đơn khám bệnh",
     link: "/invoice",
   },
   {
     icon: "pi pi-book",
-    name: "Dịch vụ khám",
-    link: "/medical-service",
-  },
-  {
-    icon: "pi pi-book",
-    name: "Phiếu dịch vụ",
+    name: "Hóa đơn dịch vụ",
     link: "/medical-service-invoice",
   },
   {
-    icon: "pi pi-box",
-    name: "Thuốc",
-    link: "/medicine",
-  },
-  {
-    icon: "pi pi-box",
-    name: "Danh mục thuốc",
-    link: "/medicine-category",
-  },
-  {
     icon: "pi pi-book",
-    name: "Kê toa đơn thuốc",
+    name: "Hóa đơn thuốc",
     link: "/prescription",
-  },
-  {
-    icon: "pi pi-users",
-    name: "Nhân viên",
-    link: "/employee",
-  },
-  {
-    icon: "pi pi-users",
-    name: "Bệnh nhân",
-    link: "/patient",
   },
   {
     icon: "pi pi-address-book",
@@ -55,15 +35,36 @@ export const SIDEBAR_LINKS = [
     link: "/medical-record",
   },
   {
-    icon: "pi pi-comment",
-    name: "Chat",
-    link: "/chat",
+    icon: "pi pi-book",
+    name: "Dịch vụ khám",
+    link: "/medical-service",
   },
   {
-    icon: "pi pi-server",
-    name: "Thiết bị",
-    link: "/device",
+    icon: "pi pi-box",
+    name: "Danh mục thuốc",
+    link: "/medicine-category",
   },
+  {
+    icon: "pi pi-users",
+    name: "Bệnh nhân",
+    link: "/patient",
+  },
+  {
+    icon: "pi pi-users",
+    name: "Nhân viên",
+    link: "/employee",
+  },
+  {
+    icon: "pi pi-box",
+    name: "Thuốc",
+    link: "/medicine",
+  },
+
+  // {
+  //   icon: "pi pi-server",
+  //   name: "Thiết bị",
+  //   link: "/device",
+  // },
 ];
 
 export const monthsArray = [
@@ -136,15 +137,50 @@ export const terminationReasons = [
   "Lạm dụng chính sách nghỉ phép của công ty",
 ];
 
-export const EMPLOYEE_STATUS = {
-  ISWORKING: "Đang làm việc",
-  ISFIRED: "Đã nghỉ việc",
+export const MEDICINE_UNITS = [
+  "Viên",
+  "Vỉ",
+  "Hộp",
+  "Chai",
+  "Ống",
+  "Gói",
+  "Ống tiêm",
+  "Lọ",
+  "Kem",
+  "Gel",
+  "Thuốc mỡ",
+  "Xi-rô",
+  "Dung dịch",
+  "Bột",
+  "Viên nang",
+];
+
+export const doctorSchedules = [
+  "7:00 - 8:00",
+  "8:00 - 9:00",
+  "9:00 - 10:00",
+  "10:00 - 11:00",
+  "13:00 - 14:00",
+  "14:00 - 15:00",
+  "15:00 - 16:00",
+  "16:00 - 17:00",
+];
+
+export const LIMIT_AMOUNT = 5;
+
+export const objectIdRegex = /^[0-9a-fA-F]{24}$/;
+
+export const DEFAULT_AVATAR =
+  "https://st3.depositphotos.com/6672868/13701/v/450/depositphotos_137014128-stock-illustration-user-profile-icon.jpg";
+
+export const ACCOUNT_STATUS = {
+  ISACTIVE: "Đang hoạt động",
   ISLOCKED: "Khóa tài khoản",
 };
 
-export const PATIENT_STATUS = {
-  ISACTIVE: "Đang hoạt động",
-  ISLOCKED: "Khóa tài khoản",
+export const EMPLOYEE_STATUS = {
+  ISWORKING: "Đang làm việc",
+  ISFIRED: "Đã nghỉ việc",
 };
 
 export const GENDER = {
@@ -154,7 +190,6 @@ export const GENDER = {
 
 export const EMPLOYEE_ROLE = {
   DOCTOR: "Bác sĩ",
-  ADMIN: "Quản trị viên",
   CASHIER: "Thu ngân",
   RECEPTIONIST: "Lễ tân",
   NURSE: "Y tá",
@@ -184,35 +219,17 @@ export const APPOINTMENT_STATUS = {
   COMPLETED: "Đã khám",
 };
 
-export const MEDICINE_UNITS = [
-  "Viên",
-  "Vỉ",
-  "Hộp",
-  "Chai",
-  "Ống",
-  "Gói",
-  "Ống tiêm",
-  "Lọ",
-  "Kem",
-  "Gel",
-  "Thuốc mỡ",
-  "Xi-rô",
-  "Dung dịch",
-  "Bột",
-  "Viên nang",
-];
+export const genders = [GENDER.MALE, GENDER.FEMALE];
 
-export const accountStatus = [
+export const accountStatus = [ACCOUNT_STATUS.ISACTIVE, ACCOUNT_STATUS.ISLOCKED];
+
+export const employeeStatus = [
   EMPLOYEE_STATUS.ISWORKING,
   EMPLOYEE_STATUS.ISFIRED,
-  EMPLOYEE_STATUS.ISLOCKED,
 ];
-
-export const genders = [GENDER.MALE, GENDER.FEMALE];
 
 export const roles = [
   EMPLOYEE_ROLE.DOCTOR,
-  EMPLOYEE_ROLE.ADMIN,
   EMPLOYEE_ROLE.CASHIER,
   EMPLOYEE_ROLE.RECEPTIONIST,
   EMPLOYEE_ROLE.NURSE,
@@ -233,21 +250,8 @@ export const salaries = [
 
 export const paymentStatus = [PAYMENT_STATUS.PAID, PAYMENT_STATUS.UNPAID];
 
-export const doctorSchedules = [
-  "7:00 - 8:00",
-  "8:00 - 9:00",
-  "9:00 - 10:00",
-  "10:00 - 11:00",
-  "13:00 - 14:00",
-  "14:00 - 15:00",
-  "15:00 - 16:00",
-  "16:00 - 17:00",
-];
-
 export const appointmentStatus = [
   APPOINTMENT_STATUS.PENDING,
   APPOINTMENT_STATUS.CANCELLED,
   APPOINTMENT_STATUS.COMPLETED,
 ];
-
-export const patientStatus = [PATIENT_STATUS.ISACTIVE, PATIENT_STATUS.ISLOCKED];

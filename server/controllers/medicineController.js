@@ -1,41 +1,50 @@
 import Medicine from "../models/medicineModel.js";
 
-export const createNewMedicine = async (req, res) => {
+export const createMedicine = async (req, res) => {
+  const { price, stock, ...data } = req.body;
+
   try {
-    const { price, stock } = req.body;
     const total = (price * stock).toFixed(2);
 
     const newMedicine = new Medicine({
-      ...req.body,
+      ...data,
+      stock,
+      price,
       total,
     });
 
     await newMedicine.save();
-    res.status(200).json(newMedicine);
+
+    return res.status(200).json(newMedicine);
   } catch (error) {
-    console.log("Error in createNewMedicine controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller createMedicine", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const updateMedicine = async (req, res) => {
-  try {
-    const { price, stock } = req.body;
+  const { id } = req.params;
+  const { price, stock, ...data } = req.body;
 
-    const currentMedicine = await Medicine.findById(req.params.id);
+  try {
+    const currentMedicine = await Medicine.findById(id);
 
     if (!currentMedicine) {
-      return res.status(404).json({ error: "Không tìm thấy thuốc" });
+      return res.status(404).json({ message: "Không tìm thấy thuốc" });
     }
 
-    const newPrice = price !== undefined ? price : currentMedicine.price;
-    const newStock = stock !== undefined ? stock : currentMedicine.stock;
+    const newPrice =
+      price !== undefined ? parseFloat(price) : currentMedicine.price;
+    const newStock =
+      stock !== undefined ? parseInt(stock) : currentMedicine.stock;
     const total = parseFloat((newPrice * newStock).toFixed(2));
 
     const updatedMedicine = await Medicine.findByIdAndUpdate(
-      req.params.id,
+      id,
       {
-        ...req.body,
+        ...data,
+        price: newPrice,
+        stock: newStock,
         total,
       },
       {
@@ -43,27 +52,27 @@ export const updateMedicine = async (req, res) => {
       }
     );
 
-    res.status(200).json(updatedMedicine);
+    return res.status(200).json(updatedMedicine);
   } catch (error) {
-    console.log("Error in updateMedicine controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.error("Error in updateMedicine controller", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
 export const deleteMedicine = async (req, res) => {
   try {
     await Medicine.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: "Xóa hoàn tất" });
+    return res.status(200).json({ message: "Xóa hoàn tất" });
   } catch (error) {
-    console.log("Error in deleteMedicine controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller deleteMedicine", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const getAllMedicine = async (req, res) => {
-  try {
-    const { page = 1, limit = 10, category, unit } = req.query;
+export const getMedicines = async (req, res) => {
+  const { page = 1, limit = 10, category, unit } = req.query;
 
+  try {
     const filter = {};
 
     if (category) {
@@ -75,6 +84,8 @@ export const getAllMedicine = async (req, res) => {
     }
 
     const skip = (page - 1) * limit;
+    const total = await Medicine.countDocuments(filter);
+    const totalPages = Math.ceil(total / limit);
 
     const medicines = await Medicine.find(filter)
       .skip(skip)
@@ -82,28 +93,50 @@ export const getAllMedicine = async (req, res) => {
       .populate("category", "_id name")
       .sort({ createdAt: -1 });
 
-    const total = await Medicine.countDocuments(filter);
-    const totalPages = Math.ceil(total / limit);
+    const data = medicines.map((item) => ({
+      _id: item._id,
+      name: item.name,
+      description: item.description,
+      price: item.price,
+      stock: item.stock,
+      unit: item.unit,
+      total: item.total,
+      category: item.category.name,
+      createdAt: item.createdAt,
+      updatedAt: item.updatedAt,
+    }));
 
     return res.status(200).json({
-      results: medicines,
+      results: data,
       totalResults: total,
       totalPages,
       currentPage: parseInt(page),
       limit: parseInt(limit),
     });
   } catch (error) {
-    console.log("Error in getAllMedicine controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getMedicines", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const getMedicineCollection = async (req, res) => {
+export const getCollection = async (req, res) => {
   try {
-    const medicines = await Medicine.find().populate("category", "_id name");
-    res.status(200).json(medicines);
+    const medicines = await Medicine.find();
+    return res.status(200).json(medicines);
   } catch (error) {
-    console.log("Error in getMedicineCollection controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getCollection", error);
+    return res.status(500).json({ message: "Lỗi server" });
+  }
+};
+
+export const getMedicineDetail = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const medicine = await Medicine.findById(id);
+    return res.status(200).json(medicine);
+  } catch (error) {
+    console.log("Lỗi tại controller getMedicineDetail", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };

@@ -1,29 +1,29 @@
+import toast from "react-hot-toast";
 import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Legend } from "recharts";
-import { getAllMedicineCategoriesApi } from "../../api/medicineCategoryApi";
+import { getMedicineCategoriesApi } from "../../api/medicineCategoryApi";
 
 const MedicineCategoryPieChart = () => {
-  const [medicineCategories, setMedicineCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetchMedicineCategories();
+    const fetchCategories = async () => {
+      setLoading(true);
+
+      try {
+        const res = await getMedicineCategoriesApi({ limit: 999999999 });
+        if (res) setCategories(res?.results);
+      } catch (error) {
+        console.log("Lỗi fetch data danh mục thuốc: ", error);
+        toast.error("Lỗi fetch data danh mục thuốc");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
   }, []);
 
-  const fetchMedicineCategories = async () => {
-    setLoading(true);
-    try {
-      const res = await getAllMedicineCategoriesApi();
-      if (res) setMedicineCategories(res);
-    } catch (error) {
-      console.log("Error fetching medicine categories:", error);
-      setMedicineCategories([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Mảng màu sắc cho từng danh mục thuốc
   const colors = [
     "#8884d8",
     "#82ca9d",
@@ -33,11 +33,10 @@ const MedicineCategoryPieChart = () => {
     "#a4de6c",
   ];
 
-  // Chuyển đổi dữ liệu thành dạng phù hợp cho PieChart và gán màu sắc
-  const pieChartData = medicineCategories.map((item, index) => ({
+  const pieChartData = categories.map((item, index) => ({
     category: item.name,
     quantity: item.medicineCount,
-    fill: colors[index % colors.length], // Sử dụng màu sắc từ mảng colors, lặp lại nếu cần
+    fill: colors[index % colors.length],
   }));
 
   return (

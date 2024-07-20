@@ -1,20 +1,19 @@
 import express from "express";
 import {
-  createNewService,
-  deleteService,
-  getAllServices,
-  updateService,
+  createMedicalService,
+  deleteMedicalService,
+  getMedicalServices,
+  updateMedicalService,
 } from "../controllers/medicalServiceController.js";
-import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
 
 const router = express.Router();
 
-router.post("/create", verifySpecificRole, createNewService);
+router.get("/medical-services", getMedicalServices);
 
-router.put("/update/:id", verifySpecificRole, updateService);
+router.post("/create", createMedicalService);
 
-router.delete("/delete/:id", verifySpecificRole, deleteService);
+router.put("/update/:id", updateMedicalService);
 
-router.get("/get-all", getAllServices);
+router.delete("/delete/:id", deleteMedicalService);
 
 export default router;

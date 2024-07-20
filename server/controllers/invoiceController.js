@@ -3,7 +3,7 @@ import Invoice from "../models/invoiceModel.js";
 import Patient from "../models/patientModel.js";
 import { PAYMENT_STATUS } from "../utils/constanst.js";
 
-export const createNewInvoice = async (req, res) => {
+export const createInvoice = async (req, res) => {
   const {
     patient: patientId,
     doctor: doctorId,
@@ -46,8 +46,8 @@ export const createNewInvoice = async (req, res) => {
 
     return res.status(201).json(newInvoice);
   } catch (error) {
-    console.log("Error in createNewInvoice controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller createInvoice", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -58,7 +58,7 @@ export const updateInvoice = async (req, res) => {
     doctor: doctorId,
     price,
     healthInsurance,
-    status,
+    paymentStatus,
   } = req.body;
 
   try {
@@ -90,7 +90,7 @@ export const updateInvoice = async (req, res) => {
         price,
         healthInsurance,
         total: totalAmount,
-        paymentStatus: status,
+        paymentStatus,
       },
       { new: true }
     );
@@ -101,8 +101,8 @@ export const updateInvoice = async (req, res) => {
 
     return res.status(200).json(updatedInvoice);
   } catch (error) {
-    console.log("Error in updateInvoice controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller updateInvoice", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -117,16 +117,18 @@ export const deleteInvoice = async (req, res) => {
 
     return res.status(200).json({ message: "Xóa hóa đơn thành công" });
   } catch (error) {
-    console.log("Error in deleteInvoice controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller deleteInvoice", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const getAllInvoices = async (req, res) => {
+export const getInvoices = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
 
   try {
     const skip = (page - 1) * limit;
+    const total = await Invoice.countDocuments();
+    const totalPages = Math.ceil(total / limit);
 
     const invoices = await Invoice.find()
       .skip(skip)
@@ -143,19 +145,29 @@ export const getAllInvoices = async (req, res) => {
       ])
       .sort({ createdAt: -1 });
 
-    const total = await Invoice.countDocuments();
-    const totalPages = Math.ceil(total / limit);
+    const formattedResults = invoices.map((invoice) => {
+      return {
+        _id: invoice._id,
+        patient: invoice.patient.name,
+        doctor: invoice.doctor.name,
+        price: invoice.price,
+        healthInsurance: invoice.healthInsurance,
+        total: invoice.total,
+        paymentStatus: invoice.paymentStatus,
+        createdAt: invoice.createdAt,
+      };
+    });
 
     return res.status(200).json({
-      results: invoices,
+      results: formattedResults,
       totalResults: total,
       totalPages,
       currentPage: parseInt(page),
       limit: parseInt(limit),
     });
   } catch (error) {
-    console.log("Error in getAllInvoices controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getInvoices", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -178,7 +190,20 @@ export const getInvoiceDetail = async (req, res) => {
       return res.status(404).json({ message: "Không tìm thấy hóa đơn" });
     }
 
-    return res.status(200).json(invoice);
+    const results = {
+      _id: invoice._id,
+      patient: invoice.patient.name,
+      patientId: invoice.patient._id,
+      doctor: invoice.doctor.name,
+      doctorId: invoice.doctor._id,
+      price: invoice.price,
+      healthInsurance: invoice.healthInsurance,
+      total: invoice.total,
+      paymentStatus: invoice.paymentStatus,
+      createdAt: invoice.createdAt,
+    };
+
+    return res.status(200).json(results);
   } catch (error) {
     console.log("Error in getInvoiceDetail controller", error);
     return res.status(500).json({ error: "Internal server error" });

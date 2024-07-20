@@ -1,35 +1,31 @@
 import express from "express";
 import {
-  createNewPatient,
+  createPatient,
   deletePatient,
-  getAllPatients,
+  getPatients,
   getPatientDetail,
-  patientLogin,
   updatePatient,
   getMedicalRecordsFromPatient,
   getAppointmentsFromPatient,
   getCollection,
 } from "../controllers/patientController.js";
-import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
 
 const router = express.Router();
 
-router.get("/collection", verifySpecificRole, getCollection);
+router.get("/collection", getCollection);
 
-router.post("/create", verifySpecificRole, createNewPatient);
-
-router.post("/login", patientLogin);
-
-router.put("/update/:id", updatePatient);
-
-router.delete("/delete/:id", verifySpecificRole, deletePatient);
-
-router.get("/get-all", getAllPatients);
+router.get("/patients", getPatients);
 
 router.get("/:id", getPatientDetail);
 
 router.get("/medical-records/:id", getMedicalRecordsFromPatient);
 
 router.get("/appointments/:id", getAppointmentsFromPatient);
+
+router.post("/create", createPatient);
+
+router.put("/update/:id", updatePatient);
+
+router.delete("/delete/:id", deletePatient);
 
 export default router;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllMedicalServicesApi } from "../api/medicalServiceApi";
+import { getMedicalServicesApi } from "../api/medicalServiceApi";
 
 export default function useGetMedicalServices() {
   const [services, setServices] = useState([]);
@@ -12,13 +12,10 @@ export default function useGetMedicalServices() {
   const fetchServices = async () => {
     setLoading(true);
     try {
-      const res = await getAllMedicalServicesApi();
-      if (res) {
-        setServices(res);
-      }
+      const res = await getMedicalServicesApi({ limit: 100 });
+      if (res) setServices(res.results);
     } catch (error) {
       console.log("Error fetching medicine categories:", error);
-      setServices([]);
     } finally {
       setLoading(false);
     }

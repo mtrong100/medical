@@ -1,14 +1,14 @@
 import MedicineCategory from "../models/medicineCategoryModel.js";
 import Medicine from "../models/medicineModel.js";
 
-export const createNewMedicineCategory = async (req, res) => {
+export const createMedicineCategory = async (req, res) => {
   try {
     const category = new MedicineCategory(req.body);
     await category.save();
-    res.status(200).json(category);
+    return res.status(200).json(category);
   } catch (error) {
-    console.log("Error in createNewMedicineCategory controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller createMedicineCategory", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -21,8 +21,8 @@ export const updateMedicineCategory = async (req, res) => {
     });
     res.status(200).json(category);
   } catch (error) {
-    console.log("Error in updateMedicineCategory controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller updateMedicineCategory", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -31,6 +31,7 @@ export const deleteMedicineCategory = async (req, res) => {
 
   try {
     const medicineCount = await Medicine.countDocuments({ category: id });
+
     if (medicineCount > 0) {
       return res
         .status(400)
@@ -38,15 +39,22 @@ export const deleteMedicineCategory = async (req, res) => {
     }
 
     await MedicineCategory.findByIdAndDelete(id);
-    res.status(200).json({ message: "Xóa hoàn tất" });
+
+    return res.status(200).json({ message: "Xóa hoàn tất" });
   } catch (error) {
-    console.log("Error in deleteMedicineCategory controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller deleteMedicineCategory", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const getAllMedicineCategory = async (req, res) => {
+export const getMedicineCategories = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
   try {
+    const skip = (page - 1) * limit;
+    const total = await MedicineCategory.countDocuments();
+    const totalPages = Math.ceil(total / limit);
+
     const categories = await MedicineCategory.aggregate([
       {
         $lookup: {
@@ -73,11 +81,33 @@ export const getAllMedicineCategory = async (req, res) => {
           medicineCount: 1,
         },
       },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: parseInt(limit),
+      },
     ]);
 
-    res.status(200).json(categories);
+    return res.status(200).json({
+      results: categories,
+      totalResults: total,
+      totalPages,
+      currentPage: parseInt(page),
+      limit: parseInt(limit),
+    });
   } catch (error) {
-    console.log("Error in getAllMedicineCategory controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getMedicineCategories", error);
+    return res.status(500).json({ message: "Lỗi server" });
+  }
+};
+
+export const getCollection = async (req, res) => {
+  try {
+    const data = await MedicineCategory.find();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Lỗi tại controller getCollection", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };

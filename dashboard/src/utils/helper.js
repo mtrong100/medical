@@ -1,4 +1,10 @@
-import { EMPLOYEE_ROLE, EMPLOYEE_SALARY } from "./constants";
+import {
+  ACCOUNT_STATUS,
+  APPOINTMENT_STATUS,
+  EMPLOYEE_ROLE,
+  EMPLOYEE_SALARY,
+  EMPLOYEE_STATUS,
+} from "./constants";
 
 export const formatDate = (timestamp) => {
   const date = new Date(timestamp);
@@ -16,6 +22,48 @@ export const parseDate = (formattedDate) => {
   const year = parseInt(parts[2], 10);
 
   return new Date(year, month, day);
+};
+
+export const getAccountSeverity = (status) => {
+  switch (status) {
+    case ACCOUNT_STATUS.ISACTIVE:
+      return "success";
+
+    case ACCOUNT_STATUS.ISLOCKED:
+      return "danger";
+
+    default:
+      return "secondary";
+  }
+};
+
+export const getEmployeeServerity = (status) => {
+  switch (status) {
+    case EMPLOYEE_STATUS.ISWORKING:
+      return "success";
+
+    case EMPLOYEE_STATUS.ISFIRED:
+      return "danger";
+
+    default:
+      return "secondary";
+  }
+};
+
+export const getAppointmentServerity = (status) => {
+  switch (status) {
+    case APPOINTMENT_STATUS.PENDING:
+      return "warning";
+
+    case APPOINTMENT_STATUS.COMPLETED:
+      return "success";
+
+    case APPOINTMENT_STATUS.CANCELLED:
+      return "danger";
+
+    default:
+      return "secondary";
+  }
 };
 
 export const formatCurrencyVND = (amount) => {

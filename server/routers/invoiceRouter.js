@@ -1,9 +1,8 @@
 import express from "express";
-import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
 import {
-  createNewInvoice,
+  createInvoice,
   deleteInvoice,
-  getAllInvoices,
+  getInvoices,
   getInvoiceDetail,
   updateInvoice,
   getCollection,
@@ -11,16 +10,16 @@ import {
 
 const router = express.Router();
 
-router.get("/collection", verifySpecificRole, getCollection);
+router.get("/collection", getCollection);
 
-router.post("/create", verifySpecificRole, createNewInvoice);
+router.get("/invoices", getInvoices);
 
-router.put("/update/:id", verifySpecificRole, updateInvoice);
+router.get("/:id", getInvoiceDetail);
 
-router.delete("/delete/:id", verifySpecificRole, deleteInvoice);
+router.post("/create", createInvoice);
 
-router.get("/get-all", verifySpecificRole, getAllInvoices);
+router.put("/update/:id", updateInvoice);
 
-router.get("/:id", verifySpecificRole, getInvoiceDetail);
+router.delete("/delete/:id", deleteInvoice);
 
 export default router;

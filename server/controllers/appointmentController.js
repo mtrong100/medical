@@ -9,7 +9,7 @@ import {
   sendAppointmentUpdate,
 } from "../utils/mail.js";
 
-export const bookingNewAppointment = async (req, res) => {
+export const bookingAppointment = async (req, res) => {
   const {
     doctor: doctorId,
     date,
@@ -81,16 +81,15 @@ export const bookingNewAppointment = async (req, res) => {
 
     return res.status(201).json(newAppointment);
   } catch (error) {
-    console.log("Error in createNewAppointment controller", error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.log("Lỗi tại controller bookingAppointment", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const createNewAppointment = async (req, res) => {
+export const createAppointment = async (req, res) => {
   const { doctor: doctorId, date, time, patient: patientId } = req.body;
 
   try {
-    // Kiểm tra xem có cuộc hẹn nào cùng bác sĩ, ngày và giờ không
     const existingAppointment = await Appointment.findOne({
       doctor: doctorId,
       date,
@@ -130,8 +129,8 @@ export const createNewAppointment = async (req, res) => {
 
     return res.status(201).json(newAppointment);
   } catch (error) {
-    console.log("Error in createNewAppointment controller", error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.log("Lỗi tại controller createAppointment", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -203,27 +202,21 @@ export const updateAppointment = async (req, res) => {
 
     return res.status(200).json(updatedAppointment);
   } catch (error) {
-    console.log("Lỗi trong updateAppointment controller", error);
-    return res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
+    console.log("Lỗi tại controller updateAppointment", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const deleteAppointment = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const { id } = req.params;
+    await Appointment.findByIdAndDelete(id);
 
-    const deletedAppointment = await Appointment.findByIdAndDelete(id);
-
-    if (!deletedAppointment) {
-      return res.status(404).json({ error: "Không tìm thấy lịch khám" });
-    }
-
-    return res
-      .status(200)
-      .json({ message: "Appointment deleted successfully" });
+    return res.status(200).json({ message: "Xóa cuộc hẹn hoàn tất" });
   } catch (error) {
-    console.log("Error in deleteAppointment controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller deleteAppointment", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -239,18 +232,31 @@ export const getAppointmentDetail = async (req, res) => {
       return res.status(404).json({ message: "Cuộc hẹn không tồn tại" });
     }
 
-    return res.status(200).json(appointment);
+    const results = {
+      patient: appointment.patient.name,
+      patientId: appointment.patient._id,
+      doctor: appointment.doctor.name,
+      doctorId: appointment.doctor._id,
+      date: appointment.date,
+      time: appointment.time,
+      status: appointment.status,
+      createdAt: appointment.createdAt,
+    };
+
+    return res.status(200).json(results);
   } catch (error) {
-    console.log("Lỗi trong getAppointmentDetail controller", error);
-    return res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
+    console.log("Lỗi tại controller getAppointmentDetail", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const getAllAppointment = async (req, res) => {
+export const getAppointments = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
 
   try {
     const skip = (page - 1) * limit;
+    const total = await Appointment.countDocuments();
+    const totalPages = Math.ceil(total / limit);
 
     const appointments = await Appointment.find()
       .skip(skip)
@@ -267,19 +273,28 @@ export const getAllAppointment = async (req, res) => {
       ])
       .sort({ createdAt: -1 });
 
-    const total = await Appointment.countDocuments();
-    const totalPages = Math.ceil(total / limit);
+    const formattedResults = appointments.map((appointment) => {
+      return {
+        _id: appointment._id,
+        patient: appointment.patient.name,
+        doctor: appointment.doctor.name,
+        date: appointment.date,
+        time: appointment.time,
+        status: appointment.status,
+        createdAt: appointment.createdAt,
+      };
+    });
 
     return res.status(200).json({
-      results: appointments,
+      results: formattedResults,
       totalResults: total,
       totalPages,
       currentPage: parseInt(page),
       limit: parseInt(limit),
     });
   } catch (error) {
-    console.log("Lỗi trong getAllAppointment controller", error);
-    return res.status(500).json({ message: "Lỗi máy chủ nội bộ" });
+    console.log("Lỗi tại controller getAppointments", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -288,7 +303,7 @@ export const getCollection = async (req, res) => {
     const data = await Appointment.find();
     return res.status(200).json(data);
   } catch (error) {
-    console.log("Error in getCollection controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getCollection", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };

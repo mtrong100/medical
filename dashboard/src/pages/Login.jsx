@@ -1,17 +1,16 @@
-import React, { useRef } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../validations/loginSchema";
 import FieldInput from "../components/FieldInput";
 import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
 import { useDispatch } from "react-redux";
 import { storeCurrentUser } from "../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { loginApi } from "../api/authApi";
+import toast from "react-hot-toast";
 
 const Login = () => {
-  const toast = useRef(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -28,7 +27,7 @@ const Login = () => {
     },
   });
 
-  const handleLogin = async (values) => {
+  const onLogin = async (values) => {
     try {
       const body = { ...values };
 
@@ -39,55 +38,60 @@ const Login = () => {
 
         dispatch(storeCurrentUser(res));
 
-        toast.current.show({
-          severity: "success",
-          summary: "Đăng nhập thành công",
-          life: 1500,
-        });
+        toast.success("Đăng nhập thành công");
 
         navigate("/");
       }
     } catch (error) {
       console.log("Error: ", error.message);
-      toast.current.show({
-        severity: "error",
-        summary: "Lỗi",
-        life: 1500,
-      });
+      toast.error("Đăng nhập thất bại");
     }
   };
 
   return (
-    <div className="bg-white shadow-xl rounded-sm p-10 max-w-xl w-full">
-      <h1 className="font-bold text-4xl text-center">
-        Medical Dashboard Login
-      </h1>
-      <Toast ref={toast} />
-      <form onSubmit={handleSubmit(handleLogin)} className="mt-6 space-y-5">
-        <FieldInput
-          label="Email"
-          type="email"
-          name="email"
-          htmlFor="email"
-          register={register}
-          errorMessage={errors?.email?.message}
-        />
-        <FieldInput
-          label="Mật khẩu"
-          type="password"
-          name="password"
-          htmlFor="password"
-          register={register}
-          errorMessage={errors?.password?.message}
-        />
-        <Button
-          type="submit"
-          label="Đăng nhập"
-          className="w-full"
-          disabled={isSubmitting}
-        />
-      </form>
-    </div>
+    <section className="min-h-screen flex">
+      <div className="flex flex-1">
+        <div className="w-1/2">
+          <img
+            src="https://www.yudaah.com/demo/free-clinic-website-template/assets/images/slider/slider_3.jpg"
+            alt="banner-login"
+            className="h-screen w-full object-cover"
+          />
+        </div>
+
+        <div className="w-1/2 flex items-center justify-center p-8 bg-white">
+          <form onSubmit={handleSubmit(onLogin)} className="w-full max-w-xl">
+            <h1 className="text-3xl text-center font-bold text-gray-900 mb-10">
+              Quản trị hệ thống phòng khám bệnh
+            </h1>
+            <div className="space-y-5">
+              <FieldInput
+                label="Email"
+                type="email"
+                name="email"
+                htmlFor="email"
+                register={register}
+                errorMessage={errors?.email?.message}
+              />
+              <FieldInput
+                label="Mật khẩu"
+                type="password"
+                name="password"
+                htmlFor="password"
+                register={register}
+                errorMessage={errors?.password?.message}
+              />
+              <Button
+                className="w-full"
+                type="submit"
+                label="Xác nhận"
+                disabled={isSubmitting}
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
   );
 };
 

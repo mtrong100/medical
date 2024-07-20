@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import { useSelector } from "react-redux";
 import TitleSection from "../components/TitleSection";
 import useGetCollectionApi from "../hooks/useGetCollectionApi";
 import { formatCurrencyVND } from "../utils/helper";
@@ -14,9 +13,7 @@ import Box from "../components/Box";
 import BasicSalaryChart from "../components/charts/BasicSalaryChart";
 
 const Dashboard = () => {
-  const { currentUser } = useSelector((state) => state.user);
   const { results: employees } = useGetCollectionApi("employee");
-  console.log(employees);
   const { results: patients } = useGetCollectionApi("patient");
   const { results: appointments } = useGetCollectionApi("appointment");
   const { results: medicalServiceInvoices } = useGetCollectionApi(

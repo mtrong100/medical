@@ -10,6 +10,8 @@ import "primeicons/primeicons.css";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./utils/firebase.js";
 import { SocketContextProvider } from "./components/SocketContext.jsx";
+import { Toaster } from "react-hot-toast";
+
 initializeApp(firebaseConfig);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -19,6 +21,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <PrimeReactProvider value={{ ripple: true }}>
           <SocketContextProvider>
             <App />
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+              containerStyle={{
+                zIndex: "999999",
+              }}
+            />
           </SocketContextProvider>
         </PrimeReactProvider>
       </PersistGate>

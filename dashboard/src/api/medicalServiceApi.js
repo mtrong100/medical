@@ -1,6 +1,13 @@
 import axios from "./axiosConfig";
 
-export const createNewMedicalServiceApi = async (data) => {
+export const getMedicalServicesApi = async (params) => {
+  const response = await axios.get("/medical-service/medical-services", {
+    params,
+  });
+  return response;
+};
+
+export const createMedicalServiceApi = async (data) => {
   const response = await axios.post("/medical-service/create", data);
   return response;
 };
@@ -12,10 +19,5 @@ export const updateMedicalServiceApi = async (id, data) => {
 
 export const deleteMedicalServiceApi = async (id) => {
   const response = await axios.delete(`/medical-service/delete/${id}`);
-  return response;
-};
-
-export const getAllMedicalServicesApi = async () => {
-  const response = await axios.get("/medical-service/get-all");
   return response;
 };

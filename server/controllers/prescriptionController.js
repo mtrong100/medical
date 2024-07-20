@@ -2,52 +2,48 @@ import Medicine from "../models/medicineModel.js";
 import Prescription from "../models/prescriptionModel.js";
 import { PAYMENT_STATUS } from "../utils/constanst.js";
 
-export const createNewPrescription = async (req, res) => {
-  try {
-    const { detail } = req.body;
+export const createPrescription = async (req, res) => {
+  const { detail } = req.body;
 
-    // Giảm số lượng thuốc trong kho
+  try {
     for (const item of detail) {
       const medicine = await Medicine.findById(item.medicine);
       if (!medicine) {
         return res
           .status(404)
-          .json({ error: `Thuốc với ID ${item.medicine} không tồn tại` });
+          .json({ message: `Thuốc với ID ${item.medicine} không tồn tại` });
       }
 
       if (medicine.stock < item.quantity) {
         return res
           .status(400)
-          .json({ error: `Không đủ số lượng cho thuốc ${medicine.name}` });
+          .json({ message: `Không đủ số lượng cho thuốc ${medicine.name}` });
       }
 
       medicine.stock -= item.quantity;
       await medicine.save();
     }
 
-    // Tạo mới đơn thuốc
     const newPrescription = new Prescription(req.body);
     await newPrescription.save();
 
     return res.status(201).json(newPrescription);
   } catch (error) {
-    console.log("Lỗi trong controller createNewPrescription", error);
-    return res.status(500).json({ error: "Lỗi máy chủ nội bộ" });
+    console.log("Lỗi tại controller createPrescription", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const updatePrescription = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { detail, ...otherFields } = req.body;
+  const { id } = req.params;
+  const { detail, ...otherFields } = req.body;
 
-    // Tìm đơn thuốc hiện tại
+  try {
     const existingPrescription = await Prescription.findById(id);
     if (!existingPrescription) {
-      return res.status(404).json({ error: "Đơn thuốc không tồn tại" });
+      return res.status(404).json({ message: "Đơn thuốc không tồn tại" });
     }
 
-    // Tăng lại số lượng thuốc trong kho dựa trên đơn thuốc hiện tại
     for (const item of existingPrescription.detail) {
       const medicine = await Medicine.findById(item.medicine);
       if (medicine) {
@@ -56,26 +52,24 @@ export const updatePrescription = async (req, res) => {
       }
     }
 
-    // Giảm số lượng thuốc trong kho dựa trên đơn thuốc cập nhật
     for (const item of detail) {
       const medicine = await Medicine.findById(item.medicine);
       if (!medicine) {
         return res
           .status(404)
-          .json({ error: `Thuốc với ID ${item.medicine} không tồn tại` });
+          .json({ message: `Thuốc với ID ${item.medicine} không tồn tại` });
       }
 
       if (medicine.stock < item.quantity) {
         return res
           .status(400)
-          .json({ error: `Không đủ số lượng cho thuốc ${medicine.name}` });
+          .json({ message: `Không đủ số lượng cho thuốc ${medicine.name}` });
       }
 
       medicine.stock -= item.quantity;
       await medicine.save();
     }
 
-    // Cập nhật đơn thuốc với thông tin mới
     const updatedPrescription = await Prescription.findByIdAndUpdate(
       id,
       { ...otherFields, detail },
@@ -84,8 +78,8 @@ export const updatePrescription = async (req, res) => {
 
     return res.status(200).json(updatedPrescription);
   } catch (error) {
-    console.log("Lỗi trong controller updatePrescription", error);
-    return res.status(500).json({ error: "Lỗi máy chủ nội bộ" });
+    console.log("Lỗi tại controller updatePrescription", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -93,27 +87,27 @@ export const deletePrescription = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // Tìm đơn thuốc cần xóa
     const prescription = await Prescription.findById(id);
     if (!prescription) {
-      return res.status(404).json({ error: "Đơn thuốc không tồn tại" });
+      return res.status(404).json({ message: "Đơn thuốc không tồn tại" });
     }
 
-    // Xóa đơn thuốc khỏi cơ sở dữ liệu
     await Prescription.findByIdAndDelete(id);
 
     return res.status(200).json({ message: "Xóa đơn thuốc thành công" });
   } catch (error) {
-    console.log("Lỗi trong controller deletePrescription", error);
-    return res.status(500).json({ error: "Lỗi máy chủ nội bộ" });
+    console.log("Lỗi tại controller deletePrescription", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const getAllPrescriptions = async (req, res) => {
-  try {
-    const { page = 1, limit = 10 } = req.query;
+export const getPrescriptions = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
 
+  try {
     const skip = (page - 1) * limit;
+    const total = await Prescription.countDocuments();
+    const totalPages = Math.ceil(total / limit);
 
     const prescriptions = await Prescription.find()
       .skip(skip)
@@ -127,15 +121,8 @@ export const getAllPrescriptions = async (req, res) => {
           path: "doctor",
           select: "_id name",
         },
-        {
-          path: "detail.medicine",
-          select: "_id name unit price",
-        },
       ])
       .sort({ createdAt: -1 });
-
-    const total = await Prescription.countDocuments();
-    const totalPages = Math.ceil(total / limit);
 
     const fotmattedResults = prescriptions.map((prescription) => {
       return {
@@ -157,13 +144,14 @@ export const getAllPrescriptions = async (req, res) => {
       limit: parseInt(limit),
     });
   } catch (error) {
-    console.log("Lỗi trong controller getAllPrescriptions", error);
-    return res.status(500).json({ error: "Lỗi máy chủ nội bộ" });
+    console.log("Lỗi tại controller getPrescriptions", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const getPrescriptionDetail = async (req, res) => {
   const { id } = req.params;
+
   try {
     const prescription = await Prescription.findById(id)
       .populate([
@@ -192,15 +180,15 @@ export const getPrescriptionDetail = async (req, res) => {
       name: item.medicine.name,
       price: item.medicine.price,
       unit: item.medicine.unit,
-      categoryId: item.medicine.category._id,
-      category: item.medicine.category.name,
       quantity: item.quantity,
     }));
 
     const formattedPrescription = {
       _id: prescription._id,
-      patient: prescription.patient,
-      doctor: prescription.doctor,
+      patientId: prescription.patient._id,
+      patient: prescription.patient.name,
+      doctorId: prescription.doctor._id,
+      doctor: prescription.doctor.name,
       detail: formattedDetail,
       notes: prescription.notes,
       total: prescription.total,
@@ -211,8 +199,8 @@ export const getPrescriptionDetail = async (req, res) => {
 
     return res.status(200).json(formattedPrescription);
   } catch (error) {
-    console.log("Lỗi trong controller getPrescriptionDetail", error);
-    return res.status(500).json({ error: "Lỗi máy chủ nội bộ" });
+    console.log("Lỗi tại controller getPrescriptionDetail", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -221,7 +209,7 @@ export const getCollection = async (req, res) => {
     const data = await Prescription.find({ status: PAYMENT_STATUS.PAID });
     return res.status(200).json(data);
   } catch (error) {
-    console.log("Error in getCollection controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getCollection", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };

@@ -1,29 +1,28 @@
 import express from "express";
-import { verifySpecificRole } from "../middlewares/verifySpecificRole.js";
 import {
-  createNewAppointment,
+  createAppointment,
   deleteAppointment,
-  getAllAppointment,
+  getAppointments,
   getAppointmentDetail,
   updateAppointment,
-  bookingNewAppointment,
+  bookingAppointment,
   getCollection,
 } from "../controllers/appointmentController.js";
 
 const router = express.Router();
 
-router.get("/collection", verifySpecificRole, getCollection);
+router.get("/collection", getCollection);
 
-router.post("/create", createNewAppointment);
-
-router.post("/booking", bookingNewAppointment);
-
-router.put("/update/:id", verifySpecificRole, updateAppointment);
-
-router.delete("/delete/:id", verifySpecificRole, deleteAppointment);
-
-router.get("/get-all", getAllAppointment);
+router.get("/appointments", getAppointments);
 
 router.get("/:id", getAppointmentDetail);
+
+router.post("/create", createAppointment);
+
+router.post("/booking", bookingAppointment);
+
+router.put("/update/:id", updateAppointment);
+
+router.delete("/delete/:id", deleteAppointment);
 
 export default router;

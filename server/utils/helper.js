@@ -87,6 +87,6 @@ export const getEmployeeSalary = (role) => {
     case EMPLOYEE_ROLE.GUARD:
       return EMPLOYEE_SALARY.GUARD;
     default:
-      return 100;
+      return 0;
   }
 };

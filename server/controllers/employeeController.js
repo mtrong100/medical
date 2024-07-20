@@ -1,64 +1,41 @@
 import Employee from "../models/employeeModel.js";
+import { sendTerminationEmail } from "../utils/mail.js";
+import { EMPLOYEE_STATUS } from "../utils/constanst.js";
 import {
   generateTokenAndSetCookie,
-  getAvatarUrl,
   getEmployeeSalary,
 } from "../utils/helper.js";
-import bcrypt from "bcrypt";
-import { sendTerminationEmail } from "../utils/mail.js";
-import { EMPLOYEE_ROLE, EMPLOYEE_STATUS } from "../utils/constanst.js";
 
 export const employeeLogin = async (req, res) => {
-  const { email, password } = req.body;
+  const { employeeId } = req.body;
 
   try {
-    const account = await Employee.findOne({ email });
-
-    if (account.status === EMPLOYEE_STATUS.ISLOCKED) {
-      return res.status(400).json({ error: "Tài khoản đã bị khóa" });
-    }
-
-    if (account.isDeleted) {
-      return res.status(400).json({ error: "Tài khoản đã bị xóa" });
-    }
+    const account = await Employee.findById(employeeId);
 
     if (!account) {
-      return res.status(400).json({ error: "Không tìm thấy tài khoản" });
+      return res.status(400).json({ message: "Không tìm thấy tài khoản" });
     }
 
-    const validPassword = bcrypt.compareSync(password, account.password);
-
-    if (!validPassword) {
-      return res.status(400).json({ error: "Sai mật khẩu" });
-    }
-
-    const payload = { userId: account._id, userRole: account.role };
+    const payload = { userId: account._id };
 
     generateTokenAndSetCookie(payload, res);
 
     return res.status(200).json(account);
   } catch (error) {
-    console.log("Error in employeeLogin controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller employeeLogin", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const createNewEmployee = async (req, res) => {
-  const { role, gender, password, avatar, salary, ...data } = req.body;
+export const createEmployee = async (req, res) => {
+  const { role, salary, ...data } = req.body;
 
   try {
-    const avatarUrl = getAvatarUrl(role, gender);
     const employeeSalary = getEmployeeSalary(role);
-
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
 
     const newEmployee = new Employee({
       ...data,
-      gender,
-      avatar: avatarUrl,
       salary: employeeSalary,
-      password: hash,
       role,
     });
 
@@ -66,46 +43,25 @@ export const createNewEmployee = async (req, res) => {
 
     return res.status(201).json(newEmployee);
   } catch (error) {
-    console.log("Error in createNewEmployee controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller createEmployee", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const updateEmployee = async (req, res) => {
   const { id } = req.params;
-  const { password, confirmPassword, ...data } = req.body;
 
   try {
-    // Check case if update password
-    if (password && confirmPassword) {
-      const account = await Employee.findById(id);
-
-      if (!account) {
-        return res.status(404).json({ error: "Không tìm thấy tài khoản" });
-      }
-
-      if (password !== confirmPassword) {
-        return res.status(400).json({ error: "Mật khẩu không trùng khớp" });
-      }
-
-      const hashedPassword = bcrypt.hashSync(password, 10);
-      account.password = hashedPassword;
-
-      await account.save();
-
-      return res.status(200).json({ message: "Cập nhật mật khẩu thành công" });
-    }
-
     const updatedEmployee = await Employee.findByIdAndUpdate(
       id,
-      { $set: data },
+      { $set: req.body },
       { new: true }
     );
 
     return res.status(200).json(updatedEmployee);
   } catch (error) {
-    console.log("Error in updateEmployee controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller updateEmployee", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -113,16 +69,11 @@ export const deleteEmployee = async (req, res) => {
   const { id } = req.params;
 
   try {
-    await Employee.findByIdAndUpdate(
-      id,
-      { $set: { isDeleted: true } },
-      { new: true }
-    );
-
+    await Employee.findByIdAndDelete(id);
     return res.status(200).json({ message: "Xóa hoàn tất" });
   } catch (error) {
-    console.log("Error in deleteEmployee controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller deleteEmployee", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -139,50 +90,31 @@ export const terminatedEmployee = async (req, res) => {
 
     sendTerminationEmail(name, email, reason);
 
-    return res.status(200).json({ message: "Gửi email hoàn tất" });
+    return res.status(200).json({ message: "Gửi email sa thải hoàn tất" });
   } catch (error) {
-    console.log("Error in terminatedEmployee controller", error);
-    return res.status(500).json({ error: "Internal server error" });
-  }
-};
-
-export const lockEmployeeAccount = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const updatedEmployee = await Employee.findByIdAndUpdate(
-      id,
-      { $set: { status: EMPLOYEE_STATUS.ISLOCKED } },
-      { new: true }
-    );
-
-    return res.status(200).json({
-      message: "Khóa tài khoản hoàn tất",
-      status: updatedEmployee.status,
-    });
-  } catch (error) {
-    console.log("Error in lockEmployeeAccount controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller terminatedEmployee", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
 export const getEmployeeDetail = async (req, res) => {
+  const { id } = req.params;
+
   try {
-    const { id } = req.params;
     const employee = await Employee.findById(id);
 
     if (!employee) {
-      return res.status(400).json({ error: "Không tìm thấy nhân viên" });
+      return res.status(400).json({ message: "Không tìm thấy nhân viên" });
     }
 
     return res.status(200).json(employee);
   } catch (error) {
-    console.log("Error in getEmployeeDetail controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getEmployeeDetail", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
-export const getAllEmployees = async (req, res) => {
+export const getEmployees = async (req, res) => {
   const {
     page = 1,
     limit = 10,
@@ -194,7 +126,7 @@ export const getAllEmployees = async (req, res) => {
   } = req.query;
 
   try {
-    const query = { isDeleted: false };
+    const query = {};
 
     if (graduatedFrom) query.graduatedFrom = graduatedFrom;
     if (specialization) query.specialization = specialization;
@@ -203,14 +135,13 @@ export const getAllEmployees = async (req, res) => {
     if (status) query.status = status;
 
     const skip = (page - 1) * limit;
+    const total = await Employee.countDocuments(query);
+    const totalPages = Math.ceil(total / limit);
 
     const employees = await Employee.find(query)
       .skip(skip)
       .limit(parseInt(limit))
       .sort({ createdAt: -1 });
-
-    const total = await Employee.countDocuments(query);
-    const totalPages = Math.ceil(total / limit);
 
     return res.status(200).json({
       results: employees,
@@ -220,8 +151,8 @@ export const getAllEmployees = async (req, res) => {
       limit: parseInt(limit),
     });
   } catch (error) {
-    console.log("Error in getAllEmployees controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getEmployees", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -230,7 +161,7 @@ export const getCollection = async (req, res) => {
     const data = await Employee.find();
     return res.status(200).json(data);
   } catch (error) {
-    console.log("Error in getCollection controller", error);
-    return res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getCollection", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };

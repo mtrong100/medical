@@ -32,7 +32,7 @@ export const register = async (req, res) => {
 
     await newUser.save();
 
-    const payload = { userId: newUser._id, userRole: newUser.role };
+    const payload = { userId: newUser._id };
 
     generateTokenAndSetCookie(payload, res);
 
@@ -40,8 +40,8 @@ export const register = async (req, res) => {
       message: "Tạo tài khoản thành công",
     });
   } catch (error) {
-    console.log("Lỗi", error.message);
-    res.status(500).json({ error: "Lỗi server" });
+    console.log("Lỗi tại controller register", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
