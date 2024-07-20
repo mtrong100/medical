@@ -1,16 +1,16 @@
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { SocketContextProvider } from "./components/SocketContext.jsx";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistor, store } from "./redux/store.js";
 import { PrimeReactProvider } from "primereact/api";
-import "./index.css";
-import "primeicons/primeicons.css";
+import { persistor, store } from "./redux/store.js";
+import { PersistGate } from "redux-persist/integration/react";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./utils/firebase.js";
-import { SocketContextProvider } from "./components/SocketContext.jsx";
-import { Toaster } from "react-hot-toast";
+import { BrowserRouter } from "react-router-dom";
+import "primeicons/primeicons.css";
+import "./index.css";
 
 initializeApp(firebaseConfig);
 

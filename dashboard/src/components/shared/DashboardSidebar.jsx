@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FaBriefcaseMedical } from "react-icons/fa6";
+import React from "react";
+import { FaHandHoldingMedical } from "react-icons/fa6";
 import { Divider } from "primereact/divider";
 import { Link, useLocation } from "react-router-dom";
 import { SIDEBAR_LINKS } from "../../utils/constants";
@@ -10,7 +10,8 @@ const DashboardSidebar = () => {
   return (
     <div className="w-[300px] sticky top-0 left-0 border border-right h-screen p-3 shadow-sm flex-shrink-0 bg-white z-10">
       <h1 className="text-center text-3xl font-bold flex items-center gap-2 justify-center">
-        Medical <FaBriefcaseMedical size={30} />
+        <FaHandHoldingMedical />
+        Medical
       </h1>
 
       <Divider />

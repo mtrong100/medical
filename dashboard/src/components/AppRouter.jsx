@@ -4,125 +4,130 @@ import AuthLayout from "./layouts/AuthLayout";
 import { Route, Routes } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { lazy, Suspense } from "react";
-/* ================================================================ */
 
 /* Patient Pages */
 const ManagePatient = lazy(() =>
-  import("../modules/manage-patient/pages/ManagePatient")
+  import("../modules/manage-patient/ManagePatient")
 );
 const CreatePatient = lazy(() =>
-  import("../modules/manage-patient/pages/CreatePatient")
+  import("../modules/manage-patient/CreatePatient")
 );
 const UpdatePatient = lazy(() =>
-  import("../modules/manage-patient/pages/UpdatePatient")
+  import("../modules/manage-patient/UpdatePatient")
 );
 
 /* Employee Pages */
 const ManageEmployee = lazy(() =>
-  import("../modules/manage-employee/pages/ManageEmployee")
+  import("../modules/manage-employee/ManageEmployee")
 );
 const CreateEmployee = lazy(() =>
-  import("../modules/manage-employee/pages/CreateEmployee")
+  import("../modules/manage-employee/CreateEmployee")
 );
 const UpdateEmployee = lazy(() =>
-  import("../modules/manage-employee/pages/UpdateEmployee")
+  import("../modules/manage-employee/UpdateEmployee")
 );
 
 /* Medicine Pages */
 const ManageMedicine = lazy(() =>
-  import("../modules/manage-medicine/pages/ManageMedicine")
+  import("../modules/manage-medicine/ManageMedicine")
 );
 const CreateMedicine = lazy(() =>
-  import("../modules/manage-medicine/pages/CreateMedicine")
+  import("../modules/manage-medicine/CreateMedicine")
 );
 const UpdateMedicine = lazy(() =>
-  import("../modules/manage-medicine/pages/UpdateMedicine")
+  import("../modules/manage-medicine/UpdateMedicine")
 );
 
 /* Medicine Category Pages */
 const ManageMedicineCategory = lazy(() =>
-  import("../modules/manage-medicine-category/pages/ManageMedicineCategory")
+  import("../modules/manage-medicine-category/ManageMedicineCategory")
 );
 
 /* Medical Record Pages */
 const ManageMedicalRecord = lazy(() =>
-  import("../modules/manage-medical-record/pages/ManageMedicalRecord")
+  import("../modules/manage-medical-record/ManageMedicalRecord")
 );
 const CreateMedicalRecord = lazy(() =>
-  import("../modules/manage-medical-record/pages/CreateMedicalRecord")
+  import("../modules/manage-medical-record/CreateMedicalRecord")
 );
 const UpdateMedicalRecord = lazy(() =>
-  import("../modules/manage-medical-record/pages/UpdateMedicalRecord")
+  import("../modules/manage-medical-record/UpdateMedicalRecord")
 );
 
 /* Medical Service Pages */
 const ManageMedicalService = lazy(() =>
-  import("../modules/manage-medical-service/pages/ManageMedicalService")
+  import("../modules/manage-medical-service/ManageMedicalService")
 );
 
 /* Prescription Pages */
 const ManagePrescription = lazy(() =>
-  import("../modules/manage-prescription/pages/ManagePrescription")
+  import("../modules/manage-prescription/ManagePrescription")
 );
 const CreatePrescription = lazy(() =>
-  import("../modules/manage-prescription/pages/CreatePrescription")
+  import("../modules/manage-prescription/CreatePrescription")
 );
 const UpdatePrescription = lazy(() =>
-  import("../modules/manage-prescription/pages/UpdatePrescription")
+  import("../modules/manage-prescription/UpdatePrescription")
 );
 const PrescriptionDetail = lazy(() =>
-  import("../modules/manage-prescription/pages/PrescriptionDetail")
+  import("../modules/manage-prescription/PrescriptionDetail")
 );
 
 /* Medical Service Invoice Pages */
 const ManageMedicalServiceInvoice = lazy(() =>
   import(
-    "../modules/manage-medical-service-invoice/pages/ManageMedicalServiceInvoice"
+    "../modules/manage-medical-service-invoice/ManageMedicalServiceInvoice"
   )
 );
 const CreateMedicalServiceInvoice = lazy(() =>
   import(
-    "../modules/manage-medical-service-invoice/pages/CreateMedicalServiceInvoice"
+    "../modules/manage-medical-service-invoice/CreateMedicalServiceInvoice"
   )
 );
 const UpdateMedicalServiceInvoice = lazy(() =>
   import(
-    "../modules/manage-medical-service-invoice/pages/UpdateMedicalServiceInvoice"
+    "../modules/manage-medical-service-invoice/UpdateMedicalServiceInvoice"
   )
 );
 const MedicalServiceInvoiceDetail = lazy(() =>
   import(
-    "../modules/manage-medical-service-invoice/pages/MedicalServiceInvoiceDetail"
+    "../modules/manage-medical-service-invoice/MedicalServiceInvoiceDetail"
   )
 );
 
 /* Apppointment Pages */
 const ManageAppointment = lazy(() =>
-  import("../modules/manage-appointment/pages/ManageAppointment")
+  import("../modules/manage-appointment/ManageAppointment")
 );
 const CreateAppointment = lazy(() =>
-  import("../modules/manage-appointment/pages/CreateAppointment")
+  import("../modules/manage-appointment/CreateAppointment")
 );
 const UpdateAppointment = lazy(() =>
-  import("../modules/manage-appointment/pages/UpdateAppointment")
+  import("../modules/manage-appointment/UpdateAppointment")
 );
 
 /* Invoice pages */
 const ManageInvoice = lazy(() =>
-  import("../modules/manage-invoice/pages/ManageInvoice")
+  import("../modules/manage-invoice/ManageInvoice")
 );
 const CreateInvoice = lazy(() =>
-  import("../modules/manage-invoice/pages/CreateInvoice")
+  import("../modules/manage-invoice/CreateInvoice")
 );
 const UpdateInvoice = lazy(() =>
-  import("../modules/manage-invoice/pages/UpdateInvoice")
+  import("../modules/manage-invoice/UpdateInvoice")
 );
 
-/* ======================================== */
-const Dashboard = lazy(() => import("../pages/Dashboard"));
-const Login = lazy(() => import("../pages/Login"));
-const Chat = lazy(() => import("../pages/Chat"));
-const ManageDevice = lazy(() => import("../pages/ManageDevice"));
+/* Authentication Pages */
+const Login = lazy(() => import("../modules/authentication/Login"));
+
+/* Chat Page */
+const Chat = lazy(() => import("../modules/chat/Chat"));
+
+/* Main Page */
+const Dashboard = lazy(() => import("./Dashboard"));
+
+/* Other Pages */
+const ManageDevice = lazy(() => import("./ManageDevice"));
 
 const MAIN_ROUTES = [
   { path: "/", element: <Dashboard /> },
