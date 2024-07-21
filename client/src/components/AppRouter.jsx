@@ -1,17 +1,19 @@
-import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
+import { Routes, Route } from "react-router-dom";
 import { ProgressSpinner } from "primereact/progressspinner";
-import Register from "../pages/Register";
-import Login from "../pages/Login";
+import { lazy, Suspense } from "react";
 
 /* MAIN PAGES */
-const Home = lazy(() => import("../pages/Home"));
-const About = lazy(() => import("../pages/About"));
-const Blog = lazy(() => import("../pages/Blog"));
-const Contact = lazy(() => import("../pages/Contact"));
 const Service = lazy(() => import("../pages/Service"));
-const Profile = lazy(() => import("../pages/Profile"));
+const Profile = lazy(() => import("../modules/profile/Profile"));
+const Home = lazy(() => import("../pages/Home"));
+const Contact = lazy(() => import("../pages/Contact"));
+const Blog = lazy(() => import("../pages/Blog"));
+const About = lazy(() => import("../pages/About"));
+
+/* Authentication Pages */
+const Register = lazy(() => import("../modules/authentication/Register"));
+const Login = lazy(() => import("../modules/authentication/Login"));
 
 const mainRoutes = [
   { path: "/", element: <Home /> },

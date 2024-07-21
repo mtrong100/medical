@@ -1,3 +1,5 @@
+import { APPOINTMENT_STATUS } from "./constants";
+
 export const formatDate = (timestamp) => {
   const date = new Date(timestamp);
   const day = String(date.getDate()).padStart(2, "0");
@@ -21,4 +23,20 @@ export const parseDate = (formattedDate) => {
   const year = parseInt(parts[2], 10);
 
   return new Date(year, month, day);
+};
+
+export const getAppointmentSeverity = (status) => {
+  switch (status) {
+    case APPOINTMENT_STATUS.PENDING:
+      return "warning";
+
+    case APPOINTMENT_STATUS.COMPLETED:
+      return "success";
+
+    case APPOINTMENT_STATUS.CANCELLED:
+      return "danger";
+
+    default:
+      return "secondary";
+  }
 };

@@ -135,7 +135,17 @@ export const getMedicalRecordsFromPatient = async (req, res) => {
       },
     ]);
 
-    return res.status(200).json(medicalRecords);
+    const results = medicalRecords.map((item) => {
+      return {
+        _id: item._id,
+        patient: item.patient.name,
+        doctor: item.doctor.name,
+        diagnosis: item.diagnosis,
+        createdAt: item.createdAt,
+      };
+    });
+
+    return res.status(200).json(results);
   } catch (error) {
     console.log("Lỗi tại controller getMedicalRecordsFromPatient", error);
     return res.status(500).json({ message: "Lỗi server" });
@@ -164,7 +174,19 @@ export const getAppointmentsFromPatient = async (req, res) => {
       },
     ]);
 
-    return res.status(200).json(appointments);
+    const results = appointments.map((item) => {
+      return {
+        _id: item._id,
+        patient: item.patient.name,
+        doctor: item.doctor.name,
+        date: item.date,
+        time: item.time,
+        status: item.status,
+        createdAt: item.createdAt,
+      };
+    });
+
+    return res.status(200).json(results);
   } catch (error) {
     console.log("Lỗi tại controller getAppointmentsFromPatient", error);
     return res.status(500).json({ message: "Lỗi server" });

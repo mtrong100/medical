@@ -12,8 +12,8 @@ export const NAV_LINKS = [
     link: "/service",
   },
   {
-    name: "Blog",
-    link: "/blog",
+    name: "Bài viết",
+    link: "/post",
   },
   {
     name: "Liên hệ",

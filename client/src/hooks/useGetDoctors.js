@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAllEmployeesApi } from "../api/employeeApi";
+import { getEmployeesApi } from "../api/employeeApi";
 
 export default function useGetDoctors() {
   const [loading, setLoading] = useState(false);
@@ -9,7 +9,7 @@ export default function useGetDoctors() {
     const fetchDoctors = async () => {
       setLoading(true);
       try {
-        const res = await getAllEmployeesApi({ role: "Bác sĩ" });
+        const res = await getEmployeesApi({ role: "Bác sĩ" });
         if (res) setDoctors(res.results);
       } catch (error) {
         console.log("Error fetching doctors:", error);

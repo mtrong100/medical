@@ -1,18 +1,24 @@
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import React, { useState } from "react";
+import FieldInput from "../../components/FieldInput";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { patientSchema } from "../validations/patientSchema";
-import FieldInput from "../components/FieldInput";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
+import { userSchema } from "../../validations/userSchema";
+import { useForm } from "react-hook-form";
+import { registerApi } from "../../api/authApi";
 import { Link, useNavigate } from "react-router-dom";
-import { formatDate } from "../utils/helper";
-import { Calendar } from "primereact/calendar";
+import { genders } from "../../utils/constants";
+import { formatDate } from "../../utils/helper";
 import { Dropdown } from "primereact/dropdown";
-import { genders } from "../utils/constants";
-import { registerApi } from "../api/authApi";
+import { Calendar } from "primereact/calendar";
+import { Button } from "primereact/button";
 
 const Register = () => {
+  const navigate = useNavigate();
+  const [selectedValue, setSelectedValue] = useState({
+    gender: null,
+    dateOfBirth: null,
+  });
+
   const {
     register,
     handleSubmit,
@@ -20,69 +26,47 @@ const Register = () => {
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onchange",
-    resolver: yupResolver(patientSchema),
+    resolver: yupResolver(userSchema),
     defaultValues: {
       name: "",
       phoneNumber: "",
       email: "",
       address: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const toast = useRef(null);
-  const navigate = useNavigate();
-  const [selectedGender, setSelectedGender] = useState(null);
-  const [date, setDate] = useState(null);
+  const onRegister = async (values) => {
+    const { dateOfBirth, gender } = selectedValue;
 
-  const handleRegister = async (values) => {
-    if (!date) {
-      toast.current.show({
-        severity: "error",
-        summary: "Vui lòng chọn ngày sinh",
-        life: 1500,
-      });
-      return;
-    }
-
-    if (!selectedGender) {
-      toast.current.show({
-        severity: "error",
-        summary: "Vui lòng chọn giới tính",
-        life: 1500,
-      });
+    if (!dateOfBirth || !gender) {
+      toast.error("Vui lòng điền đầy đủ thông tin");
       return;
     }
 
     try {
       const body = {
         ...values,
-        gender: selectedGender,
-        dateOfBirth: formatDate(date),
+        gender,
+        dateOfBirth: formatDate(dateOfBirth),
       };
 
       const res = await registerApi(body);
 
       if (res) {
-        toast.current.show({
-          severity: "success",
-          summary: "Tạo tài khoản thành công",
-          life: 1500,
-        });
-
+        toast.success("Đăng kí tài khoản thành công");
         navigate("/login");
       }
     } catch (error) {
-      console.log("Error creating new medicine:", error);
-      toast.current.show({
-        severity: "error",
-        summary: "Lỗi",
-        life: 1500,
-      });
+      console.log("Lỗi đăng kí:", error);
+      toast.error(error?.response?.data?.message);
     } finally {
       reset();
-      setSelectedGender(null);
-      setDate(null);
+      setSelectedValue({
+        gender: null,
+        dateOfBirth: null,
+      });
     }
   };
 
@@ -97,11 +81,9 @@ const Register = () => {
           />
         </div>
 
-        <Toast ref={toast} />
-
         <div className="w-1/2 flex items-center justify-center p-8 bg-white">
           <form
-            onSubmit={handleSubmit(handleRegister)}
+            onSubmit={handleSubmit(onRegister)}
             className="w-full max-w-3xl"
           >
             <h1 className="text-2xl font-bold text-gray-900 mb-4">
@@ -119,7 +101,7 @@ const Register = () => {
 
               <FieldInput
                 label="Số điện thoại"
-                type="phoneNumber"
+                type="text"
                 name="phoneNumber"
                 htmlFor="phoneNumber"
                 register={register}
@@ -128,12 +110,13 @@ const Register = () => {
 
               <FieldInput
                 label="Địa chỉ"
-                type="address"
+                type="text"
                 name="address"
                 htmlFor="address"
                 register={register}
                 errorMessage={errors?.address?.message}
               />
+
               <FieldInput
                 label="Email"
                 type="email"
@@ -142,6 +125,7 @@ const Register = () => {
                 register={register}
                 errorMessage={errors?.email?.message}
               />
+
               <FieldInput
                 label="Mật khẩu"
                 type="password"
@@ -151,24 +135,42 @@ const Register = () => {
                 errorMessage={errors?.password?.message}
               />
 
+              <FieldInput
+                label="Xác nhận mật khẩu"
+                type="password"
+                name="confirmPassword"
+                htmlFor="confirmPassword"
+                register={register}
+                errorMessage={errors?.confirmPassword?.message}
+              />
+
               <div className="flex flex-col gap-2">
                 <label>Ngày sinh</label>
                 <Calendar
-                  id="buttondisplay"
-                  value={date}
-                  onChange={(e) => setDate(e.value)}
                   showIcon
+                  value={selectedValue.dateOfBirth}
+                  onChange={(e) =>
+                    setSelectedValue((prev) => ({
+                      ...prev,
+                      dateOfBirth: e.value,
+                    }))
+                  }
                 />
               </div>
 
               <div className="flex flex-col gap-2">
                 <label>Giới tính</label>
                 <Dropdown
-                  value={selectedGender}
-                  onChange={(e) => setSelectedGender(e.value)}
                   options={genders}
                   placeholder="Chọn giới tính"
                   className="w-full "
+                  value={selectedValue.gender}
+                  onChange={(e) =>
+                    setSelectedValue((prev) => ({
+                      ...prev,
+                      gender: e.value,
+                    }))
+                  }
                 />
               </div>
             </div>

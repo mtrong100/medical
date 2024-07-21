@@ -1,16 +1,20 @@
-import React, { useRef } from "react";
-import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import React from "react";
+import FieldInput from "../../components/FieldInput";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginPatientSchema } from "../validations/patientSchema";
-import FieldInput from "../components/FieldInput";
-import { Button } from "primereact/button";
-import { Toast } from "primereact/toast";
-import { Link, useNavigate } from "react-router-dom";
+import { userLoginSchema } from "../../validations/userSchema";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { storeCurrentUser } from "../redux/slices/userSlice";
-import { loginApi } from "../api/authApi";
+import { Toast } from "primereact/toast";
+import { storeCurrentUser } from "../../redux/slices/userSlice";
+import { loginApi } from "../../api/authApi";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "primereact/button";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const disppatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -18,18 +22,14 @@ const Login = () => {
     formState: { errors, isSubmitting },
   } = useForm({
     mode: "onchange",
-    resolver: yupResolver(loginPatientSchema),
+    resolver: yupResolver(userLoginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const toast = useRef(null);
-  const navigate = useNavigate();
-  const disppatch = useDispatch();
-
-  const handleLogin = async (values) => {
+  const onLogin = async (values) => {
     try {
       const body = { ...values };
 
@@ -37,22 +37,12 @@ const Login = () => {
 
       if (res) {
         disppatch(storeCurrentUser(res));
-
-        toast.current.show({
-          severity: "success",
-          summary: "Đăng nhập thành công",
-          life: 1500,
-        });
-
+        toast.success("Đăng nhập thành công");
         navigate("/");
       }
     } catch (error) {
-      console.log("Error: ", error.message);
-      toast.current.show({
-        severity: "error",
-        summary: "Lỗi",
-        life: 1500,
-      });
+      console.log("Lỗi đăng nhập:", error);
+      toast.error(error?.response?.data?.message);
     } finally {
       reset();
     }
@@ -72,10 +62,7 @@ const Login = () => {
         <Toast ref={toast} />
 
         <div className="w-1/2 flex items-center justify-center p-8 bg-white">
-          <form
-            onSubmit={handleSubmit(handleLogin)}
-            className="w-full max-w-xl"
-          >
+          <form onSubmit={handleSubmit(onLogin)} className="w-full max-w-xl">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Đăng nhập</h1>
             <div className="space-y-5">
               <FieldInput
