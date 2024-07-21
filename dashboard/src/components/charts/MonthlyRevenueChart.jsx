@@ -9,12 +9,15 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
+import useGetMonthlyRevenue from "../../modules/dashboard/useGetMonthlyRevenue";
 
-const MonthlyRevenueChart = ({ monthlyRevenueData }) => {
+const MonthlyRevenueChart = () => {
+  const { monthlyRevenues } = useGetMonthlyRevenue();
+
   return (
     <ResponsiveContainer width="100%" height={400}>
       <BarChart
-        data={monthlyRevenueData}
+        data={monthlyRevenues}
         margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
       >
         <CartesianGrid strokeDasharray="3 3" />

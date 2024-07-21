@@ -1,9 +1,4 @@
-import {
-  EMPLOYEE_ROLE,
-  EMPLOYEE_SALARY,
-  GENDER,
-  PROFILE_IMAGE,
-} from "./constanst.js";
+import { EMPLOYEE_ROLE, EMPLOYEE_SALARY } from "./constanst.js";
 import jwt from "jsonwebtoken";
 
 export const autoGeneratePassword = () => {
@@ -24,29 +19,6 @@ export const generateTokenAndSetCookie = (payload, res) => {
     sameSite: "none",
     secure: true,
   });
-};
-
-export const getAvatarUrl = (role, gender) => {
-  switch (role) {
-    case EMPLOYEE_ROLE.DOCTOR:
-      return gender === GENDER.FEMALE
-        ? PROFILE_IMAGE.FEMALE_DOCTOR
-        : PROFILE_IMAGE.MALE_DOCTOR;
-    case EMPLOYEE_ROLE.NURSE:
-      return PROFILE_IMAGE.NURSE;
-    case EMPLOYEE_ROLE.CASHIER:
-      return PROFILE_IMAGE.CASHIER;
-    case EMPLOYEE_ROLE.RECEPTIONIST:
-      return PROFILE_IMAGE.RECEPTIONIST;
-    case EMPLOYEE_ROLE.ACCOUNTANT:
-      return PROFILE_IMAGE.ACCOUNTANT;
-    case EMPLOYEE_ROLE.CLEANING_STAFF:
-      return PROFILE_IMAGE.CLEANING_STAFF;
-    case EMPLOYEE_ROLE.GUARD:
-      return PROFILE_IMAGE.GUARD;
-    default:
-      return PROFILE_IMAGE.DEFAULT;
-  }
 };
 
 export const formatSalary = (salary) => {
@@ -89,4 +61,28 @@ export const getEmployeeSalary = (role) => {
     default:
       return 0;
   }
+};
+
+export const getMonthYear = (date) => {
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  return `${year}-${month < 10 ? "0" : ""}${month}`;
+};
+
+export const getMonthName = (date) => {
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return monthNames[date.getMonth()];
 };

@@ -124,7 +124,7 @@ const Login = lazy(() => import("../modules/authentication/Login"));
 const Chat = lazy(() => import("../modules/chat/Chat"));
 
 /* Main Page */
-const Dashboard = lazy(() => import("./Dashboard"));
+const Dashboard = lazy(() => import("../modules/dashboard/Dashboard"));
 
 /* Other Pages */
 const ManageDevice = lazy(() => import("./ManageDevice"));

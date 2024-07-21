@@ -1,14 +1,17 @@
 import React from "react";
 import { PieChart, Pie, ResponsiveContainer, Legend } from "recharts";
+import useGetCollectionApi from "../../hooks/useGetCollectionApi";
 
-const GenderDistributionChart = ({ employees = [] }) => {
+const GenderDistributionChart = () => {
+  const { results } = useGetCollectionApi("employee");
+
   // Tính toán phân bố giới tính
   const calculateGenderPercentages = () => {
     const genderCounts = {
       male: 0,
       female: 0,
     };
-    employees.forEach((employee) => {
+    results.forEach((employee) => {
       const gender = employee.gender;
       if (gender === "Nam") {
         genderCounts.male++;
@@ -16,7 +19,7 @@ const GenderDistributionChart = ({ employees = [] }) => {
         genderCounts.female++;
       }
     });
-    const totalEmployees = employees.length;
+    const totalEmployees = results.length;
     const malePercentage = (genderCounts.male / totalEmployees) * 100;
     const femalePercentage = (genderCounts.female / totalEmployees) * 100;
     return [

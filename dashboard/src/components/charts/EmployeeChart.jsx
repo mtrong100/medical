@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   BarChart,
   Bar,
@@ -9,12 +9,15 @@ import {
   Legend,
   CartesianGrid,
 } from "recharts";
+import useGetCollectionApi from "../../hooks/useGetCollectionApi";
 
-const EmployeeRolesChart = ({ employees = [] }) => {
+const EmployeeRolesChart = () => {
+  const { results } = useGetCollectionApi("employee");
+
   // Tính toán số lượng từng vai trò
   const calculateRoleCounts = () => {
     const roleCounts = {};
-    employees.forEach((employee) => {
+    results.forEach((employee) => {
       const role = employee.role;
       if (roleCounts[role]) {
         roleCounts[role]++;

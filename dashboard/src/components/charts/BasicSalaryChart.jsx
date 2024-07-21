@@ -9,14 +9,17 @@ import {
   Legend,
   CartesianGrid,
 } from "recharts";
+import useGetCollectionApi from "../../hooks/useGetCollectionApi";
 
-const BasicSalaryChart = ({ employees = [] }) => {
+const BasicSalaryChart = () => {
+  const { results } = useGetCollectionApi("employee");
+
   // Chuẩn bị dữ liệu cho biểu đồ Line
   const prepareChartData = () => {
     const roleSalaries = {};
 
     // Tính tổng lương cơ bản cho mỗi vai trò
-    employees.forEach((employee) => {
+    results.forEach((employee) => {
       const role = employee.role;
       const salary = employee.salary;
 
