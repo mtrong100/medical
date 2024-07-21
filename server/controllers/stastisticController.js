@@ -1,11 +1,13 @@
 import Appointment from "../models/appointmentModel.js";
 import Employee from "../models/employeeModel.js";
 import Invoice from "../models/invoiceModel.js";
+import MedicalRecord from "../models/medicalRecordModel.js";
 import MedicalServiceInvoice from "../models/medicalServiceInvoiceModel.js";
+import Medicine from "../models/medicineModel.js";
 import Patient from "../models/patientModel.js";
 import Prescription from "../models/prescriptionModel.js";
 import { PAYMENT_STATUS } from "../utils/constanst.js";
-import { getMonthName, getMonthYear } from "../utils/helper.js";
+import { getMonthName } from "../utils/helper.js";
 
 export const getRevenue = async (req, res) => {
   try {
@@ -51,10 +53,22 @@ export const getFigures = async (req, res) => {
     const employeeCount = await Employee.countDocuments();
     const patientCount = await Patient.countDocuments();
     const appointmentCount = await Appointment.countDocuments();
+    const medicalRecordCount = await MedicalRecord.countDocuments();
+    const medicineCount = await Medicine.countDocuments();
+    const prescriptionCount = await Prescription.countDocuments();
+    const invoiceCount = await Invoice.countDocuments();
 
     return res
       .status(200)
-      .json({ employeeCount, patientCount, appointmentCount });
+      .json({
+        employeeCount,
+        patientCount,
+        appointmentCount,
+        medicalRecordCount,
+        medicineCount,
+        prescriptionCount,
+        invoiceCount,
+      });
   } catch (error) {
     console.log("Lỗi tại controller getFigures", error);
     return res.status(500).json({ message: "Lỗi server" });

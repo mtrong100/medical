@@ -10,7 +10,14 @@ import Box from "../../components/Box";
 import BasicSalaryChart from "../../components/charts/BasicSalaryChart";
 import { MdOutlineAttachMoney } from "react-icons/md";
 import { formatCurrencyVND } from "../../utils/helper";
-import { FaUsers, FaCalendarAlt } from "react-icons/fa";
+import {
+  FaUsers,
+  FaCalendarAlt,
+  FaBook,
+  FaFileInvoiceDollar,
+} from "react-icons/fa";
+import { GiMedicines } from "react-icons/gi";
+import { AiFillMedicineBox } from "react-icons/ai";
 
 const Dashboard = () => {
   const { revenue } = useGetRevenue();
@@ -45,6 +52,30 @@ const Dashboard = () => {
           heading="Bệnh nhân"
           number={figures?.patientCount || 0}
           icon={<FaUsers size={30} color="white" />}
+        />
+        <Box
+          color="purple"
+          heading="Hồ sơ"
+          number={figures?.medicalRecordCount || 0}
+          icon={<FaBook size={30} color="white" />}
+        />
+        <Box
+          color="cyan"
+          heading="Thuốc"
+          number={figures?.medicineCount || 0}
+          icon={<GiMedicines size={30} color="white" />}
+        />
+        <Box
+          color="pink"
+          heading="Kê toa"
+          number={figures?.prescriptionCount || 0}
+          icon={<AiFillMedicineBox size={30} color="white" />}
+        />
+        <Box
+          color="teal"
+          heading="Hóa đơn"
+          number={figures?.invoiceCount || 0}
+          icon={<FaFileInvoiceDollar size={30} color="white" />}
         />
       </div>
 

@@ -13,18 +13,25 @@ const Box = ({ icon, heading, number, color }) => {
         return "bg-green-500";
       case "amber":
         return "bg-amber-500";
-
+      case "purple":
+        return "bg-purple-500";
+      case "pink":
+        return "bg-pink-500";
+      case "cyan":
+        return "bg-cyan-500";
+      case "teal":
+        return "bg-teal-500";
       default:
         return "bg-white";
     }
   };
 
   return (
-    <div className="border bg-gray-100  border-gray-300 rounded-sm flex items-center gap-5">
+    <div className="border bg-gray-100  border-blue-gray-100 rounded-sm flex items-center gap-5">
       <div
         className={`${displayBoxColor(
           color
-        )} aspect-video w-[100px] hover:opacity-80 transition-all h-[100px] flex-shrink-0 flex items-center justify-center`}
+        )} aspect-square w-[100px] hover:opacity-80 transition-all h-[100px] flex-shrink-0 flex items-center justify-center`}
       >
         {icon}
       </div>
