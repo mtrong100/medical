@@ -1,18 +1,19 @@
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { SocketContextProvider } from "./components/SocketContext.jsx";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistor, store } from "./redux/store.js";
 import { PrimeReactProvider } from "primereact/api";
-import "./index.css";
-import "primeicons/primeicons.css";
+import { persistor, store } from "./redux/store.js";
+import { PersistGate } from "redux-persist/integration/react";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./utils/firebase.js";
-import { SocketContextProvider } from "./components/SocketContext.jsx";
-import "swiper/css";
+import { BrowserRouter } from "react-router-dom";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import "swiper/css";
+import "primeicons/primeicons.css";
+import "./index.css";
 
 initializeApp(firebaseConfig);
 
@@ -23,6 +24,13 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <PrimeReactProvider value={{ ripple: true }}>
           <SocketContextProvider>
             <App />
+            <Toaster
+              position="top-center"
+              reverseOrder={false}
+              containerStyle={{
+                zIndex: "999999",
+              }}
+            />
           </SocketContextProvider>
         </PrimeReactProvider>
       </PersistGate>

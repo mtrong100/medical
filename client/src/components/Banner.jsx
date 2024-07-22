@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Button } from "primereact/button";
-import BookingDialog from "./BookingDialog";
 
 const bannerImages = [
   "https://www.yudaah.com/demo/free-clinic-website-template/assets/images/slider/slider_3.jpg",
@@ -9,7 +9,7 @@ const bannerImages = [
 ];
 
 const Banner = () => {
-  const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -28,16 +28,17 @@ const Banner = () => {
                   <div className="space-y-5">
                     <h1 className="text-5xl font-bold">Medical Care</h1>
                     <p className="text-lg">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Sapiente, voluptates nemo consectetur blanditiis veniam
-                      error totam? Ipsum quia corrupti iusto quae rerum quasi
-                      provident voluptatem minus eveniet amet, animi rem.
+                      Chào mừng bạn đến với Medical Care - nền tảng đặt lịch
+                      khám bệnh trực tuyến hàng đầu! Chúng tôi hiểu rằng sức
+                      khỏe là tài sản quý giá nhất của mỗi người, và việc chăm
+                      sóc sức khỏe nên được thực hiện một cách dễ dàng và thuận
+                      tiện nhất.
                     </p>
                     <Button
                       label="Đặt lịch khám bệnh"
                       raised
                       icon="pi pi-calendar"
-                      onClick={() => setVisible(true)}
+                      onClick={() => navigate("/book-appointment")}
                     />
                   </div>
                 </div>
@@ -46,8 +47,6 @@ const Banner = () => {
           ))}
         </Swiper>
       </div>
-
-      <BookingDialog visible={visible} setVisible={setVisible} />
     </>
   );
 };

@@ -53,3 +53,5 @@ export const APPOINTMENT_STATUS = {
   CANCELLED: "Đã hủy",
   COMPLETED: "Đã khám",
 };
+
+export const ADMIN_ID = "6695d0bb4272e683f0032f31";

@@ -1,9 +1,9 @@
+import useMessage from "../../hooks/useMessage";
 import React, { useEffect, useRef, useState } from "react";
-import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
-import Message from "./Message";
-import { IoMdSend } from "react-icons/io";
+import Message from "../../components/Message";
 import { ProgressSpinner } from "primereact/progressspinner";
-import useMessage from "../hooks/useMessage";
+import { IoMdSend } from "react-icons/io";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 
 const Chatbox = () => {
   const scrollRef = useRef();
@@ -32,7 +32,7 @@ const Chatbox = () => {
             <div className="w-[360px]  bg-white rounded-lg shadow-lg border-blue-gray-300 overflow-hidden ">
               <header className="bg-gray-100 shadow-sm border py-3 px-5 w-full rounded-sm">
                 <div className="flex items-center gap-2 justify-between">
-                  <h3 className="font-semibold">Admin</h3>
+                  <h3 className="font-semibold">Nhân viên tư vấn</h3>
                   <span className="text-green-500 font-medium text-sm">
                     Online
                   </span>
@@ -43,7 +43,9 @@ const Chatbox = () => {
                 {loading && <ProgressSpinner />}
 
                 {!loading && messages?.length === 0 && (
-                  <p className="text-center text-gray-500">No messages yet</p>
+                  <p className="text-center text-gray-500 ">
+                    Chưa có tin nhắn nào
+                  </p>
                 )}
 
                 {!loading &&
@@ -59,7 +61,7 @@ const Chatbox = () => {
                   <input
                     type="text"
                     className="outline-none border-none w-full bg-transparent"
-                    placeholder="Send message..."
+                    placeholder="Nhắn tin..."
                     value={val}
                     onChange={(e) => setVal(e.target.value)}
                   />

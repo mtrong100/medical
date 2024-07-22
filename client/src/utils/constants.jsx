@@ -38,7 +38,7 @@ export const APPOINTMENT_STATUS = {
 
 export const genders = [GENDER.MALE, GENDER.FEMALE];
 
-export const ADMIN_ID = "6686028822024269e6c1e813";
+export const ADMIN_ID = "6695d0bb4272e683f0032f31";
 
 export const doctorSchedules = [
   "7:00 - 8:00",

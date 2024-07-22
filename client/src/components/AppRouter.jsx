@@ -11,9 +11,13 @@ const Contact = lazy(() => import("../pages/Contact"));
 const Blog = lazy(() => import("../pages/Blog"));
 const About = lazy(() => import("../pages/About"));
 
+const BookAppointment = lazy(() =>
+  import("../modules/book-appointment/BookAppointment")
+);
+
 /* Authentication Pages */
-const Register = lazy(() => import("../modules/authentication/Register"));
-const Login = lazy(() => import("../modules/authentication/Login"));
+import Login from "../modules/authentication/Login";
+import Register from "../modules/authentication/Register";
 
 const mainRoutes = [
   { path: "/", element: <Home /> },
@@ -22,6 +26,7 @@ const mainRoutes = [
   { path: "/contact", element: <Contact /> },
   { path: "/service", element: <Service /> },
   { path: "/profile", element: <Profile /> },
+  { path: "/book-appointment", element: <BookAppointment /> },
 ];
 
 const AppRouter = () => {
