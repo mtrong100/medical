@@ -1,17 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../shared/Header";
-import { Outlet } from "react-router-dom";
-// import Footer from "../shared/Footer";
-// import Scrolltop from "../Scrolltop";
-import { useDispatch, useSelector } from "react-redux";
+import { Navigate, Outlet } from "react-router-dom";
+import Footer from "../shared/Footer";
+import { useSelector } from "react-redux";
 import Chatbox from "../../modules/chat/Chatbox";
-import Banner from "../Banner";
+import useGetUserDetail from "../../hooks/useGetUserDetail";
+// import Scrolltop from "../Scrolltop";
 // import Newsletter from "../Newsletter";
 // import Chatbox from "../Chatbox";
 
 const MainLayout = () => {
-  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+  const { fetchUserDetail } = useGetUserDetail();
+
+  useEffect(() => {
+    fetchUserDetail(currentUser._id);
+  }, []);
+
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
 
   return (
     <>
@@ -22,7 +30,7 @@ const MainLayout = () => {
       {currentUser && <Chatbox />}
       {/* <Scrolltop /> */}
       {/* <Newsletter /> */}
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 };

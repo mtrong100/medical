@@ -12,7 +12,7 @@ export default function useGetUserDetail() {
       const res = await getUserDetailApi(userId);
       if (res) dispatch(storeCurrentUser(res));
     } catch (error) {
-      console.log("Error in fetchUserDetail", error);
+      console.log("Lỗi fetch data người dùng", error);
     } finally {
       dispatch(setLoading(false));
     }

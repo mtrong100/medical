@@ -1,4 +1,4 @@
-## PASS ADMIN MANAGE PAGE
+# ADMIN ACCOUNT FOR MANAGE PAGE
 
-email: superadmin@gmail.com
-pass: superadmin123@
+- email: superadmin@gmail.com
+- password: superadmin123@

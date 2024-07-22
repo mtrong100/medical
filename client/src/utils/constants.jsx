@@ -1,3 +1,14 @@
+import {
+  FaBriefcaseMedical,
+  FaHospitalAlt,
+  FaMedrt,
+  FaRibbon,
+  FaUserFriends,
+} from "react-icons/fa";
+import { FaHeartPulse, FaUserDoctor } from "react-icons/fa6";
+import { GiMedicines } from "react-icons/gi";
+import { AiFillLike } from "react-icons/ai";
+
 export const NAV_LINKS = [
   {
     name: "Trang chủ",
@@ -7,18 +18,18 @@ export const NAV_LINKS = [
     name: "Về chúng tôi",
     link: "/about",
   },
-  {
-    name: "Dịch vụ",
-    link: "/service",
-  },
+  // {
+  //   name: "Dịch vụ",
+  //   link: "/service",
+  // },
   {
     name: "Bài viết",
     link: "/post",
   },
-  {
-    name: "Liên hệ",
-    link: "/contact",
-  },
+  // {
+  //   name: "Liên hệ",
+  //   link: "/contact",
+  // },
   {
     name: "Hồ sơ",
     link: "/profile",
@@ -49,4 +60,70 @@ export const doctorSchedules = [
   "14:00 - 15:00",
   "15:00 - 16:00",
   "16:00 - 17:00",
+];
+
+export const stastisticCard = [
+  {
+    icon: <FaHospitalAlt size={30} />,
+    title: "FaHospitalAlt",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
+  {
+    icon: <FaUserDoctor size={30} />,
+    title: "Experianced Doctors",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
+  {
+    icon: <FaBriefcaseMedical size={30} />,
+    title: "Customer Satisfaction",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
+  {
+    icon: <GiMedicines size={30} />,
+    title: "Pharma Pipeline",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
+];
+
+export const keyCards = [
+  {
+    icon: <FaHeartPulse size={30} />,
+    title: "Cardiology",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
+  {
+    icon: <FaRibbon size={30} />,
+    title: "Orthopaedic",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
+  {
+    icon: <FaMedrt size={30} />,
+    title: "Neurologist",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
+  {
+    icon: <GiMedicines size={30} />,
+    title: "Pharma Pipeline",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
+  {
+    icon: <FaUserFriends size={30} />,
+    title: "Pharma Team",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
+  {
+    icon: <AiFillLike size={30} />,
+    title: "High Quality treatments",
+    caption:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
+  },
 ];

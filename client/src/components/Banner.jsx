@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Button } from "primereact/button";
+import { stastisticCard } from "../utils/constants";
 
 const bannerImages = [
   "https://www.yudaah.com/demo/free-clinic-website-template/assets/images/slider/slider_3.jpg",
@@ -46,6 +47,23 @@ const Banner = () => {
             </SwiperSlide>
           ))}
         </Swiper>
+      </div>
+
+      <div className="grid grid-cols-4">
+        {stastisticCard.map((item, index) => (
+          <div
+            key={item.title}
+            className={`${
+              index % 2 === 0 ? "bg-blue-800" : "bg-cyan-600"
+            } flex gap-5 flex-col justify-center items-center aspect-square px-5 text-white`}
+          >
+            <div className="flex items-center justify-center rounded-full shadow-md bg-white text-blue-900 w-[100px] h-[100px]">
+              {item.icon}
+            </div>
+            <h1 className="text-3xl font-semibold">{item.title}</h1>
+            <p className="text-center">{item.caption}</p>
+          </div>
+        ))}
       </div>
     </>
   );
