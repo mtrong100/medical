@@ -14,6 +14,7 @@ import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
 import { bookingAppointmentApi } from "../../api/appointmentApi";
 import { appointmentSchema } from "../../validations/appointmentSchema";
+import Image from "../../assets/images/medical-marketing-2.webp";
 
 const BookAppointment = () => {
   const navigate = useNavigate();
@@ -41,6 +42,10 @@ const BookAppointment = () => {
       email: "",
     },
   });
+
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   useEffect(() => {
     if (currentUser) {
@@ -80,7 +85,11 @@ const BookAppointment = () => {
   };
 
   return (
-    <section className="my-10">
+    <section className="mb-20">
+      <div className="h-[300px] w-full mb-10">
+        <img src={Image} alt="banner" className="w-full h-full object-cover" />
+      </div>
+
       <div className="page-container">
         <TitleSection>Đặt lịch khám bệnh</TitleSection>
 
