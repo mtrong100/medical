@@ -16,7 +16,7 @@ const Chatbox = () => {
   }, [messages]);
 
   return (
-    <div className="fixed z-50 right-10 bottom-24">
+    <div className="fixed bottom-24 right-6 z-50">
       <div className="relative">
         <div
           onClick={() => setIsOpen(!isOpen)}

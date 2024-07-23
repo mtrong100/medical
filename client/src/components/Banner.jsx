@@ -2,12 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Button } from "primereact/button";
-import { stastisticCard } from "../utils/constants";
+import { SERVICE_DATA } from "../utils/constants";
+import slider1Image from "../assets/images/slider_1.webp";
+import slider3Image from "../assets/images/slider_3.webp";
 
-const bannerImages = [
-  "https://www.yudaah.com/demo/free-clinic-website-template/assets/images/slider/slider_3.jpg",
-  "https://www.yudaah.com/demo/free-clinic-website-template/assets/images/slider/slider_1.jpg",
-];
+const bannerImages = [slider1Image, slider3Image];
 
 const Banner = () => {
   const navigate = useNavigate();
@@ -50,7 +49,7 @@ const Banner = () => {
       </div>
 
       <div className="grid grid-cols-4">
-        {stastisticCard.map((item, index) => (
+        {SERVICE_DATA.map((item, index) => (
           <div
             key={item.title}
             className={`${

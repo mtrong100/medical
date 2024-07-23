@@ -18,18 +18,10 @@ export const NAV_LINKS = [
     name: "Về chúng tôi",
     link: "/about",
   },
-  // {
-  //   name: "Dịch vụ",
-  //   link: "/service",
-  // },
   {
     name: "Bài viết",
     link: "/post",
   },
-  // {
-  //   name: "Liên hệ",
-  //   link: "/contact",
-  // },
   {
     name: "Hồ sơ",
     link: "/profile",
@@ -62,67 +54,67 @@ export const doctorSchedules = [
   "16:00 - 17:00",
 ];
 
-export const stastisticCard = [
+export const SERVICE_DATA = [
   {
     icon: <FaHospitalAlt size={30} />,
-    title: "FaHospitalAlt",
+    title: "Công nghệ mới nhất",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
   {
     icon: <FaUserDoctor size={30} />,
-    title: "Experianced Doctors",
+    title: "Bác sĩ giàu kinh nghiệm",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
   {
     icon: <FaBriefcaseMedical size={30} />,
-    title: "Customer Satisfaction",
+    title: "Sự hài lòng của khách hàng",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
   {
     icon: <GiMedicines size={30} />,
-    title: "Pharma Pipeline",
+    title: "Đường ống dược phẩm",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
 ];
 
-export const keyCards = [
+export const KEYFEATURE_DATA = [
   {
     icon: <FaHeartPulse size={30} />,
-    title: "Cardiology",
+    title: "Tim mạch",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
   {
     icon: <FaRibbon size={30} />,
-    title: "Orthopaedic",
+    title: "Chỉnh hình",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
   {
     icon: <FaMedrt size={30} />,
-    title: "Neurologist",
+    title: "Nhà thần kinh học",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
   {
     icon: <GiMedicines size={30} />,
-    title: "Pharma Pipeline",
+    title: "Đường ống dược phẩm",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
   {
     icon: <FaUserFriends size={30} />,
-    title: "Pharma Team",
+    title: "Nhóm dược phẩm",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
   {
     icon: <AiFillLike size={30} />,
-    title: "High Quality treatments",
+    title: "Phương pháp điều trị chất lượng cao",
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },

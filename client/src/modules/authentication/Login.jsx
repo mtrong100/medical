@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { userLoginSchema } from "../../validations/userSchema";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Toast } from "primereact/toast";
 import { storeCurrentUser } from "../../redux/slices/userSlice";
 import { loginApi } from "../../api/authApi";
 import { Link, useNavigate } from "react-router-dom";
@@ -58,8 +57,6 @@ const Login = () => {
             className="h-screen w-full object-cover"
           />
         </div>
-
-        <Toast ref={toast} />
 
         <div className="w-1/2 flex items-center justify-center p-8 bg-white">
           <form onSubmit={handleSubmit(onLogin)} className="w-full max-w-xl">

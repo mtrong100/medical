@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 
 const Footer = () => {
   return (
-    <footer className="bg-white mt-20">
+    <footer className="bg-white ">
       <div className="py-5 px-20">
         <div className="lg:flex lg:items-start lg:gap-8">
           <div className="text-blue-600">
@@ -25,7 +25,7 @@ const Footer = () => {
             <div className="col-span-2">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Get the latest news!
+                  Nhận tin tức mới nhất!
                 </h2>
 
                 <p className="mt-4 text-gray-500">

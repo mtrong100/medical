@@ -1,12 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import Banner from "../components/Banner";
 import Introduce from "../components/Introduce";
 import KeyFeature from "../components/KeyFeature";
+import Faq from "../components/Faq";
+import Map from "../components/Map";
 
 const Home = () => {
-  const { currentUser } = useSelector((state) => state.user);
-
   return (
     <div>
       <Banner />
@@ -14,6 +13,10 @@ const Home = () => {
         <Introduce />
       </div>
       <KeyFeature />
+      <div className="my-32">
+        <Faq />
+      </div>
+      <Map />
     </div>
   );
 };

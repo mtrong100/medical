@@ -3,13 +3,13 @@ import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyDePEWeHOItUX1XcWcicOLCyC6KuswOqt0",
-  authDomain: "medical-7abfd.firebaseapp.com",
-  projectId: "medical-7abfd",
-  storageBucket: "medical-7abfd.appspot.com",
-  messagingSenderId: "1097711019859",
-  appId: "1:1097711019859:web:9288fa6ff7e106861ae3a6",
-  measurementId: "G-WD134GH26F",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGE_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

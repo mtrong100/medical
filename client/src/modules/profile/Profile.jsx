@@ -8,7 +8,7 @@ import { TabView, TabPanel } from "primereact/tabview";
 const Profile = () => {
   return (
     <div className="page-container">
-      <div className="mt-10">
+      <div className="mt-10 mb-20">
         <TitleSection>Hồ sơ người dùng</TitleSection>
 
         <div className="mt-6">

@@ -4,13 +4,10 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { lazy, Suspense } from "react";
 
 /* MAIN PAGES */
-const Service = lazy(() => import("../pages/Service"));
 const Profile = lazy(() => import("../modules/profile/Profile"));
 const Home = lazy(() => import("../pages/Home"));
-const Contact = lazy(() => import("../pages/Contact"));
-const Blog = lazy(() => import("../pages/Blog"));
 const About = lazy(() => import("../pages/About"));
-
+const Post = lazy(() => import("../pages/Post"));
 const BookAppointment = lazy(() =>
   import("../modules/book-appointment/BookAppointment")
 );
@@ -22,9 +19,7 @@ import Register from "../modules/authentication/Register";
 const mainRoutes = [
   { path: "/", element: <Home /> },
   { path: "/about", element: <About /> },
-  { path: "/blog", element: <Blog /> },
-  { path: "/contact", element: <Contact /> },
-  { path: "/service", element: <Service /> },
+  { path: "/post", element: <Post /> },
   { path: "/profile", element: <Profile /> },
   { path: "/book-appointment", element: <BookAppointment /> },
 ];

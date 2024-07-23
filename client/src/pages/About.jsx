@@ -1,11 +1,12 @@
 import TitleSection from "../components/TitleSection";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { stastisticCard } from "../utils/constants";
+import { SERVICE_DATA } from "../utils/constants";
 import { InputTextarea } from "primereact/inputtextarea";
 import { InputText } from "primereact/inputtext";
 import { FaPhone, FaMailBulk } from "react-icons/fa";
 import { Button } from "primereact/button";
+import blogImage from "../assets/images/blog_01.webp";
 
 const About = () => {
   const navigate = useNavigate();
@@ -44,15 +45,12 @@ const About = () => {
             />
           </div>
           <div className="aspect-square">
-            <img
-              src="https://www.yudaah.com/demo/free-clinic-website-template/assets/images/blog/blog_01.jpg"
-              className="img-cover rounded-sm"
-            />
+            <img src={blogImage} className="img-cover rounded-sm" />
           </div>
         </div>
 
         <div className="mt-10 grid grid-cols-4 gap-5">
-          {stastisticCard.map((item) => (
+          {SERVICE_DATA.map((item) => (
             <div
               key={item.title}
               className="border border-gray-300 flex gap-5 flex-col justify-center items-center rounded-md  hover:bg-blue-500 hover:text-white transition-all aspect-square p-5"
