@@ -29,7 +29,7 @@ const Header = () => {
               className="text-3xl text-white font-bold flex items-center gap-3"
             >
               <FaHandHoldingMedical />
-              Medical
+              Medical Care
             </Link>
 
             {currentUser ? (
@@ -50,7 +50,7 @@ const Header = () => {
           </div>
         </section>
       </div>
-      <div className="h-[60px] bg-white flex items-center border-b border-gray-300 ">
+      <div className="h-[60px] bg-blue-100 flex items-center  ">
         <div className="page-container flex items-center justify-center">
           <ul className="flex items-center gap-8">
             {NAV_LINKS.map((item) => {

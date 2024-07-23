@@ -11,7 +11,7 @@ const DashboardSidebar = () => {
     <div className="w-[300px] sticky top-0 left-0  border-right h-screen p-3 shadow-sm flex-shrink-0 bg-blue-900 text-white z-10">
       <h1 className="text-center text-3xl font-bold flex items-center gap-2 justify-center">
         <FaHandHoldingMedical />
-        Medical
+        Medical Care
       </h1>
 
       <Divider />
