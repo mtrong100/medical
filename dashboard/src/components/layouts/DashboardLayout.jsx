@@ -1,29 +1,15 @@
-import { Navigate, Outlet } from "react-router-dom";
+import useGetUserDetail from "../../hooks/useGetUserDetail";
 import DashboardSidebar from "../shared/DashboardSidebar";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getUserDetailApi } from "../../api/userApi";
-import { setLoading, storeCurrentUser } from "../../redux/slices/userSlice";
+import { Navigate, Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
-  const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+  const { fetchUserDetail } = useGetUserDetail();
 
   useEffect(() => {
-    const fetchDetailUser = async () => {
-      dispatch(setLoading(true));
-
-      try {
-        const res = await getUserDetailApi(currentUser?._id);
-        if (res) dispatch(storeCurrentUser(res));
-      } catch (error) {
-        console.log(error);
-        dispatch(storeCurrentUser(null));
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchDetailUser();
+    fetchUserDetail(currentUser?._id);
   }, []);
 
   if (!currentUser) {

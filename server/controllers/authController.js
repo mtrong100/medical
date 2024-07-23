@@ -128,8 +128,8 @@ export const logout = (req, res) => {
     res.cookie("MEDICAL_JWT", "", { maxAge: 0 });
     return res.status(200).json({ message: "Đã đăng xuất tài khoản" });
   } catch (error) {
-    console.log("Error in logout controller", error.message);
-    return res.status(500).json({ error: "Lỗi server" });
+    console.log("Lỗi tại controller logout", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 

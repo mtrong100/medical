@@ -55,16 +55,25 @@ export const SIDEBAR_LINKS = [
     link: "/employee",
   },
   {
+    icon: "pi pi-users",
+    name: "Nhà cung cấp",
+    link: "/supplier",
+  },
+  {
     icon: "pi pi-box",
     name: "Thuốc",
     link: "/medicine",
   },
-
-  // {
-  //   icon: "pi pi-server",
-  //   name: "Thiết bị",
-  //   link: "/device",
-  // },
+  {
+    icon: "pi pi-server",
+    name: "Thiết bị",
+    link: "/device",
+  },
+  {
+    icon: "pi pi-warehouse",
+    name: "Kho",
+    link: "/inventory",
+  },
 ];
 
 export const monthsArray = [

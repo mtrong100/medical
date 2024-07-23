@@ -68,6 +68,7 @@ const Login = () => {
                 htmlFor="email"
                 register={register}
                 errorMessage={errors?.email?.message}
+                placeholder="Nhập email"
               />
               <FieldInput
                 label="Mật khẩu"
@@ -76,6 +77,7 @@ const Login = () => {
                 htmlFor="password"
                 register={register}
                 errorMessage={errors?.password?.message}
+                placeholder="Nhập mật khẩu"
               />
               <Button
                 className="w-full"

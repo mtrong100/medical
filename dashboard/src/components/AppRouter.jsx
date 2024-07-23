@@ -117,6 +117,33 @@ const UpdateInvoice = lazy(() =>
   import("../modules/manage-invoice/UpdateInvoice")
 );
 
+/* Device Pages */
+const ManageDevice = lazy(() =>
+  import("../modules/manage-device/ManageDevice")
+);
+const CreateDevice = lazy(() =>
+  import("../modules/manage-device/CreateDevice")
+);
+const UpdateDevice = lazy(() =>
+  import("../modules/manage-device/UpdateDevice")
+);
+
+/* Supplier Pages */
+const ManageSupplier = lazy(() =>
+  import("../modules/manage-supplier/ManageSupplier")
+);
+const CreateSupplier = lazy(() =>
+  import("../modules/manage-supplier/CreateSupplier")
+);
+const UpdateSupplier = lazy(() =>
+  import("../modules/manage-supplier/UpdateSupplier")
+);
+
+/* Inventory Page */
+const ManageInventory = lazy(() =>
+  import("../modules/manage-inventory/ManageInventory")
+);
+
 /* Authentication Pages */
 const Login = lazy(() => import("../modules/authentication/Login"));
 
@@ -125,9 +152,6 @@ const Chat = lazy(() => import("../modules/chat/Chat"));
 
 /* Main Page */
 const Dashboard = lazy(() => import("../modules/dashboard/Dashboard"));
-
-/* Other Pages */
-const ManageDevice = lazy(() => import("./ManageDevice"));
 
 const MAIN_ROUTES = [
   { path: "/", element: <Dashboard /> },
@@ -183,6 +207,15 @@ const MAIN_ROUTES = [
   { path: "/invoice/update/:id", element: <UpdateInvoice /> },
 
   { path: "/device", element: <ManageDevice /> },
+  { path: "/device/create", element: <CreateDevice /> },
+  { path: "/device/update/:id", element: <UpdateDevice /> },
+
+  { path: "/supplier", element: <ManageSupplier /> },
+  { path: "/supplier/create", element: <CreateSupplier /> },
+  { path: "/supplier/update/:id", element: <UpdateSupplier /> },
+
+  { path: "/inventory", element: <ManageInventory /> },
+
   {
     path: "/chat",
     element: <Chat />,
