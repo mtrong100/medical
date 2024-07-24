@@ -76,3 +76,13 @@ export const deleteDevice = async (req, res) => {
     return res.status(500).json({ message: "Lỗi server" });
   }
 };
+
+export const getDeviceCollection = async (req, res) => {
+  try {
+    const devices = await Device.find();
+    return res.status(200).json(devices);
+  } catch (error) {
+    console.log("Lỗi tại controller getDeviceCollection", error);
+    return res.status(500).json({ message: "Lỗi server" });
+  }
+};

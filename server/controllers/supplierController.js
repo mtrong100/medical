@@ -77,3 +77,13 @@ export const deleteSupplier = async (req, res) => {
     return res.status(500).json({ message: "Lỗi server" });
   }
 };
+
+export const getSupplierCollection = async (req, res) => {
+  try {
+    const data = await Supplier.find();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Lỗi tại controller getSupplierCollection", error);
+    return res.status(500).json({ message: "Lỗi server" });
+  }
+};

@@ -8,7 +8,7 @@ import {
 
 const router = express.Router();
 
-router.get("/inventory", getInventory);
+router.get("/inventories", getInventory);
 router.get("/:id", getInventoryDetail);
 router.post("/create", createInventory);
 router.delete("/delete/:id", deleteInventory);

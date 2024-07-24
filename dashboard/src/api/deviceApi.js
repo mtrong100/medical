@@ -1,5 +1,10 @@
 import axios from "./axiosConfig";
 
+export const getDevicesCollectionApi = async () => {
+  const response = await axios.get("/device/collection");
+  return response;
+};
+
 export const getDevicesApi = async (params) => {
   const response = await axios.get("/device/devices", { params });
   return response;

@@ -143,6 +143,12 @@ const UpdateSupplier = lazy(() =>
 const ManageInventory = lazy(() =>
   import("../modules/manage-inventory/ManageInventory")
 );
+const CreateInventoryDevice = lazy(() =>
+  import("../modules/manage-inventory/CreateInventoryDevice")
+);
+const CreateInventoryMedicine = lazy(() =>
+  import("../modules/manage-inventory/CreateInventoryMedicine")
+);
 
 /* Authentication Pages */
 const Login = lazy(() => import("../modules/authentication/Login"));
@@ -215,6 +221,8 @@ const MAIN_ROUTES = [
   { path: "/supplier/update/:id", element: <UpdateSupplier /> },
 
   { path: "/inventory", element: <ManageInventory /> },
+  { path: "/inventory-device/create", element: <CreateInventoryDevice /> },
+  { path: "/inventory-medicine/create", element: <CreateInventoryMedicine /> },
 
   {
     path: "/chat",

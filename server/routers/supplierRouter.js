@@ -2,6 +2,7 @@ import express from "express";
 import {
   createSupplier,
   deleteSupplier,
+  getSupplierCollection,
   getSupplierDetail,
   getSuppliers,
   updateSupplier,
@@ -9,6 +10,7 @@ import {
 
 const router = express.Router();
 
+router.get("/collection", getSupplierCollection);
 router.get("/suppliers", getSuppliers);
 router.get("/:id", getSupplierDetail);
 router.post("/create", createSupplier);

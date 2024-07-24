@@ -1,5 +1,10 @@
 import axios from "./axiosConfig";
 
+export const getSupplierCollectionApi = async () => {
+  const response = await axios.get("/supplier/collection");
+  return response;
+};
+
 export const getSuppliersApi = async (params) => {
   const response = await axios.get("/supplier/suppliers", { params });
   return response;

@@ -4,6 +4,7 @@ import Medicine from "../models/medicineModel.js";
 
 export const getInventory = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
+
   try {
     const skip = (page - 1) * limit;
     const total = await Inventory.countDocuments();
@@ -15,17 +16,28 @@ export const getInventory = async (req, res) => {
       .sort({ createdAt: -1 })
       .populate("supplier", "_id name")
       .populate("items.medicine", "_id name")
-      .populate("items.device", "_id name");
+      .populate("items.device", "_id name category price");
 
     const formattedInventory = inventory.map((inv) => ({
       id: inv._id,
       supplier: inv.supplier.name,
       total: inv.total,
-      items: inv.items.map((item) => ({
-        itemType: item.medicine ? "Medicine" : "Device",
-        item: item.medicine.name || item.device.name,
-        quantity: item.quantity,
-      })),
+      itemType: inv.itemType,
+      items: inv.items.map((item) => {
+        if (inv.itemType === "Medicine" && item.medicine) {
+          return {
+            medicine: item.medicine.name,
+            quantity: item.quantity,
+          };
+        } else {
+          return {
+            device: item.device.name,
+            quantity: item.quantity,
+            category: item.device.category,
+            price: item.device.price,
+          };
+        }
+      }),
       createdAt: inv.createdAt,
       updatedAt: inv.updatedAt,
     }));

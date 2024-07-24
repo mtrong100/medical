@@ -2,6 +2,7 @@ import express from "express";
 import {
   createDevice,
   deleteDevice,
+  getDeviceCollection,
   getDeviceDetail,
   getDevices,
   updateDevice,
@@ -9,6 +10,7 @@ import {
 
 const router = express.Router();
 
+router.get("/collection", getDeviceCollection);
 router.get("/devices", getDevices);
 router.get("/:id", getDeviceDetail);
 router.post("/create", createDevice);

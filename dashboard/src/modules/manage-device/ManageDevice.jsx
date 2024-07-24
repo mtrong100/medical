@@ -111,11 +111,19 @@ const ManageDevice = () => {
     <div>
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí thiết bị</TitleSection>
-        <Button
-          label="Thêm mới"
-          icon="pi pi-plus"
-          onClick={() => navigate("/device/create")}
-        />
+        <div className="flex items-center gap-5">
+          <Button
+            label="Nhập kho"
+            severity="help"
+            icon="pi pi-warehouse"
+            onClick={() => navigate("/inventory-device/create")}
+          />
+          <Button
+            label="Thêm mới"
+            icon="pi pi-plus"
+            onClick={() => navigate("/device/create")}
+          />
+        </div>
       </div>
 
       <div className="mt-5">
