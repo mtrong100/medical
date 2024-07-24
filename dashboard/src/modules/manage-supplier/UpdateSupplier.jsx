@@ -50,7 +50,7 @@ const UpdateSupplier = () => {
 
   return (
     <div>
-      <TitleSection>Thêm mới nhà cung cấp</TitleSection>
+      <TitleSection>Cập nhật nhà cung cấp</TitleSection>
 
       <div className="mt-20">
         <div className="w-full  max-w-4xl mx-auto">

@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { getSupplierDetailApi } from "../../api/supplierApi";
+import { getDeviceDetailApi } from "../../api/deviceApi";
 import toast from "react-hot-toast";
 
-export default function useGetSupplierDetail() {
+export default function useGetDeviceDetail() {
   const [detail, setDetail] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const fetchDetail = async (id) => {
     setLoading(true);
     try {
-      const res = await getSupplierDetailApi(id);
+      const res = await getDeviceDetailApi(id);
       if (res) setDetail(res);
     } catch (error) {
       console.log("Lỗi fetch data detail", error);
