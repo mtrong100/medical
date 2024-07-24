@@ -175,7 +175,7 @@ export const doctorSchedules = [
   "16:00 - 17:00",
 ];
 
-export const LIMIT_AMOUNT = 5;
+export const LIMIT_AMOUNT = 6;
 
 export const objectIdRegex = /^[0-9a-fA-F]{24}$/;
 
