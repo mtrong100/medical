@@ -15,7 +15,7 @@ export const getInventory = async (req, res) => {
       .limit(parseInt(limit))
       .sort({ createdAt: -1 })
       .populate("supplier", "_id name")
-      .populate("items.medicine", "_id name")
+      .populate("items.medicine", "_id name category price")
       .populate("items.device", "_id name category price");
 
     const formattedInventory = inventory.map((inv) => ({
@@ -29,12 +29,12 @@ export const getInventory = async (req, res) => {
           return {
             name: item.medicine.name,
             quantity: item.quantity,
+            price: item.medicine.price,
           };
         } else {
           return {
             name: item.device.name,
             quantity: item.quantity,
-            category: item.device.category,
             price: item.device.price,
           };
         }

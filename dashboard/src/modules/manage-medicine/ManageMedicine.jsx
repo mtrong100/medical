@@ -114,18 +114,26 @@ const ManageMedicine = () => {
   };
 
   const totalBodyTemplate = (rowData) => {
-    return <div>{formatCurrencyVND(rowData.total || 0)} </div>;
+    return <div>{formatCurrencyVND(rowData.price * rowData.stock)} </div>;
   };
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí thuốc</TitleSection>
-        <Button
-          label="Thêm mới"
-          icon="pi pi-plus"
-          onClick={() => navigate("/medicine/create")}
-        />
+        <div className="flex items-center gap-5">
+          <Button
+            label="Nhập thêm thuốc"
+            severity="help"
+            icon="pi pi-cart-plus"
+            onClick={() => navigate("/inventory-medicine/create")}
+          />
+          <Button
+            label="Thêm mới"
+            icon="pi pi-plus"
+            onClick={() => navigate("/medicine/create")}
+          />
+        </div>
       </div>
 
       {/* Filter */}

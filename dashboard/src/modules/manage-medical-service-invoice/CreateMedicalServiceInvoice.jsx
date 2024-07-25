@@ -57,6 +57,7 @@ const CreateMedicalServiceInvoice = () => {
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, patient: e.target.value }))
               }
+              placeholder="Mã bệnh nhân"
             />
           </div>
 
@@ -135,12 +136,14 @@ const CreateMedicalServiceInvoice = () => {
           label="Quay về"
           severity="secondary"
           onClick={() => navigate("/medical-service-invoice")}
+          icon="pi pi-arrow-left"
         />
         <Button
           onClick={onCreate}
           type="submit"
           label="Xác nhận"
           disabled={loading}
+          icon="pi pi-check-circle"
         />
       </div>
     </div>

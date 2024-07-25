@@ -113,9 +113,9 @@ const ManageDevice = () => {
         <TitleSection>Quản lí thiết bị</TitleSection>
         <div className="flex items-center gap-5">
           <Button
-            label="Nhập kho"
+            label="Nhập thêm thiết bị"
             severity="help"
-            icon="pi pi-warehouse"
+            icon="pi pi-cart-plus"
             onClick={() => navigate("/inventory-device/create")}
           />
           <Button

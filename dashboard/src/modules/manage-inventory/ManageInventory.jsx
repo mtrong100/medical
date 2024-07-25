@@ -57,14 +57,13 @@ const ManageInventory = () => {
     );
 
     // Tạo bảng chi tiết thuốc
-    const tableColumn = ["Tên", "Danh mục", "Đơn giá", "Số lượng", "Tổng tiền"];
+    const tableColumn = ["Tên", "Đơn giá", "Số lượng", "Tổng tiền"];
 
     const tableRows = [];
 
     rowData.items.forEach((item) => {
       const data = [
         item.name,
-        item.category,
         item.price.toLocaleString("vi-VN", {
           style: "currency",
           currency: "VND",
@@ -200,7 +199,7 @@ const ManageInventory = () => {
       <Tag
         value={rowData.itemType === "Device" ? "Thiết bị y tế" : "Thuốc"}
         rounded
-        severity={rowData.itemType === "Device" ? "warning" : "secondary"}
+        severity={rowData.itemType === "Device" ? "contrast" : "warning"}
       />
     );
   };
@@ -215,7 +214,7 @@ const ManageInventory = () => {
 
   return (
     <div>
-      <TitleSection>Quản lí phiếu nhập kho</TitleSection>
+      <TitleSection>Quản lí kho</TitleSection>
 
       <div className="mt-5">
         <DataTable
@@ -318,7 +317,6 @@ const ManageInventory = () => {
               value={detail?.items}
             >
               <Column field="name" header="Tên" sortable />
-              <Column field="category" header="Danh mục" sortable />
               <Column
                 field="price"
                 header="Đơn giá"

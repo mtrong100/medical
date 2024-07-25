@@ -120,7 +120,7 @@ const ManageMedicalServiceInvoice = () => {
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí phiếu dịch vụ</TitleSection>
         <Button
-          label="Tạo mới"
+          label="Lập phiếu dịch vụ mới"
           icon="pi pi-plus"
           onClick={() => navigate("/medical-service-invoice/create")}
         />
@@ -136,7 +136,7 @@ const ManageMedicalServiceInvoice = () => {
           value={data}
           header={header}
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã phiếu dịch vụ" sortable />
           <Column field="patient" header="Bệnh nhân" sortable />
           <Column
             field="total"

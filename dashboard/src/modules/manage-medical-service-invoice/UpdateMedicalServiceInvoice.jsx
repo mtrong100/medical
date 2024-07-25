@@ -135,12 +135,14 @@ const UpdateMedicalServiceInvoice = () => {
           label="Quay về"
           severity="secondary"
           onClick={() => navigate("/medical-service-invoice")}
+          icon="pi pi-arrow-left"
         />
         <Button
           onClick={onUpdate}
           type="submit"
           label="Xác nhận"
           disabled={loading}
+          icon="pi pi-check-circle"
         />
       </div>
     </div>

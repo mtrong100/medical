@@ -128,7 +128,6 @@ const CreateInventoryDevice = () => {
             value={items}
           >
             <Column field="name" header="Tên" sortable />
-            <Column field="category" header="Danh mục" sortable />
             <Column
               field="price"
               header="Giá tiền"

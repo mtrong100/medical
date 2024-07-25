@@ -21,7 +21,7 @@ export const SIDEBAR_LINKS = [
   },
   {
     icon: "pi pi-book",
-    name: "Hóa đơn dịch vụ",
+    name: "Phiếu dịch vụ",
     link: "/medical-service-invoice",
   },
   {

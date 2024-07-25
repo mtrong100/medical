@@ -1,13 +1,13 @@
 import useGetDoctors from "../../hooks/useGetDoctors";
-import useCreateAppointment from "./hooks/useCreateAppointment";
 import TitleSection from "../../components/TitleSection";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
-import { doctorSchedules } from "../../utils/constants";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
+import useCreateAppointment from "./useCreateAppointment";
+import { doctorSchedules } from "../../utils/constants";
 
 const CreateAppointment = () => {
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ const CreateAppointment = () => {
             <label>Mã bệnh nhân</label>
             <InputText
               value={form.patient}
+              placeholder="Mã bệnh nhân"
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, patient: e.target.value }))
               }
@@ -54,6 +55,7 @@ const CreateAppointment = () => {
               showIcon
               value={form.date}
               onChange={(e) => setForm((prev) => ({ ...prev, date: e.value }))}
+              placeholder="Ngày khám bệnh"
             />
           </div>
 
@@ -76,12 +78,14 @@ const CreateAppointment = () => {
               type="button"
               onClick={() => navigate("/appointment")}
               label="Quay về"
+              icon="pi pi-arrow-left"
               severity="secondary"
             />
             <Button
               disabled={loading}
               type="submit"
               label="Xác nhận"
+              icon="pi pi-check-circle"
               onClick={onCreate}
             />
           </div>

@@ -1,13 +1,11 @@
 import useManageInvoice from "./useManageInvoice";
 import TitleSection from "../../components/TitleSection";
 import React, { useState } from "react";
-import jsPDF from "jspdf";
 import { useNavigate } from "react-router-dom";
 import { Tag } from "primereact/tag";
 import { LIMIT_AMOUNT, PAYMENT_STATUS } from "../../utils/constants";
 import { InputText } from "primereact/inputtext";
 import { formatCurrencyVND, formatDate } from "../../utils/helper";
-import { font } from "../../assets/font";
 import { Fieldset } from "primereact/fieldset";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
@@ -30,6 +28,7 @@ const ManageInvoice = () => {
     exportCSV,
     exportPdf,
     exportExcel,
+    onExportPDF,
   } = useManageInvoice();
 
   const header = (
@@ -74,43 +73,6 @@ const ManageInvoice = () => {
     </div>
   );
 
-  const handleExportPDF = () => {
-    const doc = new jsPDF();
-
-    // Add the custom font
-    doc.addFileToVFS("Roboto-Regular.ttf", font);
-    doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
-    doc.setFont("Roboto");
-
-    // Tiêu đề hóa đơn
-    doc.setFontSize(18);
-    doc.text("Hóa đơn khám bệnh", 14, 22);
-
-    // Thông tin bệnh nhân và bác sĩ
-    doc.setFontSize(12);
-    doc.text(`Mã hóa đơn: ${detail._id}`, 14, 40);
-    doc.text(`Bệnh nhân: ${detail.patient}`, 14, 50);
-    doc.text(`Bác sĩ: ${detail.doctor}`, 14, 60);
-    doc.text(
-      `Ngày tạo: ${new Date(detail.createdAt).toLocaleDateString()}`,
-      14,
-      70
-    );
-    doc.text(`Giá tiền khám: ${formatCurrencyVND(detail.price)}`, 14, 80);
-    doc.text(
-      `Bảo hiểm y tế: ${
-        detail.healthInsurance ? "Có sử dụng" : "Không sử dụng"
-      }`,
-      14,
-      90
-    );
-
-    doc.text(`Tổng giá tiền: ${formatCurrencyVND(detail.total)}`, 14, 100);
-
-    // Xuất file PDF
-    doc.save(`hoa-don-kham-benh.pdf`);
-  };
-
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex items-center gap-2 ">
@@ -122,6 +84,12 @@ const ManageInvoice = () => {
             setVisible(true);
             setDetail(rowData);
           }}
+        />
+        <Button
+          icon="pi pi-print"
+          rounded
+          severity="help"
+          onClick={() => onExportPDF(rowData)}
         />
         <Button
           icon="pi pi-pencil"
@@ -167,7 +135,7 @@ const ManageInvoice = () => {
       <Tag
         value={rowData.healthInsurance ? "Có" : "Không"}
         rounded
-        severity={rowData.healthInsurance ? "secondary" : "warning"}
+        severity={rowData.healthInsurance ? "secondary" : "danger"}
       />
     );
   };
@@ -223,7 +191,7 @@ const ManageInvoice = () => {
           />
           <Column
             field="createdAt"
-            header="Ngày tạo"
+            header="Ngày lập"
             sortable
             body={createdAtBodyTemplate}
           />
@@ -292,15 +260,6 @@ const ManageInvoice = () => {
             <Fieldset legend="Ngày tạo">
               <p className="m-0">{formatDate(detail?.createdAt)}</p>
             </Fieldset>
-          </div>
-          <div className="mt-5 flex items-center justify-end">
-            <Button
-              type="submit"
-              label="Xuất hóa đơn khám bệnh (PDF)"
-              icon="pi pi-print"
-              severity="warning"
-              onClick={handleExportPDF}
-            />
           </div>
         </div>
       </Dialog>

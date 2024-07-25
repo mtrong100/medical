@@ -1,8 +1,8 @@
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { objectIdRegex } from "../../../utils/constants";
-import { formatDate } from "../../../utils/helper";
-import { createAppointmentApi } from "../../../api/appointmentApi";
+import { objectIdRegex } from "../../utils/constants";
+import { formatDate } from "../../utils/helper";
+import { createAppointmentApi } from "../../api/appointmentApi";
 
 export default function useCreateAppointment() {
   const [loading, setLoading] = useState(false);

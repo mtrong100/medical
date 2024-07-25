@@ -115,7 +115,7 @@ const ManageAppointment = () => {
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí lịch khám bệnh</TitleSection>
         <Button
-          label="Tạo mới"
+          label="Tạo lịch khám bệnh mới"
           icon="pi pi-plus"
           onClick={() => navigate("/appointment/create")}
         />
@@ -131,7 +131,7 @@ const ManageAppointment = () => {
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã lịch khám bệnh" sortable />
           <Column field="patient" header="Bệnh nhân" sortable />
           <Column field="doctor" header="Bác sĩ" sortable />
           <Column field="date" header="Ngày khám" sortable />

@@ -78,6 +78,7 @@ const MedicalServiceInvoiceDetail = () => {
             label="Quay về"
             severity="secondary"
             onClick={() => navigate("/medical-service-invoice")}
+            icon="pi pi-arrow-left"
           />
         </div>
       </div>

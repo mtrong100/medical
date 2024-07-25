@@ -88,12 +88,14 @@ const UpdateAppointment = () => {
               type="button"
               onClick={() => navigate("/appointment")}
               label="Quay về"
+              icon="pi pi-arrow-left"
               severity="secondary"
             />
             <Button
               disabled={loading}
               type="submit"
               label="Xác nhận"
+              icon="pi pi-check-circle"
               onClick={onUpdate}
             />
           </div>

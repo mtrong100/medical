@@ -5,6 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import { font } from "../../assets/font";
 import { LIMIT_AMOUNT } from "../../utils/constants";
 import { deleteInvoiceApi, getInvoicesApi } from "../../api/invoiceApi";
+import jsPDF from "jspdf";
+import { formatCurrencyVND } from "../../utils/helper";
 
 export default function useManageInvoice() {
   const dt = useRef(null);
@@ -173,6 +175,43 @@ export default function useManageInvoice() {
     });
   };
 
+  const onExportPDF = (rowData) => {
+    const doc = new jsPDF();
+
+    // Add the custom font
+    doc.addFileToVFS("Roboto-Regular.ttf", font);
+    doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+    doc.setFont("Roboto");
+
+    // Tiêu đề hóa đơn
+    doc.setFontSize(18);
+    doc.text("Hóa đơn khám bệnh", 14, 22);
+
+    // Thông tin bệnh nhân và bác sĩ
+    doc.setFontSize(12);
+    doc.text(`Mã hóa đơn: ${rowData._id}`, 14, 40);
+    doc.text(`Bệnh nhân: ${rowData.patient}`, 14, 50);
+    doc.text(`Bác sĩ: ${rowData.doctor}`, 14, 60);
+    doc.text(
+      `Ngày tạo: ${new Date(rowData.createdAt).toLocaleDateString()}`,
+      14,
+      70
+    );
+    doc.text(`Giá tiền khám: ${formatCurrencyVND(rowData.price)}`, 14, 80);
+    doc.text(
+      `Bảo hiểm y tế: ${
+        rowData.healthInsurance ? "Có sử dụng" : "Không sử dụng"
+      }`,
+      14,
+      90
+    );
+
+    doc.text(`Tổng giá tiền: ${formatCurrencyVND(rowData.total)}`, 14, 100);
+
+    // Xuất file PDF
+    doc.save(`hoa-don-kham-benh.pdf`);
+  };
+
   return {
     data: filteredQuery,
     loading,
@@ -188,5 +227,6 @@ export default function useManageInvoice() {
     exportCSV,
     exportPdf,
     exportExcel,
+    onExportPDF,
   };
 }
