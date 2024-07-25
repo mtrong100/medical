@@ -30,7 +30,8 @@ const ManageInventory = () => {
     exportExcel,
   } = useManageInventory();
 
-  const onExportPDF = () => {
+  const onExportPDF = (rowData) => {
+    console.log("🚀 ~ onExportPDF ~ rowData:", rowData);
     const doc = new jsPDF();
 
     doc.addFileToVFS("Roboto-Regular.ttf", font);
@@ -41,16 +42,16 @@ const ManageInventory = () => {
     doc.text("Hóa đơn nhập kho", 14, 22);
 
     doc.setFontSize(12);
-    doc.text(`Mã hóa đơn: ${detail._id}`, 14, 40);
-    doc.text(`Nhà cung cấp: ${detail.supplier}`, 14, 50);
+    doc.text(`Mã hóa đơn: ${rowData._id}`, 14, 40);
+    doc.text(`Nhà cung cấp: ${rowData.supplier}`, 14, 50);
     doc.text(
-      `Mặc hàng: ${detail.itemType === "Device" ? "Thiết bị y tế" : "Thuốc"}`,
+      `Mặc hàng: ${rowData.itemType === "Device" ? "Thiết bị y tế" : "Thuốc"}`,
       14,
       60
     );
-    doc.text(`Trạng thái: ${detail.status}`, 14, 70);
+    doc.text(`Trạng thái: ${rowData.status}`, 14, 70);
     doc.text(
-      `Ngày lập phiếu: ${new Date(detail.createdAt).toLocaleDateString()}`,
+      `Ngày lập phiếu: ${new Date(rowData.createdAt).toLocaleDateString()}`,
       14,
       80
     );
@@ -60,8 +61,8 @@ const ManageInventory = () => {
 
     const tableRows = [];
 
-    detail.items.forEach((item) => {
-      const medicineData = [
+    rowData.items.forEach((item) => {
+      const data = [
         item.name,
         item.category,
         item.price.toLocaleString("vi-VN", {
@@ -74,7 +75,7 @@ const ManageInventory = () => {
           currency: "VND",
         }),
       ];
-      tableRows.push(medicineData);
+      tableRows.push(data);
     });
 
     doc.autoTable({
@@ -92,7 +93,7 @@ const ManageInventory = () => {
     const finalY = doc.previousAutoTable.finalY;
     doc.setFontSize(12);
     doc.text(
-      `Tổng cộng: ${detail.total.toLocaleString("vi-VN", {
+      `Tổng cộng: ${rowData.total.toLocaleString("vi-VN", {
         style: "currency",
         currency: "VND",
       })}`,
@@ -157,6 +158,12 @@ const ManageInventory = () => {
             setVisible(true);
             setDetail(rowData);
           }}
+        />
+        <Button
+          icon="pi pi-print"
+          rounded
+          severity="info"
+          onClick={() => onExportPDF(rowData)}
         />
         <Button
           icon="pi pi-trash"
@@ -321,16 +328,6 @@ const ManageInventory = () => {
               <Column field="quantity" header="Số lượng" />
               <Column header="Tồng tiền" sortable body={totalBodyTemplate} />
             </DataTable>
-          </div>
-
-          <div className="mt-8 text-right">
-            <Button
-              type="submit"
-              label="Xuất hóa đơn nhập kho"
-              icon="pi pi-print"
-              severity="warning"
-              onClick={onExportPDF}
-            />
           </div>
         </div>
       </Dialog>

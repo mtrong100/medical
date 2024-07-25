@@ -103,17 +103,17 @@ export const getInventoryDetail = async (req, res) => {
 };
 
 export const createInventory = async (req, res) => {
-  const { items } = req.body;
+  const { items, itemType } = req.body;
 
   try {
     const inventory = await Inventory.create(req.body);
 
     for (const item of items) {
-      if (item.itemType === "Medicine") {
+      if (itemType === "Medicine") {
         await Medicine.findByIdAndUpdate(item.medicine, {
           $inc: { stock: item.quantity },
         });
-      } else if (item.itemType === "Device") {
+      } else if (itemType === "Device") {
         await Device.findByIdAndUpdate(item.device, {
           $inc: { stock: item.quantity },
         });
