@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { PAYMENT_STATUS } from "../utils/constanst.js";
 
 const inventorySchema = new mongoose.Schema(
   {
@@ -15,6 +16,11 @@ const inventorySchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ["Medicine", "Device"],
+    },
+    status: {
+      type: String,
+      required: true,
+      default: PAYMENT_STATUS.PAID,
     },
     items: [
       {

@@ -19,19 +19,20 @@ export const getInventory = async (req, res) => {
       .populate("items.device", "_id name category price");
 
     const formattedInventory = inventory.map((inv) => ({
-      id: inv._id,
+      _id: inv._id,
       supplier: inv.supplier.name,
       total: inv.total,
       itemType: inv.itemType,
+      status: inv.status,
       items: inv.items.map((item) => {
         if (inv.itemType === "Medicine" && item.medicine) {
           return {
-            medicine: item.medicine.name,
+            name: item.medicine.name,
             quantity: item.quantity,
           };
         } else {
           return {
-            device: item.device.name,
+            name: item.device.name,
             quantity: item.quantity,
             category: item.device.category,
             price: item.device.price,
@@ -70,14 +71,26 @@ export const getInventoryDetail = async (req, res) => {
 
     // Format kết quả trả về
     const formattedInventory = {
-      id: inventory._id,
+      _id: inventory._id,
       supplier: inventory.supplier.name,
       total: inventory.total,
-      items: inventory.items.map((item) => ({
-        itemType: item.medicine ? "Medicine" : "Device",
-        item: item.medicine.name || item.device.name,
-        quantity: item.quantity,
-      })),
+      itemType: inventory.itemType,
+      status: inventory.status,
+      items: inventory.items.map((item) => {
+        if (inventory.itemType === "Medicine" && item.medicine) {
+          return {
+            medicine: item.medicine.name,
+            quantity: item.quantity,
+          };
+        } else {
+          return {
+            device: item.device.name,
+            quantity: item.quantity,
+            category: item.device.category,
+            price: item.device.price,
+          };
+        }
+      }),
       createdAt: inventory.createdAt,
       updatedAt: inventory.updatedAt,
     };
