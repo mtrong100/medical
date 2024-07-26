@@ -119,7 +119,7 @@ const ManageDevice = () => {
             onClick={() => navigate("/inventory-device/create")}
           />
           <Button
-            label="Thêm mới"
+            label="Tạo mới thiết bị"
             icon="pi pi-plus"
             onClick={() => navigate("/device/create")}
           />
@@ -136,7 +136,7 @@ const ManageDevice = () => {
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã thiết bị" sortable />
           <Column field="name" header="Tên" sortable />
           <Column field="category" header="Danh mục" sortable />
           <Column

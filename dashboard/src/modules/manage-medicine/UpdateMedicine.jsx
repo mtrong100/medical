@@ -82,7 +82,7 @@ const UpdateMedicine = () => {
 
       <form
         onSubmit={handleSubmit(onUpdate)}
-        className="space-y-8 w-full max-w-3xl mx-auto"
+        className="space-y-8 w-full max-w-3xl mx-auto mt-10"
       >
         <div className="grid gap-5">
           <FieldInput
@@ -160,9 +160,15 @@ const UpdateMedicine = () => {
             onClick={() => navigate("/medicine")}
             label="Quay về"
             severity="secondary"
+            icon="pi pi-arrow-left"
           />
 
-          <Button type="submit" label="Xác nhận" disabled={isSubmitting} />
+          <Button
+            type="submit"
+            label="Xác nhận"
+            disabled={isSubmitting}
+            icon="pi pi-check-circle"
+          />
         </div>
       </form>
     </div>

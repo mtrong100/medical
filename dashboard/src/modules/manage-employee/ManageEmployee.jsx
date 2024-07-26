@@ -135,7 +135,7 @@ const ManageEmployee = () => {
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí nhân viên</TitleSection>
         <Button
-          label="Thêm mới"
+          label="Thêm mới nhân viên"
           icon="pi pi-plus"
           onClick={() => navigate("/employee/create")}
         />
@@ -228,7 +228,7 @@ const ManageEmployee = () => {
           showGridlines
           emptyMessage="Không tìm thấy nhân viên"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã nhân viên" sortable />
           <Column field="name" header="Tên" sortable />
           <Column field="gender" header="Giới tính" sortable />
           <Column field="dateOfBirth" header="Ngày sinh" sortable />

@@ -52,8 +52,8 @@ const UpdateSupplier = () => {
     <div>
       <TitleSection>Cập nhật nhà cung cấp</TitleSection>
 
-      <div className="mt-20">
-        <div className="w-full  max-w-4xl mx-auto">
+      <div className="mt-10">
+        <div className="w-full  max-w-3xl mx-auto">
           <form onSubmit={handleSubmit(onUpdate)} className="space-y-8">
             <div className="grid  gap-5">
               <FieldInput
@@ -103,9 +103,15 @@ const UpdateSupplier = () => {
                 onClick={() => navigate("/supplier")}
                 label="Quay về"
                 severity="secondary"
+                icon="pi pi-arrow-left"
               />
 
-              <Button type="submit" label="Xác nhận" disabled={isSubmitting} />
+              <Button
+                type="submit"
+                label="Xác nhận"
+                disabled={isSubmitting}
+                icon="pi pi-check-circle"
+              />
             </div>
           </form>
         </div>

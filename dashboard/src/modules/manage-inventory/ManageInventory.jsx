@@ -226,7 +226,7 @@ const ManageInventory = () => {
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã phiếu" sortable />
           <Column field="supplier" header="Nhà cung cấp" sortable />
           <Column
             field="itemType"

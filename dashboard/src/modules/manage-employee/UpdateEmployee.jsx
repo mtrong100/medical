@@ -211,6 +211,7 @@ const UpdateEmployee = () => {
                         htmlFor="name"
                         register={register}
                         errorMessage={errors?.name?.message}
+                        placeholder="Tên nhân viên"
                       />
 
                       <FieldInput
@@ -219,6 +220,7 @@ const UpdateEmployee = () => {
                         htmlFor="phoneNumber"
                         register={register}
                         errorMessage={errors?.phoneNumber?.message}
+                        placeholder="Số điện thoại"
                       />
 
                       <FieldInput
@@ -227,6 +229,7 @@ const UpdateEmployee = () => {
                         htmlFor="address"
                         register={register}
                         errorMessage={errors?.address?.message}
+                        placeholder="Địa chỉ"
                       />
 
                       <FieldInput
@@ -236,12 +239,14 @@ const UpdateEmployee = () => {
                         htmlFor="email"
                         register={register}
                         errorMessage={errors?.email?.message}
+                        placeholder="Email"
                       />
 
                       <div className="flex flex-col gap-2">
                         <label>Ngày sinh</label>
                         <Calendar
                           showIcon
+                          placeholder="Ngày sinh"
                           value={selectedValue.dateOfBirth}
                           onChange={(e) =>
                             setSelectedValue((prev) => ({
@@ -348,12 +353,14 @@ const UpdateEmployee = () => {
                         onClick={() => navigate("/employee")}
                         label="Quay về"
                         severity="secondary"
+                        icon="pi pi-arrow-left"
                       />
 
                       <Button
                         type="submit"
                         label="Xác nhận"
                         disabled={isSubmitting}
+                        icon="pi pi-check-circle"
                       />
                     </div>
                   </form>
@@ -373,12 +380,14 @@ const UpdateEmployee = () => {
                       onClick={() => navigate("/employee")}
                       label="Quay về"
                       severity="secondary"
+                      icon="pi pi-arrow-left"
                     />
                     <Button
                       type="button"
                       label="Xác nhận"
                       disabled={pending}
                       onClick={onUpdateDesc}
+                      icon="pi pi-check-circle"
                     />
                   </div>
                 </div>
@@ -414,6 +423,7 @@ const UpdateEmployee = () => {
                         onClick={() => navigate("/employee")}
                         label="Quay về"
                         severity="secondary"
+                        icon="pi pi-arrow-left"
                       />
 
                       <Button
@@ -421,6 +431,7 @@ const UpdateEmployee = () => {
                         label="Gửi email"
                         onClick={onTerminate}
                         disabled={isSending}
+                        icon="pi pi-envelope"
                       />
                     </div>
                   </div>

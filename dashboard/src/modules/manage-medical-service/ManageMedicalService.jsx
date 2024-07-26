@@ -106,7 +106,7 @@ const ManageMedicalService = () => {
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí dịch vụ khám</TitleSection>
         <Button
-          label="Thêm mới"
+          label="Thêm dịch vụ khám mới"
           icon="pi pi-plus"
           onClick={() => setVisible(true)}
         />
@@ -122,7 +122,7 @@ const ManageMedicalService = () => {
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã dịch vụ" sortable />
           <Column field="name" header="Tên" sortable />
           <Column
             field="description"

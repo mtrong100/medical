@@ -86,6 +86,7 @@ const UpdateInfomation = ({ data }) => {
           htmlFor="name"
           register={register}
           errorMessage={errors?.name?.message}
+          placeholder="Nhập tên bệnh nhân"
         />
 
         <FieldInput
@@ -95,6 +96,7 @@ const UpdateInfomation = ({ data }) => {
           htmlFor="phoneNumber"
           register={register}
           errorMessage={errors?.phoneNumber?.message}
+          placeholder="Nhập sđt bệnh nhân"
         />
 
         <FieldInput
@@ -104,6 +106,7 @@ const UpdateInfomation = ({ data }) => {
           htmlFor="address"
           register={register}
           errorMessage={errors?.address?.message}
+          placeholder="Nhập địa chỉ bệnh nhân"
         />
 
         <FieldInput
@@ -113,6 +116,7 @@ const UpdateInfomation = ({ data }) => {
           htmlFor="email"
           register={register}
           errorMessage={errors?.email?.message}
+          placeholder="Nhập email bệnh nhân"
         />
 
         <div className="flex flex-col gap-2">
@@ -120,6 +124,7 @@ const UpdateInfomation = ({ data }) => {
           <Calendar
             showIcon
             value={selectedValue.dateOfBirth}
+            placeholder="Chọn ngày sinh"
             onChange={(e) =>
               setSelectedValue((prev) => ({ ...prev, dateOfBirth: e.value }))
             }
@@ -159,8 +164,14 @@ const UpdateInfomation = ({ data }) => {
           onClick={() => navigate("/patient")}
           label="Quay về"
           severity="secondary"
+          icon="pi pi-arrow-left"
         />
-        <Button type="submit" label="Xác nhận" disabled={isSubmitting} />
+        <Button
+          type="submit"
+          label="Xác nhận"
+          disabled={isSubmitting}
+          icon="pi pi-check-circle"
+        />
       </div>
     </form>
   );

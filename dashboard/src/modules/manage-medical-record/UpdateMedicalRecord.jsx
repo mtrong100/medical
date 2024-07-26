@@ -137,9 +137,15 @@ const UpdateMedicalRecord = () => {
             onClick={() => navigate("/medical-record")}
             label="Quay về"
             severity="secondary"
+            icon="pi pi-arrow-left"
           />
 
-          <Button type="submit" label="Xác nhận" disabled={isSubmitting} />
+          <Button
+            type="submit"
+            label="Xác nhận"
+            disabled={isSubmitting}
+            icon="pi pi-check-circle"
+          />
         </div>
       </form>
     </div>

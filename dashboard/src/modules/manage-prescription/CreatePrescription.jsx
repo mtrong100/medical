@@ -76,7 +76,7 @@ const CreatePrescription = () => {
     <div>
       <TitleSection>Kê toa đơn thuốc mới</TitleSection>
 
-      <div className="my-10 space-y-8">
+      <div className="my-10 space-y-8 w-full max-w-6xl mx-auto">
         <div className="grid grid-cols-2 gap-5">
           <div className="flex flex-col gap-2">
             <label>Mã bệnh nhân</label>
@@ -163,7 +163,12 @@ const CreatePrescription = () => {
 
           <div className="flex flex-col gap-2">
             <label>Thao tác</label>
-            <Button onClick={onAddMedicine} type="button" label="Thêm thuốc" />
+            <Button
+              onClick={onAddMedicine}
+              type="button"
+              label="Thêm thuốc"
+              icon="pi pi-plus"
+            />
           </div>
         </div>
 
@@ -212,12 +217,14 @@ const CreatePrescription = () => {
             label="Quay về"
             severity="secondary"
             onClick={() => navigate("/prescription")}
+            icon="pi pi-arrow-left"
           />
           <Button
             onClick={onCreate}
             type="submit"
             label="Xác nhận"
             disabled={loading}
+            icon="pi pi-check-circle"
           />
         </div>
       </div>

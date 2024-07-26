@@ -48,6 +48,7 @@ const CreateMedicineCategory = ({ visible, setVisible, onReload }) => {
             id="category"
             value={newValue}
             onChange={(e) => setNewValue(e.target.value)}
+            placeholder="Danh mục thuốc"
           />
         </div>
         <Button

@@ -80,7 +80,7 @@ const CreateMedicine = () => {
 
       <form
         onSubmit={handleSubmit(onCreate)}
-        className="space-y-8 w-full max-w-3xl mx-auto"
+        className="space-y-8 w-full max-w-3xl mx-auto mt-10"
       >
         <div className="grid gap-5">
           <FieldInput
@@ -90,6 +90,7 @@ const CreateMedicine = () => {
             htmlFor="name"
             register={register}
             errorMessage={errors?.name?.message}
+            placeholder="Tên thuốc"
           />
 
           <FieldInput
@@ -99,6 +100,7 @@ const CreateMedicine = () => {
             htmlFor="price"
             register={register}
             errorMessage={errors?.price?.message}
+            placeholder="Giá tiền"
           />
 
           <FieldInput
@@ -108,6 +110,7 @@ const CreateMedicine = () => {
             htmlFor="stock"
             register={register}
             errorMessage={errors?.stock?.message}
+            placeholder="Tồn kho"
           />
 
           <div className="flex flex-col gap-2">
@@ -149,6 +152,7 @@ const CreateMedicine = () => {
             htmlFor="description"
             register={register}
             errorMessage={errors?.description?.message}
+            placeholder="Mô tả"
           />
         </div>
 
@@ -158,9 +162,15 @@ const CreateMedicine = () => {
             onClick={() => navigate("/medicine")}
             label="Quay về"
             severity="secondary"
+            icon="pi pi-arrow-left"
           />
 
-          <Button type="submit" label="Xác nhận" disabled={isSubmitting} />
+          <Button
+            type="submit"
+            label="Xác nhận"
+            disabled={isSubmitting}
+            icon="pi pi-check-circle"
+          />
         </div>
       </form>
     </div>

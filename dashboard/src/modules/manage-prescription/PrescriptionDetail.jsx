@@ -43,7 +43,7 @@ const PrescriptionDetail = () => {
         />
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 w-full max-w-6xl mx-auto">
         <div className="grid grid-cols-2 gap-5">
           <Fieldset legend="Mã đơn thuốc">
             <p className="m-0">{detail?._id}</p>
@@ -95,6 +95,7 @@ const PrescriptionDetail = () => {
             label="Quay về"
             severity="secondary"
             onClick={() => navigate("/prescription")}
+            icon="pi pi-arrow-left"
           />
         </div>
       </div>

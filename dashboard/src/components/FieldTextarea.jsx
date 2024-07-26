@@ -8,6 +8,7 @@ const FieldTextarea = ({
   name,
   errorMessage,
   type,
+  placeholder,
 }) => {
   return (
     <div className="flex flex-col gap-2">
@@ -18,6 +19,7 @@ const FieldTextarea = ({
         type={type}
         id={htmlFor}
         {...register(`${name}`)}
+        placeholder={placeholder}
       />
       {errorMessage && <small className="text-red-500">{errorMessage}</small>}
     </div>

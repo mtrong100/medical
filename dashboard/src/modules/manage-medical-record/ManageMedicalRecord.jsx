@@ -109,7 +109,7 @@ const ManageMedicalRecord = () => {
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí hồ sơ bệnh án</TitleSection>
         <Button
-          label="Thêm mới"
+          label="Lập hồ sơ bệnh án mới"
           icon="pi pi-plus"
           onClick={() => navigate("/medical-record/create")}
         />
@@ -125,7 +125,7 @@ const ManageMedicalRecord = () => {
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã hồ sơ" sortable />
           <Column field="patient" header="Bệnh nhân" sortable />
           <Column field="doctor" header="Bác sĩ" sortable />
           <Column field="diagnosis" header="Chuẩn đoán bệnh" sortable />

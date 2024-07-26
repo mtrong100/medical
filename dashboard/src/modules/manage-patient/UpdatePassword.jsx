@@ -50,6 +50,7 @@ const UpdatePassword = (id) => {
           htmlFor="password"
           register={register}
           errorMessage={errors?.password?.message}
+          placeholder="Nhập mật khẩu"
         />
         <FieldInput
           label="Xác nhận mật khẩu"
@@ -58,6 +59,7 @@ const UpdatePassword = (id) => {
           htmlFor="confirmPassword"
           register={register}
           errorMessage={errors?.confirmPassword?.message}
+          placeholder="Nhập lại mật khẩu"
         />
       </div>
 
@@ -67,8 +69,14 @@ const UpdatePassword = (id) => {
           onClick={() => navigate("/patient")}
           label="Quay về"
           severity="secondary"
+          icon="pi pi-arrow-left"
         />
-        <Button type="submit" label="Xác nhận" disabled={isSubmitting} />
+        <Button
+          type="submit"
+          label="Xác nhận"
+          disabled={isSubmitting}
+          icon="pi pi-check-circle"
+        />
       </div>
     </form>
   );

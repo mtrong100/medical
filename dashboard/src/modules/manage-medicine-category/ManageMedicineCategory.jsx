@@ -102,7 +102,7 @@ const ManageMedicineCategory = () => {
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí danh mục thuốc</TitleSection>
         <Button
-          label="Thêm mới"
+          label="Thêm danh mục mới"
           icon="pi pi-plus"
           onClick={() => setVisible(true)}
         />
@@ -118,7 +118,7 @@ const ManageMedicineCategory = () => {
           showGridlines
           emptyMessage="Không tìm thấy nhân viên"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã danh mục" sortable />
           <Column field="name" header="Tên" sortable />
           <Column field="medicineCount" header="Số lượng" sortable />
           <Column

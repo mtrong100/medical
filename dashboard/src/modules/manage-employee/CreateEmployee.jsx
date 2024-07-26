@@ -128,6 +128,7 @@ const CreateEmployee = () => {
                 htmlFor="name"
                 register={register}
                 errorMessage={errors?.name?.message}
+                placeholder="Tên nhân viên"
               />
 
               <FieldInput
@@ -137,6 +138,7 @@ const CreateEmployee = () => {
                 htmlFor="phoneNumber"
                 register={register}
                 errorMessage={errors?.phoneNumber?.message}
+                placeholder="Số điện thoại"
               />
 
               <FieldInput
@@ -146,6 +148,7 @@ const CreateEmployee = () => {
                 htmlFor="address"
                 register={register}
                 errorMessage={errors?.address?.message}
+                placeholder="Địa chỉ"
               />
 
               <FieldInput
@@ -155,6 +158,7 @@ const CreateEmployee = () => {
                 htmlFor="email"
                 register={register}
                 errorMessage={errors?.email?.message}
+                placeholder="Email"
               />
 
               {/* 
@@ -172,6 +176,7 @@ const CreateEmployee = () => {
                 <Calendar
                   showIcon
                   value={selectedValue.dateOfBirth}
+                  placeholder="Ngày sinh"
                   onChange={(e) =>
                     setSelectedValue((prev) => ({
                       ...prev,
@@ -255,9 +260,15 @@ const CreateEmployee = () => {
                 onClick={() => navigate("/employee")}
                 label="Quay về"
                 severity="secondary"
+                icon="pi pi-arrow-left"
               />
 
-              <Button type="submit" label="Xác nhận" disabled={isSubmitting} />
+              <Button
+                type="submit"
+                label="Xác nhận"
+                disabled={isSubmitting}
+                icon="pi pi-check-circle"
+              />
             </div>
           </form>
         </div>

@@ -129,7 +129,7 @@ const ManageMedicine = () => {
             onClick={() => navigate("/inventory-medicine/create")}
           />
           <Button
-            label="Thêm mới"
+            label="Tạo mới thuốc"
             icon="pi pi-plus"
             onClick={() => navigate("/medicine/create")}
           />
@@ -185,7 +185,7 @@ const ManageMedicine = () => {
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã thuốc" sortable />
           <Column field="name" header="Tên" sortable />
           <Column field="unit" header="Đơn vị" sortable />
           <Column

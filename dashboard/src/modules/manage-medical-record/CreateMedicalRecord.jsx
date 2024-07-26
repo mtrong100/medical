@@ -73,6 +73,7 @@ const CreateMedicalRecord = () => {
             htmlFor="patient"
             register={register}
             errorMessage={errors?.patient?.message}
+            placeholder="Mã bệnh nhân"
           />
 
           <div className="flex flex-col gap-2">
@@ -97,6 +98,7 @@ const CreateMedicalRecord = () => {
             htmlFor="diagnosis"
             register={register}
             errorMessage={errors?.diagnosis?.message}
+            placeholder="Chuẩn đoán bệnh"
           />
 
           <FieldTextarea
@@ -105,6 +107,7 @@ const CreateMedicalRecord = () => {
             htmlFor="treatment"
             register={register}
             errorMessage={errors?.treatment?.message}
+            placeholder="Phương pháp trị liệu"
           />
 
           <FieldTextarea
@@ -112,7 +115,7 @@ const CreateMedicalRecord = () => {
             name="notes"
             htmlFor="notes"
             register={register}
-            errorMessage={errors?.notes?.message}
+            placeholder="Ghi chú"
           />
         </div>
 
@@ -122,9 +125,15 @@ const CreateMedicalRecord = () => {
             onClick={() => navigate("/medical-record")}
             label="Quay về"
             severity="secondary"
+            icon="pi pi-arrow-left"
           />
 
-          <Button type="submit" label="Xác nhận" disabled={isSubmitting} />
+          <Button
+            type="submit"
+            label="Xác nhận"
+            disabled={isSubmitting}
+            icon="pi pi-check-circle"
+          />
         </div>
       </form>
     </div>

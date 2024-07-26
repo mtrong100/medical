@@ -120,7 +120,7 @@ const ManagePatient = () => {
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí bệnh nhân</TitleSection>
         <Button
-          label="Thêm mới"
+          label="Thêm mới bệnh nhân"
           icon="pi pi-plus"
           onClick={() => navigate("/patient/create")}
         />
@@ -167,7 +167,7 @@ const ManagePatient = () => {
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã bệnh nhân" sortable />
           <Column field="name" header="Tên" sortable />
           <Column field="gender" header="Giới tính" sortable />
           <Column field="dateOfBirth" header="Ngày sinh" sortable />

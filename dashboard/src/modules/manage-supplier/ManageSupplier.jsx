@@ -104,7 +104,7 @@ const ManageSupplier = () => {
       <div className="flex items-center justify-between">
         <TitleSection>Quản lí nhà cung cấp</TitleSection>
         <Button
-          label="Thêm mới"
+          label="Thêm mới nhà cung cấp"
           icon="pi pi-plus"
           onClick={() => navigate("/supplier/create")}
         />
@@ -120,7 +120,7 @@ const ManageSupplier = () => {
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã nhà cung cấp" sortable />
           <Column field="name" header="Tên" sortable />
           <Column field="email" header="Email" sortable />
           <Column field="phone" header="SDT" sortable />

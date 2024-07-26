@@ -134,7 +134,7 @@ const ManagePrescription = () => {
           value={data}
           header={header}
         >
-          <Column field="_id" header="ID" sortable />
+          <Column field="_id" header="Mã hóa đơn" sortable />
           <Column field="doctor" header="Bác sĩ" sortable />
           <Column field="patient" header="Bệnh nhân" sortable />
           <Column
