@@ -9,10 +9,13 @@ import { storeCurrentUser } from "../../redux/slices/userSlice";
 import { loginApi } from "../../api/authApi";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "primereact/button";
+import GoogleLogin from "./GoogleLogin";
+import useGoogleLogin from "./useGoogleLogin";
 
 const Login = () => {
   const navigate = useNavigate();
   const disppatch = useDispatch();
+  const { handleGoogleLogin, loading } = useGoogleLogin();
 
   const {
     register,
@@ -41,7 +44,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log("Lỗi đăng nhập:", error);
-      toast.error(error?.response?.data?.message);
+      toast.error(error.message);
     } finally {
       reset();
     }
@@ -61,7 +64,10 @@ const Login = () => {
         <div className="w-1/2 flex items-center justify-center p-8 bg-white">
           <form onSubmit={handleSubmit(onLogin)} className="w-full max-w-xl">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Đăng nhập</h1>
-            <div className="space-y-5">
+
+            <GoogleLogin onGoogleLogin={handleGoogleLogin} loading={loading} />
+
+            <div className="space-y-5 mt-5">
               <FieldInput
                 label="Email"
                 type="email"
@@ -69,6 +75,7 @@ const Login = () => {
                 htmlFor="email"
                 register={register}
                 errorMessage={errors?.email?.message}
+                placeholder="Nhập email"
               />
               <FieldInput
                 label="Mật khẩu"
@@ -77,6 +84,7 @@ const Login = () => {
                 htmlFor="password"
                 register={register}
                 errorMessage={errors?.password?.message}
+                placeholder="Nhập mật khẩu"
               />
               <Button
                 className="w-full"
@@ -85,17 +93,22 @@ const Login = () => {
                 disabled={isSubmitting}
               />
             </div>
-            <div className="flex items-center gap-2 mt-5">
-              <p>
-                Chưa có tài khoản ?{" "}
-                <Link
-                  className="text-blue-700 hover:underline font-medium"
-                  to="/register"
-                >
-                  Đăng kí
-                </Link>
-              </p>
-            </div>
+
+            <section className="flex items-center justify-between">
+              <div className="flex items-center gap-2 mt-5">
+                <p>
+                  Chưa có tài khoản ?{" "}
+                  <Link
+                    className="text-blue-700 hover:underline font-medium"
+                    to="/register"
+                  >
+                    Đăng kí
+                  </Link>
+                </p>
+              </div>
+
+              <Link to="/reset-password">Quên mật khẩu?</Link>
+            </section>
           </form>
         </div>
       </div>

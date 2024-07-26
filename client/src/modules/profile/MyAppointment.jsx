@@ -22,7 +22,7 @@ const MyAppointment = () => {
     fetchData(currentUser._id);
   }, []);
 
-  const handleExportPDF = () => {
+  const handleExportPDF = (rowData) => {
     const doc = new jsPDF();
 
     // Add the custom font
@@ -35,12 +35,12 @@ const MyAppointment = () => {
 
     doc.setFontSize(12);
 
-    doc.text(`Mã lịch khám: ${detail._id}`, 14, 40);
-    doc.text(`Bệnh nhân: ${detail.patient}`, 14, 50);
-    doc.text(`Bác sĩ khám: ${detail.doctor}`, 14, 60);
-    doc.text(`Ngày khám: ${formatDate(detail.date)}`, 14, 70);
-    doc.text(`Khung giờ: ${detail.time}`, 14, 80);
-    doc.text(`Trạng thái: ${detail.status}`, 14, 90);
+    doc.text(`Mã lịch khám: ${rowData._id}`, 14, 40);
+    doc.text(`Bệnh nhân: ${rowData.patient}`, 14, 50);
+    doc.text(`Bác sĩ khám: ${rowData.doctor}`, 14, 60);
+    doc.text(`Ngày khám: ${formatDate(rowData.date)}`, 14, 70);
+    doc.text(`Khung giờ: ${rowData.time}`, 14, 80);
+    doc.text(`Trạng thái: ${rowData.status}`, 14, 90);
 
     // Xuất file PDF
     doc.save(`lich-kham-benh.pdf`);
@@ -67,6 +67,12 @@ const MyAppointment = () => {
             setVisible(true);
             setDetail(rowData);
           }}
+        />
+        <Button
+          icon="pi pi-print"
+          rounded
+          severity="success"
+          onClick={() => handleExportPDF(rowData)}
         />
       </div>
     );
@@ -139,16 +145,6 @@ const MyAppointment = () => {
             <Fieldset legend="Ngày đặt lịch">
               <p className="m-0">{formatDate(detail?.createdAt)}</p>
             </Fieldset>
-          </div>
-
-          <div className="mt-5 flex items-center justify-end">
-            <Button
-              type="submit"
-              label="Xuất lịch khám bệnh"
-              icon="pi pi-print"
-              severity="warning"
-              onClick={handleExportPDF}
-            />
           </div>
         </div>
       </Dialog>

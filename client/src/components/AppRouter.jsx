@@ -15,6 +15,7 @@ const BookAppointment = lazy(() =>
 /* Authentication Pages */
 import Login from "../modules/authentication/Login";
 import Register from "../modules/authentication/Register";
+import ResetPassword from "../modules/authentication/ResetPassword";
 
 const mainRoutes = [
   { path: "/", element: <Home /> },
@@ -49,6 +50,7 @@ const AppRouter = () => {
 
       <Route path="/register" element={<Register />}></Route>
       <Route path="/login" element={<Login />}></Route>
+      <Route path="/reset-password" element={<ResetPassword />}></Route>
     </Routes>
   );
 };

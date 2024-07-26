@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <header className="z-50 sticky top-0">
-      <div className=" h-max max-w-full rounded-none  p-4 bg-blue-600">
+      <div className=" h-max max-w-full rounded-none p-2 bg-blue-600">
         <section className="page-container">
           <div className="flex items-center justify-between text-white text-sm">
             <p>Call: +0123 456 789</p>
@@ -50,7 +50,7 @@ const Header = () => {
           </div>
         </section>
       </div>
-      <div className="h-[60px] bg-blue-100 flex items-center  ">
+      <div className="h-[50px] bg-blue-100 flex items-center  ">
         <div className="page-container flex items-center justify-center">
           <ul className="flex items-center gap-8">
             {NAV_LINKS.map((item) => {

@@ -97,6 +97,7 @@ const Register = () => {
                 htmlFor="name"
                 register={register}
                 errorMessage={errors?.name?.message}
+                placeholder="Tên người dùng"
               />
 
               <FieldInput
@@ -106,6 +107,7 @@ const Register = () => {
                 htmlFor="phoneNumber"
                 register={register}
                 errorMessage={errors?.phoneNumber?.message}
+                placeholder="Số điện thoại"
               />
 
               <FieldInput
@@ -115,6 +117,7 @@ const Register = () => {
                 htmlFor="address"
                 register={register}
                 errorMessage={errors?.address?.message}
+                placeholder="Địa chỉ"
               />
 
               <FieldInput
@@ -124,6 +127,7 @@ const Register = () => {
                 htmlFor="email"
                 register={register}
                 errorMessage={errors?.email?.message}
+                placeholder="Email"
               />
 
               <FieldInput
@@ -133,6 +137,7 @@ const Register = () => {
                 htmlFor="password"
                 register={register}
                 errorMessage={errors?.password?.message}
+                placeholder="Mật khẩu"
               />
 
               <FieldInput
@@ -142,6 +147,7 @@ const Register = () => {
                 htmlFor="confirmPassword"
                 register={register}
                 errorMessage={errors?.confirmPassword?.message}
+                placeholder="Xác nhận mật khẩu"
               />
 
               <div className="flex flex-col gap-2">
@@ -149,6 +155,7 @@ const Register = () => {
                 <Calendar
                   showIcon
                   value={selectedValue.dateOfBirth}
+                  placeholder="Chọn ngày sinh"
                   onChange={(e) =>
                     setSelectedValue((prev) => ({
                       ...prev,

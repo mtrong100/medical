@@ -110,6 +110,7 @@ const UpdateProfile = () => {
                 htmlFor="name"
                 register={register}
                 errorMessage={errors?.name?.message}
+                placeholder="Nhập tên"
               />
 
               <FieldInput
@@ -119,6 +120,7 @@ const UpdateProfile = () => {
                 htmlFor="phoneNumber"
                 register={register}
                 errorMessage={errors?.phoneNumber?.message}
+                placeholder="Nhập số điện thoại"
               />
 
               <FieldInput
@@ -128,6 +130,7 @@ const UpdateProfile = () => {
                 htmlFor="address"
                 register={register}
                 errorMessage={errors?.address?.message}
+                placeholder="Nhập địa chỉ"
               />
               <FieldInput
                 label="Email"
@@ -136,12 +139,14 @@ const UpdateProfile = () => {
                 htmlFor="email"
                 register={register}
                 errorMessage={errors?.email?.message}
+                placeholder="Nhập email"
               />
 
               <div className="flex flex-col gap-2">
                 <label>Ngày sinh</label>
                 <Calendar
                   showIcon
+                  placeholder="Chọn ngày sinh"
                   value={selectedValue.dateOfBirth}
                   onChange={(e) =>
                     setSelectedValue((prev) => ({

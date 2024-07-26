@@ -15,7 +15,7 @@ export default function useGetMyAppointment() {
       if (res) setData(res);
     } catch (error) {
       console.log("Lỗi fetch data lịch khám bệnh:", error);
-      toast.error("Lỗi fetch data lịch khám bệnh:", error);
+      // toast.error("Lỗi fetch data lịch khám bệnh:", error);
     } finally {
       setLoading(false);
     }

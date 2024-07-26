@@ -14,11 +14,11 @@ export const register = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user) {
-      return res.status(400).json({ error: "Tài khoản đã tồn tại" });
+      return res.status(400).json({ message: "Tài khoản đã tồn tại" });
     }
 
     if (password !== confirmPassword) {
-      return res.status(400).json({ error: "Mật khẩu không trùng khớp" });
+      return res.status(400).json({ message: "Mật khẩu không trùng khớp" });
     }
 
     const salt = bcrypt.genSaltSync(10);
@@ -50,16 +50,16 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-      return res.status(400).json({ error: "Không tìm thấy tài khoản" });
+      return res.status(400).json({ message: "Không tìm thấy tài khoản" });
     }
 
     if (user.status === ACCOUNT_STATUS.ISLOCKED) {
-      return res.status(400).json({ error: "Tài khoản của bạn đã bị khóa" });
+      return res.status(400).json({ message: "Tài khoản của bạn đã bị khóa" });
     }
 
     const validPassword = bcrypt.compareSync(req.body.password, user.password);
     if (!validPassword) {
-      return res.status(400).json({ error: "Sai mật khẩu" });
+      return res.status(400).json({ message: "Sai mật khẩu" });
     }
 
     const payload = { userId: user._id, userRole: user.role };
@@ -71,8 +71,8 @@ export const login = async (req, res) => {
 
     return res.status(200).json(rest);
   } catch (error) {
-    console.log("Lỗi", error.message);
-    return res.status(500).json({ error: "Lỗi server" });
+    console.log("Lỗi tại controller login", error);
+    return res.status(500).json({ message: "Lỗi server" });
   }
 };
 
@@ -81,10 +81,6 @@ export const googleLogin = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-
-    if (user.status === ACCOUNT_STATUS.ISLOCKED) {
-      return res.status(400).json({ error: "Tài khoản của bạn đã bị khóa" });
-    }
 
     if (!user) {
       const generatedPassword = autoGeneratePassword();
@@ -108,6 +104,10 @@ export const googleLogin = async (req, res) => {
         newUser._doc;
 
       return res.status(200).json(rest);
+    }
+
+    if (user.status === ACCOUNT_STATUS.ISLOCKED) {
+      return res.status(400).json({ message: "Tài khoản của bạn đã bị khóa" });
     }
 
     const payload = { userId: user._id, userRole: user.role };

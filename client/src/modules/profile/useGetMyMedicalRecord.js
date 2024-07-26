@@ -15,7 +15,7 @@ export default function useGetMyMedicalRecord() {
       if (res) setData(res);
     } catch (error) {
       console.log("Lỗi fetch data hồ sơ bệnh án:", error);
-      toast.error("Lỗi fetch data hồ sơ bệnh án:", error);
+      // toast.error("Lỗi fetch data hồ sơ bệnh án:", error);
     } finally {
       setLoading(false);
     }

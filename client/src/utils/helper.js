@@ -17,6 +17,8 @@ export const formatCurrencyVND = (amount) => {
 };
 
 export const parseDate = (formattedDate) => {
+  if (!formattedDate) return null;
+
   const parts = formattedDate.split("/");
   const day = parseInt(parts[0], 10);
   const month = parseInt(parts[1], 10) - 1;
