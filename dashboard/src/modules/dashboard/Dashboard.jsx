@@ -1,83 +1,18 @@
-import useGetRevenue from "./useGetRevenue";
-import useGetFirgures from "./useGetFigures";
 import TitleSection from "../../components/TitleSection";
 import React from "react";
 import MonthlyRevenueChart from "../../components/charts/MonthlyRevenueChart";
 import MedicineCategoryPieChart from "../../components/charts/MedicineCategoryPieChart";
 import GenderDistributionChart from "../../components/charts/GenderDistributionChart";
+import FigureBlock from "./FigureBlock";
 import EmployeeRolesChart from "../../components/charts/EmployeeChart";
-import Box from "../../components/Box";
 import BasicSalaryChart from "../../components/charts/BasicSalaryChart";
-import { MdOutlineAttachMoney } from "react-icons/md";
-import { formatCurrencyVND } from "../../utils/helper";
-import {
-  FaUsers,
-  FaCalendarAlt,
-  FaBook,
-  FaFileInvoiceDollar,
-} from "react-icons/fa";
-import { GiMedicines } from "react-icons/gi";
-import { AiFillMedicineBox } from "react-icons/ai";
 
 const Dashboard = () => {
-  const { revenue } = useGetRevenue();
-  const { figures } = useGetFirgures();
-
   return (
     <div>
       <TitleSection>Quản lí và thống kê</TitleSection>
 
-      {/* Figures */}
-      <div className="mt-5 grid grid-cols-4 gap-3">
-        <Box
-          color="blue"
-          heading="Doanh thu"
-          number={formatCurrencyVND(revenue || 0)}
-          icon={<MdOutlineAttachMoney size={30} color="white" />}
-        />
-        <Box
-          color="red"
-          heading="Lịch khám"
-          number={figures?.appointmentCount || 0}
-          icon={<FaCalendarAlt size={30} color="white" />}
-        />
-        <Box
-          color="green"
-          heading="Nhân viên"
-          number={figures?.employeeCount || 0}
-          icon={<FaUsers size={30} color="white" />}
-        />
-        <Box
-          color="amber"
-          heading="Bệnh nhân"
-          number={figures?.patientCount || 0}
-          icon={<FaUsers size={30} color="white" />}
-        />
-        <Box
-          color="purple"
-          heading="Hồ sơ"
-          number={figures?.medicalRecordCount || 0}
-          icon={<FaBook size={30} color="white" />}
-        />
-        <Box
-          color="cyan"
-          heading="Thuốc"
-          number={figures?.medicineCount || 0}
-          icon={<GiMedicines size={30} color="white" />}
-        />
-        <Box
-          color="pink"
-          heading="Kê toa"
-          number={figures?.prescriptionCount || 0}
-          icon={<AiFillMedicineBox size={30} color="white" />}
-        />
-        <Box
-          color="teal"
-          heading="Hóa đơn"
-          number={figures?.invoiceCount || 0}
-          icon={<FaFileInvoiceDollar size={30} color="white" />}
-        />
-      </div>
+      <FigureBlock />
 
       <div className="mt-10 space-y-5">
         <div className="space-y-5">
