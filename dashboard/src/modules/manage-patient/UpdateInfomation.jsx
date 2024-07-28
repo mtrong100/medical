@@ -10,7 +10,7 @@ import { formatDate, parseDate } from "../../utils/helper";
 import { Dropdown } from "primereact/dropdown";
 import { Calendar } from "primereact/calendar";
 import { Button } from "primereact/button";
-import { accountStatus, genders } from "../../utils/constants";
+import { genders } from "../../utils/constants";
 import useGetPatientDetail from "./useGetPatientDetail";
 
 const UpdateInfomation = ({ data }) => {
@@ -19,7 +19,6 @@ const UpdateInfomation = ({ data }) => {
 
   const [selectedValue, setSelectedValue] = useState({
     gender: null,
-    status: null,
     dateOfBirth: null,
   });
 
@@ -44,16 +43,15 @@ const UpdateInfomation = ({ data }) => {
       reset({ ...data });
       setSelectedValue({
         gender: data.gender,
-        status: data.status,
         dateOfBirth: parseDate(data.dateOfBirth),
       });
     }
   }, [data, reset]);
 
   const onUpdate = async (values) => {
-    const { dateOfBirth, gender, status } = selectedValue;
+    const { dateOfBirth, gender } = selectedValue;
 
-    if (!dateOfBirth || !gender || !status) {
+    if (!dateOfBirth || !gender) {
       toast.error("Vui lòng điền đầy đủ thông tin");
       return;
     }
@@ -62,7 +60,6 @@ const UpdateInfomation = ({ data }) => {
       const body = {
         ...values,
         gender,
-        status,
         dateOfBirth: formatDate(dateOfBirth),
       };
 
@@ -140,19 +137,6 @@ const UpdateInfomation = ({ data }) => {
             value={selectedValue.gender}
             onChange={(e) =>
               setSelectedValue((prev) => ({ ...prev, gender: e.value }))
-            }
-          />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label>Trạng thái</label>
-          <Dropdown
-            placeholder="Chọn trạng thái"
-            className="w-full "
-            options={accountStatus}
-            value={selectedValue.status}
-            onChange={(e) =>
-              setSelectedValue((prev) => ({ ...prev, status: e.value }))
             }
           />
         </div>

@@ -19,13 +19,3 @@ export const logoutApi = async () => {
   const response = await axios.post("/auth/logout");
   return response;
 };
-
-export const sendOtpApi = async (data) => {
-  const response = await axios.post("/auth/send-otp", data);
-  return response;
-};
-
-export const resetPasswordApi = async (data) => {
-  const response = await axios.post("/auth/reset-password", data);
-  return response;
-};

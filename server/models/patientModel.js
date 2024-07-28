@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ACCOUNT_STATUS, PROFILE_IMAGE } from "../utils/constanst.js";
+import { PROFILE_IMAGE } from "../utils/constanst.js";
 
 const patientSchema = new mongoose.Schema(
   {

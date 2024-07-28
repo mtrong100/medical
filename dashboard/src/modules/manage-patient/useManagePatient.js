@@ -14,7 +14,6 @@ export default function useManagePatient() {
   const queryValue = useDebounce(query, 500);
   const [selectedFilter, setSelectedFilter] = useState({
     gender: null,
-    status: null,
   });
   const [paginator, setPaginator] = useState({
     totalPages: 1,
@@ -30,13 +29,12 @@ export default function useManagePatient() {
     setLoading(true);
 
     try {
-      const { gender, status } = selectedFilter;
+      const { gender } = selectedFilter;
 
       const params = {
         page: paginator.currentPage,
         limit: LIMIT_AMOUNT,
         gender,
-        status,
       };
 
       const res = await getPatientsApi(params);

@@ -2,16 +2,15 @@ import useManagePatient from "./useManagePatient";
 import TitleSection from "../../components/TitleSection";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tag } from "primereact/tag";
 import { InputText } from "primereact/inputtext";
-import { formatDate, getAccountSeverity } from "../../utils/helper";
+import { formatDate } from "../../utils/helper";
 import { Fieldset } from "primereact/fieldset";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
-import { accountStatus, genders, LIMIT_AMOUNT } from "../../utils/constants";
+import { genders, LIMIT_AMOUNT } from "../../utils/constants";
 
 const ManagePatient = () => {
   const navigate = useNavigate();
@@ -60,16 +59,6 @@ const ManagePatient = () => {
           onClick={() => onDelete(rowData._id)}
         />
       </div>
-    );
-  };
-
-  const statusBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        value={rowData.status}
-        severity={getAccountSeverity(rowData.status)}
-        rounded
-      />
     );
   };
 
@@ -144,16 +133,6 @@ const ManagePatient = () => {
             setSelectedFilter((prev) => ({ ...prev, gender: e.value }))
           }
         />
-
-        <Dropdown
-          options={accountStatus}
-          placeholder="Chọn trạng thái"
-          className="w-[350px]"
-          value={selectedFilter.status}
-          onChange={(e) =>
-            setSelectedFilter((prev) => ({ ...prev, status: e.value }))
-          }
-        />
       </div>
 
       {/* Table */}
@@ -173,11 +152,6 @@ const ManagePatient = () => {
           <Column field="dateOfBirth" header="Ngày sinh" sortable />
           <Column field="email" header="Email" sortable />
           <Column field="phoneNumber" header="SĐT" sortable />
-          <Column
-            body={statusBodyTemplate}
-            header="Trạng thái"
-            exportable={false}
-          />
           <Column
             body={actionBodyTemplate}
             exportable={false}

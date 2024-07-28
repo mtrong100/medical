@@ -6,8 +6,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { resetPasswordSchema } from "../../validations/resetPasswordSchema";
-import { resetPasswordApi, sendOtpApi } from "../../api/authApi";
 import { Button } from "primereact/button";
+import { sendOtpApi, updateUserPasswordApi } from "../../api/userApi";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ const ResetPassword = () => {
     try {
       const body = { ...values };
 
-      const res = await resetPasswordApi(body);
+      const res = await updateUserPasswordApi(body);
 
       if (res) {
         toast.success("Đặt lại mật khẩu thành công");

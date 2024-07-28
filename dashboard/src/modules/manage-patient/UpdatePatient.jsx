@@ -1,6 +1,5 @@
 import useUpdateAvatar from "./useUpdateAvatar";
 import useGetPatientDetail from "./useGetPatientDetail";
-import UpdatePassword from "./UpdatePassword";
 import UpdateInfomation from "./UpdateInfomation";
 import TitleSection from "../../components/TitleSection";
 import React, { useEffect } from "react";
@@ -56,11 +55,6 @@ const UpdatePatient = () => {
             <TabPanel header="Cập nhật thông tin cá nhân">
               <div className="m-0">
                 <UpdateInfomation data={detail} />
-              </div>
-            </TabPanel>
-            <TabPanel header="Cập nhật mật khẩu">
-              <div className="m-0">
-                <UpdatePassword id={id} />
               </div>
             </TabPanel>
           </TabView>

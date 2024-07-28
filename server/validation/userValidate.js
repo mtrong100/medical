@@ -1,6 +1,114 @@
 import { body, validationResult } from "express-validator";
 import { ACCOUNT_STATUS, GENDER } from "../utils/constanst.js";
 
+export const validateRegisterUserData = [
+  body("name")
+    .exists({ checkFalsy: true })
+    .withMessage("Tên không được để trống")
+    .isLength({ min: 2, max: 50 })
+    .withMessage("Tên phải có độ dài từ 2 đến 50 ký tự"),
+  body("dateOfBirth")
+    .exists({ checkFalsy: true })
+    .withMessage("Ngày sinh không được để trống")
+    .matches(/^\d{2}\/\d{2}\/\d{4}$/)
+    .withMessage("Ngày sinh phải theo định dạng dd/mm/yyyy"),
+  body("gender")
+    .exists({ checkFalsy: true })
+    .withMessage("Giới tính không được để trống")
+    .isIn([GENDER.MALE, GENDER.FEMALE])
+    .withMessage(`Giới tính phải là '${GENDER.MALE}' hoặc '${GENDER.FEMALE}'`),
+  body("phoneNumber")
+    .exists({ checkFalsy: true })
+    .withMessage("Số điện thoại không được để trống")
+    .isString()
+    .withMessage("Số điện thoại phải là một chuỗi")
+    .isLength({ min: 10, max: 10 })
+    .withMessage("Số điện thoại phải là một chuỗi 10 chữ số"),
+  body("email")
+    .exists({ checkFalsy: true })
+    .withMessage("Email không được để trống")
+    .isEmail()
+    .withMessage("Email không hợp lệ"),
+  body("address")
+    .exists({ checkFalsy: true })
+    .withMessage("Địa chỉ không được để trống")
+    .isLength({ min: 5, max: 100 })
+    .withMessage("Địa chỉ phải có độ dài từ 5 đến 100 ký tự")
+    .isString()
+    .withMessage("Địa chỉ phải là một chuỗi"),
+  body("password")
+    .exists({ checkFalsy: true })
+    .withMessage("Mật khẩu không được để trống")
+    .isLength({ min: 6 })
+    .withMessage("Mật khẩu phải có ít nhất 6 ký tự"),
+  body("confirmPassword")
+    .exists({ checkFalsy: true })
+    .withMessage("Xác nhận mật khẩu không được để trống")
+    .custom((value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error("Mật khẩu và xác nhận mật khẩu không khớp");
+      }
+      return true;
+    }),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array().map((err) => err.msg),
+      });
+    }
+    next();
+  },
+];
+
+export const validateLoginUserData = [
+  body("email")
+    .exists({ checkFalsy: true })
+    .withMessage("Email không được để trống")
+    .isEmail()
+    .withMessage("Email không hợp lệ"),
+  body("password")
+    .exists({ checkFalsy: true })
+    .withMessage("Mật khẩu không được để trống")
+    .isLength({ min: 6 })
+    .withMessage("Mật khẩu phải có ít nhất 6 ký tự"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array().map((err) => err.msg),
+      });
+    }
+    next();
+  },
+];
+
+export const validateGoogleLoginUserData = [
+  body("name")
+    .exists({ checkFalsy: true })
+    .withMessage("Tên không được để trống")
+    .isLength({ min: 2, max: 50 })
+    .withMessage("Tên phải có độ dài từ 2 đến 50 ký tự"),
+  body("avatar")
+    .exists({ checkFalsy: true })
+    .isString()
+    .withMessage("Avatar phải là một chuỗi"),
+  body("email")
+    .exists({ checkFalsy: true })
+    .withMessage("Email không được để trống")
+    .isEmail()
+    .withMessage("Email không hợp lệ"),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        errors: errors.array().map((err) => err.msg),
+      });
+    }
+    next();
+  },
+];
+
 export const validateUpdateUserData = [
   body("name")
     .optional()

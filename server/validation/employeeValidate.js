@@ -10,12 +10,12 @@ export const validateCreateEmployeeData = [
   body("avatar").optional().isString().withMessage("Avatar phải là một chuỗi"),
   body("graduatedFrom")
     .optional()
-    .isString()
-    .withMessage("Nơi tốt nghiệp phải là một chuỗi"),
+    .custom((value) => typeof value === "string" || value === null)
+    .withMessage("Nơi tốt nghiệp phải là một chuỗi hoặc null"),
   body("specialization")
     .optional()
-    .isString()
-    .withMessage("Chuyên môn phải là một chuỗi"),
+    .custom((value) => typeof value === "string" || value === null)
+    .withMessage("Chuyên môn phải là một chuỗi hoặc null"),
   body("phoneNumber")
     .exists({ checkFalsy: true })
     .withMessage("Số điện thoại không được để trống")
@@ -54,7 +54,7 @@ export const validateCreateEmployeeData = [
     .withMessage("Lương phải là một số"),
   body("description")
     .optional()
-    .isString()
+    .custom((value) => typeof value === "string" || value === null)
     .withMessage("Mô tả phải là một chuỗi"),
   body("role")
     .exists({ checkFalsy: true })
@@ -86,11 +86,11 @@ export const validateUpdateEmployeeData = [
   body("avatar").optional().isString().withMessage("Avatar phải là một chuỗi"),
   body("graduatedFrom")
     .optional()
-    .isString()
+    .custom((value) => typeof value === "string" || value === null)
     .withMessage("Nơi tốt nghiệp phải là một chuỗi"),
   body("specialization")
     .optional()
-    .isString()
+    .custom((value) => typeof value === "string" || value === null)
     .withMessage("Chuyên môn phải là một chuỗi"),
   body("phoneNumber")
     .optional({ checkFalsy: true })
@@ -124,7 +124,7 @@ export const validateUpdateEmployeeData = [
     .withMessage("Lương phải là một số"),
   body("description")
     .optional()
-    .isString()
+    .custom((value) => typeof value === "string" || value === null)
     .withMessage("Mô tả phải là một chuỗi"),
   body("role")
     .optional({ checkFalsy: true })

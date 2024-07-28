@@ -62,7 +62,7 @@ const CreateEmployee = () => {
     const { gender, role, graduatedFrom, specialization, dateOfBirth } =
       selectedValue;
 
-    if (!gender || !graduatedFrom || !specialization || !role || !dateOfBirth) {
+    if (!gender || !role || !dateOfBirth) {
       toast.error("Vui lòng điền đầy đủ thông tin");
       return;
     }
@@ -160,16 +160,6 @@ const CreateEmployee = () => {
                 errorMessage={errors?.email?.message}
                 placeholder="Email"
               />
-
-              {/* 
-              <FieldInput
-                label="Mật khẩu mới"
-                type="password"
-                name="password"
-                htmlFor="password"
-                register={register}
-                errorMessage={errors?.password?.message}
-              /> */}
 
               <div className="flex flex-col gap-2">
                 <label>Ngày sinh</label>

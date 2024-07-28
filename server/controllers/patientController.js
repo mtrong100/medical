@@ -21,10 +21,10 @@ export const getPatientCollection = async (req, res) => {
 };
 
 export const getPatients = async (req, res) => {
-  const { page = 1, limit = 10, gender, status } = req.query;
+  const { page = 1, limit = 10, gender } = req.query;
 
   try {
-    const result = await getPatientsService({ page, limit, gender, status });
+    const result = await getPatientsService({ page, limit, gender });
     return res.status(200).json(result);
   } catch (error) {
     console.log("Lỗi tại controller getPatients", error);

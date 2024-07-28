@@ -16,16 +16,12 @@ export const getPatientCollectionService = async () => {
   }
 };
 
-export const getPatientsService = async ({ page, limit, gender, status }) => {
+export const getPatientsService = async ({ page, limit, gender }) => {
   try {
     const filter = {};
 
     if (gender) {
       filter.gender = gender;
-    }
-
-    if (status) {
-      filter.status = status;
     }
 
     const skip = (page - 1) * limit;

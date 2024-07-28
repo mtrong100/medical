@@ -10,7 +10,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { updatedEmployeeSchema } from "../../validations/employeeSchema";
 import { TabView, TabPanel } from "primereact/tabview";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Image } from "primereact/image";
 import { formatDate, getEmployeeSalary, parseDate } from "../../utils/helper";
@@ -34,7 +33,7 @@ import {
 const UpdateEmployee = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { detail, loading, fetchDetail } = useGetEmployeeDetail();
+  const { detail, fetchDetail } = useGetEmployeeDetail();
   const { isUploading, onUpload } = useUpdateAvatar(fetchDetail);
   const [text, setText] = useState("");
   const [pending, setPending] = useState(false);
@@ -90,14 +89,7 @@ const UpdateEmployee = () => {
     const { gender, role, graduatedFrom, specialization, dateOfBirth, status } =
       selectedValue;
 
-    if (
-      !gender ||
-      !graduatedFrom ||
-      !specialization ||
-      !role ||
-      !dateOfBirth ||
-      !status
-    ) {
+    if (!gender || !role || !dateOfBirth || !status) {
       toast.error("Vui lòng điền đầy đủ thông tin");
       return;
     }
@@ -165,14 +157,6 @@ const UpdateEmployee = () => {
       setIsSending(false);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <ProgressSpinner />
-      </div>
-    );
-  }
 
   return (
     <div>

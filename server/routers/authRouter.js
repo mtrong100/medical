@@ -4,22 +4,21 @@ import {
   login,
   logout,
   register,
-  resetPassword,
-  sendOtp,
 } from "../controllers/authController.js";
+import {
+  validateGoogleLoginUserData,
+  validateLoginUserData,
+  validateRegisterUserData,
+} from "../validation/userValidate.js";
 
 const router = express.Router();
 
-router.post("/register", register);
+router.post("/register", validateRegisterUserData, register);
 
-router.post("/login", login);
+router.post("/login", validateLoginUserData, login);
 
-router.post("/google-login", googleLogin);
+router.post("/google-login", validateGoogleLoginUserData, googleLogin);
 
 router.post("/logout", logout);
-
-router.post("/reset-password", resetPassword);
-
-router.post("/send-otp", sendOtp);
 
 export default router;
