@@ -22,6 +22,7 @@ const router = express.Router();
 
 router.use("/users", userRouter);
 router.use("/patients", patientRouter);
+router.use("/employees", employeeRouter);
 
 router.use("/supplier", supplierRouter);
 router.use("/statistic", stastisticRouter);
@@ -34,7 +35,6 @@ router.use("/medical-service-invoice", medicalServiceInvoiceRouter);
 router.use("/medical-record", medicalRecordRouter);
 router.use("/invoice", invoiceRouter);
 router.use("/inventory", inventoryRouter);
-router.use("/employee", employeeRouter);
 router.use("/device", deviceRouter);
 router.use("/conversation", conversationRouter);
 router.use("/auth", authRouter);

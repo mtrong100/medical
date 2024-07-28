@@ -2,30 +2,31 @@ import express from "express";
 import {
   createEmployee,
   deleteEmployee,
-  employeeLogin,
   getEmployees,
-  getCollection,
+  getEmployeeCollection,
   getEmployeeDetail,
   terminatedEmployee,
   updateEmployee,
 } from "../controllers/employeeController.js";
+import {
+  validateCreateEmployeeData,
+  validateUpdateEmployeeData,
+} from "../validation/employeeValidate.js";
 
 const router = express.Router();
 
-router.get("/collection", getCollection);
+router.get("/collection", getEmployeeCollection);
 
-router.get("/employees", getEmployees);
+router.get("/", getEmployees);
 
-router.post("/login", employeeLogin);
+router.get("/:id", getEmployeeDetail);
 
-router.post("/create", createEmployee);
+router.post("/create", validateCreateEmployeeData, createEmployee);
 
-router.put("/update/:id", updateEmployee);
+router.put("/update/:id", validateUpdateEmployeeData, updateEmployee);
 
 router.delete("/delete/:id", deleteEmployee);
 
 router.put("/terminated/:id", terminatedEmployee);
-
-router.get("/:id", getEmployeeDetail);
 
 export default router;
