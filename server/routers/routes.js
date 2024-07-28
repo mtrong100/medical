@@ -23,13 +23,14 @@ const router = express.Router();
 router.use("/users", userRouter);
 router.use("/patients", patientRouter);
 router.use("/employees", employeeRouter);
+router.use("/auth", authRouter);
+router.use("/medicine-categories", medicineCategoryRouter);
 
 router.use("/supplier", supplierRouter);
 router.use("/statistic", stastisticRouter);
 router.use("/prescription", prescriptionRouter);
 router.use("/message", messageRouter);
 router.use("/medicine", medicineRouter);
-router.use("/medicine-category", medicineCategoryRouter);
 router.use("/medical-service", medicalServiceRouter);
 router.use("/medical-service-invoice", medicalServiceInvoiceRouter);
 router.use("/medical-record", medicalRecordRouter);
@@ -37,7 +38,6 @@ router.use("/invoice", invoiceRouter);
 router.use("/inventory", inventoryRouter);
 router.use("/device", deviceRouter);
 router.use("/conversation", conversationRouter);
-router.use("/auth", authRouter);
 router.use("/appointment", appointmentRouter);
 
 export default router;

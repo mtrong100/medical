@@ -77,7 +77,7 @@ export default function useManageMedicineCategory() {
           if (res) Swal.fire("Đã xoá!", "Dữ liệu đã được xóa.", "success");
         } catch (error) {
           console.log("Đã xảy ra sự cố khi xoá: ", error);
-          Swal.fire("Lỗi!", "Đã xảy ra sự cố khi xoá.", "error");
+          Swal.fire("Lỗi!", `${error.message}`, "error");
         } finally {
           fetchCategories();
         }

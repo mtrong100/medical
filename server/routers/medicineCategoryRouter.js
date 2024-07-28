@@ -2,21 +2,33 @@ import express from "express";
 import {
   createMedicineCategory,
   deleteMedicineCategory,
-  getCollection,
+  getMedicineCategoryCollection,
   getMedicineCategories,
   updateMedicineCategory,
 } from "../controllers/medicineCategoryController.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import { validateMedicineCategoryData } from "../validation/medicineCategoryValidate.js";
 
 const router = express.Router();
 
-router.get("/collection", getCollection);
+router.get("/collection", verifyAdmin, getMedicineCategoryCollection);
 
-router.get("/medicine-categories", getMedicineCategories);
+router.get("/", verifyAdmin, getMedicineCategories);
 
-router.post("/create", createMedicineCategory);
+router.post(
+  "/create",
+  verifyAdmin,
+  validateMedicineCategoryData,
+  createMedicineCategory
+);
 
-router.put("/update/:id", updateMedicineCategory);
+router.put(
+  "/update/:id",
+  verifyAdmin,
+  validateMedicineCategoryData,
+  updateMedicineCategory
+);
 
-router.delete("/delete/:id", deleteMedicineCategory);
+router.delete("/delete/:id", verifyAdmin, deleteMedicineCategory);
 
 export default router;

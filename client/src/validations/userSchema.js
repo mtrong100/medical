@@ -9,7 +9,7 @@ export const userSchema = yup.object().shape({
   phoneNumber: yup
     .string()
     .min(10, "Số điện thoại phải có ít nhất 10 ký tự")
-    .max(15, "Số điện thoại không được vượt quá 15 ký tự")
+    .max(10, "Số điện thoại không được vượt quá 10 ký tự")
     .required("Số điện thoại là bắt buộc"),
   email: yup
     .string()
