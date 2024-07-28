@@ -4,17 +4,38 @@ import {
   updateUser,
   getUserCollection,
   deleteUser,
+  updateUserAccount,
+  updateUserPassword,
+  sendOtp,
 } from "../controllers/userController.js";
-import { protectedRoute } from "../middlewares/protectedRoute.js";
+import { verifyUser } from "../middlewares/verifyUser.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import {
+  validateUpdatePassword,
+  validateUpdateUserData,
+  validateUserAccountStatus,
+  validateUserEmail,
+} from "../validation/userValidate.js";
 
 const router = express.Router();
 
-router.get("/collection", getUserCollection);
+router.get("/collection", verifyAdmin, getUserCollection);
 
-router.get("/:id", protectedRoute, getUserDetail);
+router.get("/:id", verifyUser, getUserDetail);
 
-router.put("/update/:id", updateUser);
+router.post("/send-otp", validateUserEmail, sendOtp);
 
-router.delete("/delete/:id", deleteUser);
+router.put("/update-password", validateUpdatePassword, updateUserPassword);
+
+router.put("/update/:id", verifyUser, validateUpdateUserData, updateUser);
+
+router.put(
+  "/update-account/:id",
+  verifyAdmin,
+  validateUserAccountStatus,
+  updateUserAccount
+);
+
+router.delete("/delete/:id", verifyAdmin, deleteUser);
 
 export default router;

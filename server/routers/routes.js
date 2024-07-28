@@ -20,7 +20,7 @@ import appointmentRouter from "./appointmentRouter.js";
 
 const router = express.Router();
 
-router.use("/user", userRouter);
+router.use("/users", userRouter);
 router.use("/supplier", supplierRouter);
 router.use("/statistic", stastisticRouter);
 router.use("/prescription", prescriptionRouter);
