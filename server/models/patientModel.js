@@ -10,11 +10,6 @@ const patientSchema = new mongoose.Schema(
     phoneNumber: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     address: { type: String },
-    status: {
-      type: String,
-      required: true,
-      default: ACCOUNT_STATUS.ISACTIVE,
-    },
   },
   {
     timestamps: true,

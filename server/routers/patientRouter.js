@@ -7,25 +7,28 @@ import {
   updatePatient,
   getMedicalRecordsFromPatient,
   getAppointmentsFromPatient,
-  getCollection,
+  getPatientCollection,
 } from "../controllers/patientController.js";
+import { validatePatientData } from "../validation/patientValidate.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import { verifyUser } from "../middlewares/verifyUser.js";
 
 const router = express.Router();
 
-router.get("/collection", getCollection);
+router.get("/collection", verifyAdmin, getPatientCollection);
 
-router.get("/patients", getPatients);
+router.get("/", verifyAdmin, getPatients);
 
-router.get("/:id", getPatientDetail);
+router.get("/:id", verifyUser, getPatientDetail);
 
-router.get("/medical-records/:id", getMedicalRecordsFromPatient);
+router.get("/medical-records/:id", verifyUser, getMedicalRecordsFromPatient);
 
-router.get("/appointments/:id", getAppointmentsFromPatient);
+router.get("/appointments/:id", verifyUser, getAppointmentsFromPatient);
 
-router.post("/create", createPatient);
+router.post("/create", verifyAdmin, validatePatientData, createPatient);
 
-router.put("/update/:id", updatePatient);
+router.put("/update/:id", verifyAdmin, validatePatientData, updatePatient);
 
-router.delete("/delete/:id", deletePatient);
+router.delete("/delete/:id", verifyAdmin, deletePatient);
 
 export default router;

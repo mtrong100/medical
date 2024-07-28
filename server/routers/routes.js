@@ -21,10 +21,11 @@ import appointmentRouter from "./appointmentRouter.js";
 const router = express.Router();
 
 router.use("/users", userRouter);
+router.use("/patients", patientRouter);
+
 router.use("/supplier", supplierRouter);
 router.use("/statistic", stastisticRouter);
 router.use("/prescription", prescriptionRouter);
-router.use("/patient", patientRouter);
 router.use("/message", messageRouter);
 router.use("/medicine", medicineRouter);
 router.use("/medicine-category", medicineCategoryRouter);
