@@ -7,14 +7,29 @@ import {
   getSuppliers,
   updateSupplier,
 } from "../controllers/supplierController.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import {
+  validateSupplierData,
+  validateUpdateSupplierData,
+} from "../validation/supplierValidate.js";
 
 const router = express.Router();
 
-router.get("/collection", getSupplierCollection);
-router.get("/suppliers", getSuppliers);
-router.get("/:id", getSupplierDetail);
-router.post("/create", createSupplier);
-router.put("/update/:id", updateSupplier);
-router.delete("/delete/:id", deleteSupplier);
+router.get("/collection", verifyAdmin, getSupplierCollection);
+
+router.get("/", verifyAdmin, getSuppliers);
+
+router.get("/:id", verifyAdmin, getSupplierDetail);
+
+router.post("/create", validateSupplierData, verifyAdmin, createSupplier);
+
+router.put(
+  "/update/:id",
+  validateUpdateSupplierData,
+  verifyAdmin,
+  updateSupplier
+);
+
+router.delete("/delete/:id", verifyAdmin, deleteSupplier);
 
 export default router;

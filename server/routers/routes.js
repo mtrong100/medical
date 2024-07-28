@@ -25,8 +25,8 @@ router.use("/patients", patientRouter);
 router.use("/employees", employeeRouter);
 router.use("/auth", authRouter);
 router.use("/medicine-categories", medicineCategoryRouter);
+router.use("/suppliers", supplierRouter);
 
-router.use("/supplier", supplierRouter);
 router.use("/statistic", stastisticRouter);
 router.use("/prescription", prescriptionRouter);
 router.use("/message", messageRouter);
