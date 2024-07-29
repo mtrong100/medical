@@ -36,12 +36,6 @@ const ManagePrescription = () => {
           onClick={() => navigate(`/prescription/${rowData._id}`)}
         />
         <Button
-          icon="pi pi-pencil"
-          rounded
-          severity="info"
-          onClick={() => navigate(`/prescription/update/${rowData._id}`)}
-        />
-        <Button
           icon="pi pi-trash"
           rounded
           severity="danger"

@@ -1,4 +1,3 @@
-import useGetMedicineCollection from "../../hooks/useGetMedicineCollection";
 import useGetDoctors from "../../hooks/useGetDoctors";
 import useCreatePrescription from "./useCreatePrescription";
 import TitleSection from "../../components/TitleSection";
@@ -13,11 +12,13 @@ import { Dropdown } from "primereact/dropdown";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import useGetCollectionApi from "../../hooks/useGetCollectionApi";
 
 const CreatePrescription = () => {
   const navigate = useNavigate();
   const { doctors } = useGetDoctors();
-  const { medicines } = useGetMedicineCollection();
+  const { results: medicines } = useGetCollectionApi("medicines");
+
   const {
     form,
     setForm,
@@ -85,6 +86,7 @@ const CreatePrescription = () => {
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, patient: e.target.value }))
               }
+              placeholder="Mã bệnh nhân"
             />
           </div>
 
@@ -128,11 +130,12 @@ const CreatePrescription = () => {
               onChange={(e) =>
                 setForm((prev) => ({ ...prev, notes: e.target.value }))
               }
+              placeholder="Ghi chú"
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-5">
+        <div className="grid grid-cols-3 gap-5">
           <div className="flex flex-col gap-2">
             <label>Chọn thuốc</label>
             <Dropdown
@@ -146,11 +149,6 @@ const CreatePrescription = () => {
               value={selectedMedicine}
               onChange={(e) => setSelectedMedicine(e.value)}
             />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label>Đơn vị</label>
-            <InputText value={selectedMedicine?.unit} readOnly />
           </div>
 
           <div className="flex flex-col gap-2">

@@ -33,7 +33,7 @@ const CreateMedicine = () => {
       name: "",
       unit: "",
       price: 0,
-      stock: 500,
+      stock: 100,
       description: "",
     },
   });
@@ -56,8 +56,6 @@ const CreateMedicine = () => {
         unit,
         category,
       };
-
-      console.log(body);
 
       const res = await createMedicineApi(body);
 

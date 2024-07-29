@@ -9,7 +9,7 @@ export default function useCreatePrescription() {
   const [selectedMedicine, setSelectedMedicine] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [form, setForm] = useState({
-    patient: null,
+    patient: "",
     doctor: null,
     status: PAYMENT_STATUS.UNPAID,
     notes: "",
@@ -25,7 +25,7 @@ export default function useCreatePrescription() {
   const onCreate = async () => {
     const { patient, doctor, notes, status } = form;
 
-    if (!patient || !doctor || !notes || !status) {
+    if (!patient || !doctor || !status) {
       toast.error("Vui lòng điền đầy đủ thông tin");
       return;
     }
@@ -66,9 +66,9 @@ export default function useCreatePrescription() {
       setSelectedMedicine(null);
       setQuantity(1);
       setForm({
-        patient: null,
+        patient: "",
         doctor: null,
-        status: null,
+        status: PAYMENT_STATUS.UNPAID,
         notes: "",
       });
     }

@@ -3,23 +3,28 @@ import {
   createMedicine,
   deleteMedicine,
   getMedicines,
-  getCollection,
+  getMedicineCollection,
   updateMedicine,
   getMedicineDetail,
 } from "../controllers/medicineController.js";
+import {
+  validateCreateMedicine,
+  validateUpdateMedicine,
+} from "../validation/medicineValidate.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 
 const router = express.Router();
 
-router.get("/collection", getCollection);
+router.get("/collection", verifyAdmin, getMedicineCollection);
 
-router.get("/medicines", getMedicines);
+router.get("/", verifyAdmin, getMedicines);
 
-router.get("/:id", getMedicineDetail);
+router.get("/:id", verifyAdmin, getMedicineDetail);
 
-router.post("/create", createMedicine);
+router.post("/create", verifyAdmin, validateCreateMedicine, createMedicine);
 
-router.put("/update/:id", updateMedicine);
+router.put("/update/:id", verifyAdmin, validateUpdateMedicine, updateMedicine);
 
-router.delete("/delete/:id", deleteMedicine);
+router.delete("/delete/:id", verifyAdmin, deleteMedicine);
 
 export default router;

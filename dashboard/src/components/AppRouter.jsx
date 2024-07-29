@@ -66,9 +66,6 @@ const ManagePrescription = lazy(() =>
 const CreatePrescription = lazy(() =>
   import("../modules/manage-prescription/CreatePrescription")
 );
-const UpdatePrescription = lazy(() =>
-  import("../modules/manage-prescription/UpdatePrescription")
-);
 const PrescriptionDetail = lazy(() =>
   import("../modules/manage-prescription/PrescriptionDetail")
 );
@@ -184,7 +181,6 @@ const MAIN_ROUTES = [
 
   { path: "/prescription", element: <ManagePrescription /> },
   { path: "/prescription/create", element: <CreatePrescription /> },
-  { path: "/prescription/update/:id", element: <UpdatePrescription /> },
   { path: "/prescription/:id", element: <PrescriptionDetail /> },
 
   {

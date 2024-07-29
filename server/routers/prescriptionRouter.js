@@ -4,22 +4,26 @@ import {
   deletePrescription,
   getPrescriptions,
   getPrescriptionDetail,
-  updatePrescription,
-  getCollection,
+  getPrescriptionCollection,
 } from "../controllers/prescriptionController.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import { validateCreatePrescription } from "../validation/prescriptionValidate.js";
 
 const router = express.Router();
 
-router.get("/collection", getCollection);
+router.get("/collection", verifyAdmin, getPrescriptionCollection);
 
-router.get("/prescriptions", getPrescriptions);
+router.get("/", verifyAdmin, getPrescriptions);
 
-router.get("/:id", getPrescriptionDetail);
+router.get("/:id", verifyAdmin, getPrescriptionDetail);
 
-router.post("/create", createPrescription);
+router.post(
+  "/create",
+  verifyAdmin,
+  validateCreatePrescription,
+  createPrescription
+);
 
-router.put("/update/:id", updatePrescription);
-
-router.delete("/delete/:id", deletePrescription);
+router.delete("/delete/:id", verifyAdmin, deletePrescription);
 
 export default router;

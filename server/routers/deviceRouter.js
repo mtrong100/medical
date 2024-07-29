@@ -7,14 +7,24 @@ import {
   getDevices,
   updateDevice,
 } from "../controllers/deviceController.js";
+import {
+  validateDeviceData,
+  validateUpdateDeviceData,
+} from "../validation/deviceValidate.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 
 const router = express.Router();
 
-router.get("/collection", getDeviceCollection);
-router.get("/devices", getDevices);
-router.get("/:id", getDeviceDetail);
-router.post("/create", createDevice);
-router.put("/update/:id", updateDevice);
-router.delete("/delete/:id", deleteDevice);
+router.get("/collection", verifyAdmin, getDeviceCollection);
+
+router.get("/", verifyAdmin, getDevices);
+
+router.get("/:id", verifyAdmin, getDeviceDetail);
+
+router.post("/create", verifyAdmin, validateDeviceData, createDevice);
+
+router.put("/update/:id", verifyAdmin, validateUpdateDeviceData, updateDevice);
+
+router.delete("/delete/:id", verifyAdmin, deleteDevice);
 
 export default router;
