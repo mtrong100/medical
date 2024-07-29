@@ -12,7 +12,7 @@ export default function useUpdateInvoice() {
   const [detail, setDetail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    patient: null,
+    patient: "",
     doctor: null,
     price: 200000,
     healthInsurance: false,
@@ -47,13 +47,7 @@ export default function useUpdateInvoice() {
 
   const onUpdate = async () => {
     const { patient, doctor, price, healthInsurance, paymentStatus } = form;
-    if (
-      !doctor ||
-      !patient.trim() ||
-      !price ||
-      !healthInsurance ||
-      !paymentStatus
-    ) {
+    if (!doctor || !patient.trim() || !price || !paymentStatus) {
       toast.error("Vui lòng điền đầy đủ thông tin");
       return;
     }

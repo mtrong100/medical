@@ -5,21 +5,26 @@ import {
   getInvoices,
   getInvoiceDetail,
   updateInvoice,
-  getCollection,
+  getInvoiceCollection,
 } from "../controllers/invoiceController.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import {
+  validateCreateInvoice,
+  validateUpdateInvoice,
+} from "../validation/invoiceValidate.js";
 
 const router = express.Router();
 
-router.get("/collection", getCollection);
+router.get("/collection", verifyAdmin, getInvoiceCollection);
 
-router.get("/invoices", getInvoices);
+router.get("/", verifyAdmin, getInvoices);
 
-router.get("/:id", getInvoiceDetail);
+router.get("/:id", verifyAdmin, getInvoiceDetail);
 
-router.post("/create", createInvoice);
+router.post("/create", verifyAdmin, validateCreateInvoice, createInvoice);
 
-router.put("/update/:id", updateInvoice);
+router.put("/update/:id", verifyAdmin, validateUpdateInvoice, updateInvoice);
 
-router.delete("/delete/:id", deleteInvoice);
+router.delete("/delete/:id", verifyAdmin, deleteInvoice);
 
 export default router;

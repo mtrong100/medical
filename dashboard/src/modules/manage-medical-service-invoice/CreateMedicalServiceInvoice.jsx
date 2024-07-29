@@ -48,7 +48,7 @@ const CreateMedicalServiceInvoice = () => {
     <div>
       <TitleSection>Tạo phiếu dịch vụ mới</TitleSection>
 
-      <div className="my-10 ">
+      <div className="my-10">
         <div className="grid grid-cols-2 gap-5">
           <div className="flex flex-col gap-2">
             <label htmlFor="patient">Mã bệnh nhân</label>

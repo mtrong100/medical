@@ -4,22 +4,37 @@ import {
   deleteMedicalServiceInvoice,
   getMedicalServiceInvoices,
   getMedicalServiceInvoiceDetail,
+  getMedicalServiceInvoiceCollection,
   updateMedicalServiceInvoice,
-  getCollection,
 } from "../controllers/medicalServiceInvoiceController.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import {
+  validateCreateMedicalServiceInvoice,
+  validateUpdateMedicalServiceInvoice,
+} from "../validation/medicalServiceInvoiceValidate.js";
 
 const router = express.Router();
 
-router.get("/collection", getCollection);
+router.get("/collection", verifyAdmin, getMedicalServiceInvoiceCollection);
 
-router.get("/medical-service-invoices", getMedicalServiceInvoices);
+router.get("/", verifyAdmin, getMedicalServiceInvoices);
 
-router.get("/:id", getMedicalServiceInvoiceDetail);
+router.get("/:id", verifyAdmin, getMedicalServiceInvoiceDetail);
 
-router.post("/create", createMedicalServiceInvoice);
+router.post(
+  "/create",
+  verifyAdmin,
+  validateCreateMedicalServiceInvoice,
+  createMedicalServiceInvoice
+);
 
-router.put("/update/:id", updateMedicalServiceInvoice);
+router.put(
+  "/update/:id",
+  verifyAdmin,
+  validateUpdateMedicalServiceInvoice,
+  updateMedicalServiceInvoice
+);
 
-router.delete("/delete/:id", deleteMedicalServiceInvoice);
+router.delete("/delete/:id", verifyAdmin, deleteMedicalServiceInvoice);
 
 export default router;

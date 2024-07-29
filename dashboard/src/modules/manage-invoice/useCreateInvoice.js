@@ -6,7 +6,7 @@ import { createInvoiceApi } from "../../api/invoiceApi";
 export default function useCreateInvoice() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    patient: null,
+    patient: "",
     doctor: null,
     price: 200000,
     healthInsurance: false,

@@ -31,11 +31,11 @@ router.use("/medicines", medicineRouter);
 router.use("/medical-services", medicalServiceRouter);
 router.use("/medical-records", medicalRecordRouter);
 router.use("/prescriptions", prescriptionRouter);
+router.use("/medical-service-invoices", medicalServiceInvoiceRouter);
+router.use("/invoices", invoiceRouter);
 
 router.use("/statistic", stastisticRouter);
 router.use("/message", messageRouter);
-router.use("/medical-service-invoice", medicalServiceInvoiceRouter);
-router.use("/invoice", invoiceRouter);
 router.use("/inventory", inventoryRouter);
 router.use("/conversation", conversationRouter);
 router.use("/appointment", appointmentRouter);

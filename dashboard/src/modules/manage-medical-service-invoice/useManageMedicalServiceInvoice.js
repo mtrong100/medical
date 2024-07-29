@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { font } from "../../assets/font";
 import { LIMIT_AMOUNT } from "../../utils/constants";
 import {
-  ddeleteMedicalServiceInvoiceApi,
+  deleteMedicalServiceInvoiceApi,
   getMedicalServiceInvoicesApi,
 } from "../../api/medicalServiceInvoiceApi";
 
@@ -78,7 +78,7 @@ export default function useManageMedicalServiceInvoice() {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const res = await ddeleteMedicalServiceInvoiceApi(itemId);
+          const res = await deleteMedicalServiceInvoiceApi(itemId);
           if (res) Swal.fire("Đã xoá!", "Dữ liệu đã được xóa.", "success");
         } catch (error) {
           console.log("Đã xảy ra sự cố khi xoá: ", error);

@@ -59,7 +59,7 @@ const ManageMedicalServiceInvoice = () => {
         value={rowData.status}
         rounded
         severity={
-          rowData.status === PAYMENT_STATUS.UNPAID ? "warning" : "success"
+          rowData.status === PAYMENT_STATUS.UNPAID ? "danger" : "success"
         }
       />
     );
