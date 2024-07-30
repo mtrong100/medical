@@ -1,3 +1,4 @@
+import Appointment from "../models/appointmentModel.js";
 import MedicalRecord from "../models/medicalRecordModel.js";
 import Patient from "../models/patientModel.js";
 

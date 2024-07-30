@@ -6,23 +6,45 @@ import {
   getAppointmentDetail,
   updateAppointment,
   bookingAppointment,
-  getCollection,
+  getAppoinmentCollection,
 } from "../controllers/appointmentController.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import {
+  validateBookingAppointment,
+  validateCreateAppointment,
+  validateUpdateAppointment,
+} from "../validation/appointmentsValidate.js";
+import { verifyUser } from "../middlewares/verifyUser.js";
 
 const router = express.Router();
 
-router.get("/collection", getCollection);
+router.get("/collection", verifyAdmin, getAppoinmentCollection);
 
-router.get("/appointments", getAppointments);
+router.get("/", verifyAdmin, getAppointments);
 
-router.get("/:id", getAppointmentDetail);
+router.get("/:id", verifyAdmin, getAppointmentDetail);
 
-router.post("/create", createAppointment);
+router.post(
+  "/create",
+  verifyAdmin,
+  validateCreateAppointment,
+  createAppointment
+);
 
-router.post("/booking", bookingAppointment);
+router.post(
+  "/booking",
+  verifyUser,
+  validateBookingAppointment,
+  bookingAppointment
+);
 
-router.put("/update/:id", updateAppointment);
+router.put(
+  "/update/:id",
+  verifyAdmin,
+  validateUpdateAppointment,
+  updateAppointment
+);
 
-router.delete("/delete/:id", deleteAppointment);
+router.delete("/delete/:id", verifyAdmin, deleteAppointment);
 
 export default router;

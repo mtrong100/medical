@@ -7,7 +7,7 @@ import { createAppointmentApi } from "../../api/appointmentApi";
 export default function useCreateAppointment() {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    patient: null,
+    patient: "",
     doctor: null,
     date: null,
     time: null,
@@ -46,7 +46,7 @@ export default function useCreateAppointment() {
     } finally {
       setLoading(false);
       setForm({
-        patient: null,
+        patient: "",
         doctor: null,
         date: null,
         time: null,

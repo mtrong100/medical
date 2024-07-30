@@ -33,11 +33,11 @@ router.use("/medical-records", medicalRecordRouter);
 router.use("/prescriptions", prescriptionRouter);
 router.use("/medical-service-invoices", medicalServiceInvoiceRouter);
 router.use("/invoices", invoiceRouter);
+router.use("/appointments", appointmentRouter);
 
 router.use("/statistic", stastisticRouter);
 router.use("/message", messageRouter);
 router.use("/inventory", inventoryRouter);
 router.use("/conversation", conversationRouter);
-router.use("/appointment", appointmentRouter);
 
 export default router;

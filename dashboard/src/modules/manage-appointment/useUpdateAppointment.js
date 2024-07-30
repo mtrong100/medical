@@ -13,7 +13,7 @@ export default function useUpdateAppointment() {
   const [detail, setDetail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
-    patient: null,
+    patient: "",
     doctor: null,
     date: null,
     time: null,
