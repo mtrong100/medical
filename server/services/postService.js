@@ -1,4 +1,4 @@
-import Post from "../models/postModel";
+import Post from "../models/postModel.js";
 
 export const getPostCollectionService = async () => {
   try {
@@ -30,6 +30,19 @@ export const getPostsService = async (page, limit, category) => {
     const data = await Post.find(filter)
       .skip(skip)
       .limit(parseInt(limit))
+      .populate([
+        {
+          path: "author",
+          select: "name avatar",
+        },
+        {
+          path: "comment",
+          populate: {
+            path: "user",
+            select: "name",
+          },
+        },
+      ])
       .sort({ createdAt: -1 });
 
     return {

@@ -18,6 +18,7 @@ import conversationRouter from "./conversationRouter.js";
 import authRouter from "./authRouter.js";
 import appointmentRouter from "./appointmentRouter.js";
 import postRouter from "./postRouter.js";
+import commentRouter from "./commentRouter.js";
 
 const router = express.Router();
 
@@ -40,5 +41,6 @@ router.use("/statistic", stastisticRouter);
 router.use("/messages", messageRouter);
 router.use("/conversations", conversationRouter);
 router.use("/posts", postRouter);
+router.use("/comments", commentRouter);
 
 export default router;
