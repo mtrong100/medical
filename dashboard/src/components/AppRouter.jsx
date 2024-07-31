@@ -147,6 +147,16 @@ const CreateInventoryMedicine = lazy(() =>
   import("../modules/manage-inventory/CreateInventoryMedicine")
 );
 
+/* Post Page */
+const ManagePost = lazy(() => import("../modules/manage-post/ManagePost"));
+const CreatePost = lazy(() => import("../modules/manage-post/CreatePost"));
+const UpdatePost = lazy(() => import("../modules/manage-post/UpdatePost"));
+
+/* Comment Page */
+const ManageComment = lazy(() =>
+  import("../modules/manage-comment/ManageComment")
+);
+
 /* Authentication Pages */
 const Login = lazy(() => import("../modules/authentication/Login"));
 
@@ -219,6 +229,12 @@ const MAIN_ROUTES = [
   { path: "/inventory", element: <ManageInventory /> },
   { path: "/inventory-device/create", element: <CreateInventoryDevice /> },
   { path: "/inventory-medicine/create", element: <CreateInventoryMedicine /> },
+
+  { path: "/post", element: <ManagePost /> },
+  { path: "/post/create", element: <CreatePost /> },
+  { path: "/post/update/:id", element: <UpdatePost /> },
+
+  { path: "/comment", element: <ManageComment /> },
 
   {
     path: "/chat",
