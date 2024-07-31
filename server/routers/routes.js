@@ -17,6 +17,7 @@ import deviceRouter from "./deviceRouter.js";
 import conversationRouter from "./conversationRouter.js";
 import authRouter from "./authRouter.js";
 import appointmentRouter from "./appointmentRouter.js";
+import postRouter from "./postRouter.js";
 
 const router = express.Router();
 
@@ -38,5 +39,6 @@ router.use("/inventories", inventoryRouter);
 router.use("/statistic", stastisticRouter);
 router.use("/messages", messageRouter);
 router.use("/conversations", conversationRouter);
+router.use("/posts", postRouter);
 
 export default router;
