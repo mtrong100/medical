@@ -5,12 +5,17 @@ import {
   getInventory,
   getInventoryDetail,
 } from "../controllers/inventoryController.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import { validateInventory } from "../validation/inventoryValidate.js";
 
 const router = express.Router();
 
-router.get("/inventories", getInventory);
-router.get("/:id", getInventoryDetail);
-router.post("/create", createInventory);
-router.delete("/delete/:id", deleteInventory);
+router.get("/", verifyAdmin, getInventory);
+
+router.get("/:id", verifyAdmin, getInventoryDetail);
+
+router.post("/create", verifyAdmin, validateInventory, createInventory);
+
+router.delete("/delete/:id", verifyAdmin, deleteInventory);
 
 export default router;

@@ -9,6 +9,7 @@ import { storeCurrentUser } from "../../redux/slices/userSlice";
 import { loginSchema } from "../../validations/loginSchema";
 import { loginApi } from "../../api/authApi";
 import { Button } from "primereact/button";
+import Image from "../../assets/images/slider_3.webp";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -22,8 +23,8 @@ const Login = () => {
     mode: "onchange",
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      password: "",
-      email: "",
+      password: "superadmin123@",
+      email: "superadmin@gmail.com",
     },
   });
 
@@ -49,7 +50,7 @@ const Login = () => {
       <div className="flex flex-1">
         <div className="w-1/2">
           <img
-            src="https://www.yudaah.com/demo/free-clinic-website-template/assets/images/slider/slider_3.jpg"
+            src={Image}
             alt="banner-login"
             className="h-screen w-full object-cover"
           />

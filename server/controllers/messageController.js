@@ -1,76 +1,46 @@
-import Conversation from "../models/conversationModel.js";
-import Message from "../models/messageModel.js";
-import { getUserSocketId, io } from "../socket/socket.js";
+import {
+  getMessagesService,
+  sendMessageService,
+} from "../services/messageService.js";
+import mongoose from "mongoose";
 
 export const sendMessage = async (req, res) => {
+  const { message } = req.body;
+  const { id: receiverId } = req.params;
+  const senderId = req.user._id;
+
+  if (!mongoose.Types.ObjectId.isValid(receiverId)) {
+    return res.status(404).json({ message: "ID không đúng định dạng" });
+  }
+
   try {
-    const { message } = req.body;
-    const { id: receiverId } = req.params;
-    const senderId = req.user._id;
+    const messageResponse = await sendMessageService(
+      senderId,
+      receiverId,
+      message
+    );
 
-    let conversation = await Conversation.findOne({
-      participants: { $all: [senderId, receiverId] },
-    });
-
-    if (!conversation) {
-      conversation = await Conversation.create({
-        participants: [senderId, receiverId],
-      });
-    }
-
-    const newMessage = new Message({
-      sender: senderId,
-      receiver: receiverId,
-      message,
-    });
-
-    if (newMessage) {
-      conversation.messages.push(newMessage._id);
-    }
-
-    await Promise.all([conversation.save(), newMessage.save()]);
-
-    const messageResponse = await Message.findById(newMessage._id)
-      .populate("sender", "_id name avatar")
-      .populate("receiver", "_id name avatar");
-
-    // Get receiver's socket ID
-    const receiverSocketId = getUserSocketId(receiverId);
-
-    // Emit the message to client by socket
-    if (receiverSocketId) {
-      io.to(receiverSocketId).emit("newMessage", messageResponse);
-    }
-
-    res.status(201).json(messageResponse);
+    return res.status(201).json(messageResponse);
   } catch (error) {
-    console.log("Error in sendMessage controller: ", error.message);
-    res.status(500).json({ error: "Internal server error" });
+    console.log("Lổi tại controller sendMessage", error);
+    return res.status(500).json({ message: error.message });
   }
 };
 
 export const getMessages = async (req, res) => {
+  const { id: userToChatId } = req.params;
+  const senderId = req.user._id;
+
+  if (!mongoose.Types.ObjectId.isValid(userToChatId)) {
+    return res.status(404).json({ message: "ID không đúng định dạng" });
+  }
+
   try {
-    const { id: userToChatId } = req.params;
-    const senderId = req.user._id;
+    const messages = await getMessagesService(senderId, userToChatId);
 
-    const conversation = await Conversation.findOne({
-      participants: { $all: [senderId, userToChatId] },
-    }).populate({
-      path: "messages",
-      populate: [
-        { path: "sender", select: "name avatar" },
-        { path: "receiver", select: "name avatar" },
-      ],
-    });
-
-    if (!conversation) return res.status(200).json([]);
-
-    const messages = conversation.messages;
-
-    res.status(200).json(messages);
+    return res.status(200).json(messages);
   } catch (error) {
-    console.log("Error in getMessages controller: ", error.message);
-    res.status(500).json({ error: "Internal server error" });
+    console.log("Lỗi tại controller getMessages: ", error);
+    return res.status(500).json({ message: error.message });
   }
 };

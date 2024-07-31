@@ -1,21 +1,21 @@
 import axios from "./axiosConfig";
 
 export const getInventoriesApi = async (params) => {
-  const response = await axios.get("/inventory/inventories", { params });
+  const response = await axios.get("/inventories", { params });
   return response;
 };
 
 export const getInventoryDetailApi = async (id) => {
-  const response = await axios.get(`/inventory/${id}`);
+  const response = await axios.get(`/inventories/${id}`);
   return response;
 };
 
 export const createInventoryApi = async (data) => {
-  const response = await axios.post("/inventory/create", data);
+  const response = await axios.post("/inventories/create", data);
   return response;
 };
 
 export const deleteInventoryApi = async (id) => {
-  const response = await axios.delete(`/inventory/delete/${id}`);
+  const response = await axios.delete(`/inventories/delete/${id}`);
   return response;
 };

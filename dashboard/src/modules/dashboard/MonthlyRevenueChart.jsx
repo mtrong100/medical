@@ -9,7 +9,7 @@ import {
   CartesianGrid,
   Legend,
 } from "recharts";
-import useGetMonthlyRevenue from "../../modules/dashboard/useGetMonthlyRevenue";
+import useGetMonthlyRevenue from "./useGetMonthlyRevenue";
 
 const MonthlyRevenueChart = () => {
   const { monthlyRevenues } = useGetMonthlyRevenue();
@@ -21,7 +21,7 @@ const MonthlyRevenueChart = () => {
         margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="month" tick={{ fontSize: 12 }} interval={0} />
+        <XAxis dataKey="month" interval={0} />
         <YAxis />
         <Tooltip />
         <Legend />

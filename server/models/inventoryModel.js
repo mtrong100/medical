@@ -20,7 +20,7 @@ const inventorySchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      default: PAYMENT_STATUS.PAID,
+      default: PAYMENT_STATUS.UNPAID,
     },
     items: [
       {
