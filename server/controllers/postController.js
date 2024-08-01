@@ -5,6 +5,7 @@ import {
   getPostCollectionService,
   getPostDetailService,
   getPostsService,
+  getPostStatsService,
   updatePostService,
 } from "../services/postService.js";
 
@@ -42,6 +43,16 @@ export const getPostDetail = async (req, res) => {
     return res.status(200).json(post);
   } catch (error) {
     console.log("Lỗi tại controller getPostDetail", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getPostStats = async (req, res) => {
+  try {
+    const results = await getPostStatsService();
+    return res.status(200).json(results);
+  } catch (error) {
+    console.log("Lỗi tại controller getPostStats", error);
     return res.status(500).json({ message: error.message });
   }
 };

@@ -5,6 +5,11 @@ export const getPostsApi = async (params) => {
   return response;
 };
 
+export const getPostStatsApi = async () => {
+  const response = await axios.get("/posts/stats");
+  return response;
+};
+
 export const getPostDetailApi = async (id) => {
   const response = await axios.get(`/posts/${id}`);
   return response;

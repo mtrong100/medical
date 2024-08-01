@@ -7,6 +7,7 @@ import {
   getPostCollection,
   getPostDetail,
   getPosts,
+  getPostStats,
   updatePost,
 } from "../controllers/postController.js";
 import {
@@ -19,6 +20,8 @@ const router = express.Router();
 router.get("/collection", verifyAdmin, getPostCollection);
 
 router.get("/", verifyUser, getPosts);
+
+router.get("/stats", getPostStats);
 
 router.get("/:id", verifyUser, getPostDetail);
 

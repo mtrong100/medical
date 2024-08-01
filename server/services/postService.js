@@ -89,6 +89,91 @@ export const getPostDetailService = async (id) => {
   }
 };
 
+export const getPostStatsService = async () => {
+  try {
+    const allMonths = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+
+    // Lấy dữ liệu bài viết
+    const posts = await Post.find()
+      .populate([
+        {
+          path: "author",
+          select: "name avatar",
+        },
+        {
+          path: "comments",
+          populate: {
+            path: "user",
+            select: "name",
+          },
+        },
+      ])
+      .sort({ createdAt: -1 });
+
+    // Khởi tạo mảng để chứa tổng số bài viết, views và comments cho mỗi tháng
+    const postStatsByMonth = allMonths.map((month) => ({
+      month,
+      postCount: 0,
+      totalViews: 0,
+      totalComments: 0,
+    }));
+
+    // Tạo đối tượng để chứa tổng số bài viết trong mỗi danh mục
+    const postCountByCategoryObj = {};
+
+    // Tính tổng số bài viết, views và comments cho mỗi tháng
+    posts.forEach((post) => {
+      const month = new Date(post.createdAt).toLocaleString("default", {
+        month: "long",
+      });
+      const monthStats = postStatsByMonth.find(
+        (stats) => stats.month === month
+      );
+      if (monthStats) {
+        monthStats.postCount += 1;
+        monthStats.totalViews += post.views;
+        monthStats.totalComments += post.comments.length;
+      }
+
+      // Tính tổng số bài viết trong mỗi danh mục
+      if (post.category in postCountByCategoryObj) {
+        postCountByCategoryObj[post.category] += 1;
+      } else {
+        postCountByCategoryObj[post.category] = 1;
+      }
+    });
+
+    // Chuyển đổi đối tượng thành mảng
+    const postCountByCategory = Object.keys(postCountByCategoryObj).map(
+      (category) => ({
+        category,
+        postCount: postCountByCategoryObj[category],
+      })
+    );
+
+    return {
+      postsUploadedByMonth: postStatsByMonth,
+      postsByCategory: postCountByCategory,
+    };
+  } catch (error) {
+    console.log("Lỗi tại service getPostStatsService", error);
+    throw new Error(error.message);
+  }
+};
+
 export const createPostService = async (data) => {
   try {
     const post = new Post(data);

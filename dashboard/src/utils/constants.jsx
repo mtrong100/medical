@@ -79,11 +79,6 @@ export const SIDEBAR_LINKS = [
     name: "Bài viết",
     link: "/post",
   },
-  {
-    icon: "pi pi-comments",
-    name: "Bình luận",
-    link: "/comment",
-  },
 ];
 
 export const monthsArray = [

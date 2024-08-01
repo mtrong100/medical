@@ -27,7 +27,7 @@ const Box = ({ icon, heading, number, color }) => {
   };
 
   return (
-    <div className="border bg-gray-100  border-blue-gray-100 rounded-sm flex items-center gap-5">
+    <div className="border bg-gray-50  border-blue-gray-100 rounded-sm flex items-center gap-5">
       <div
         className={`${displayBoxColor(
           color

@@ -1,10 +1,11 @@
 import React from "react";
 import MonthlyRevenueChart from "./MonthlyRevenueChart";
 import MonthlyExpenseChart from "./MonthlyExpenseChart";
+import ChartSection from "../../components/ChartSection";
 
 const DiagramBlock = () => {
   return (
-    <div>
+    <div className="space-y-5">
       <ChartSection title="Thống kê doanh thu theo tháng">
         <MonthlyRevenueChart />
       </ChartSection>
@@ -17,12 +18,3 @@ const DiagramBlock = () => {
 };
 
 export default DiagramBlock;
-
-function ChartSection({ children, title = "" }) {
-  return (
-    <div className="space-y-3">
-      <h1 className="text-2xl font-bold text-blue-gray-700">{title}</h1>
-      {children}
-    </div>
-  );
-}
