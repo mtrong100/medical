@@ -8,6 +8,8 @@ export const validateCreatePost = [
     .notEmpty()
     .withMessage("Title is required"),
 
+  body("image").isURL().withMessage("Image must be a valid URL"),
+
   body("content")
     .isString()
     .withMessage("Content must be a string")
@@ -45,6 +47,8 @@ export const validateUpdatePost = [
     .withMessage("Title must be a string")
     .notEmpty()
     .withMessage("Title cannot be empty"),
+
+  body("image").optional().isURL().withMessage("Image must be a valid URL"),
 
   body("content")
     .optional()

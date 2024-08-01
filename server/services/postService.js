@@ -36,7 +36,7 @@ export const getPostsService = async (page, limit, category) => {
           select: "name avatar",
         },
         {
-          path: "comment",
+          path: "comments",
           populate: {
             path: "user",
             select: "name",
@@ -45,8 +45,24 @@ export const getPostsService = async (page, limit, category) => {
       ])
       .sort({ createdAt: -1 });
 
+    const formattedResults = data.map((post) => {
+      return {
+        _id: post._id,
+        title: post.title,
+        image: post.image,
+        content: post.content,
+        author: post.author.name,
+        authorId: post.author._id,
+        category: post.category,
+        views: post.views,
+        comments: post.comments,
+        totalComments: post.comments.length,
+        createdAt: post.createdAt,
+      };
+    });
+
     return {
-      results: data,
+      results: formattedResults,
       totalResults: total,
       totalPages,
       currentPage: parseInt(page),

@@ -274,3 +274,14 @@ export const appointmentStatus = [
   APPOINTMENT_STATUS.CANCELLED,
   APPOINTMENT_STATUS.COMPLETED,
 ];
+
+export const POST_CATGORIES = [
+  "Dinh dưỡng",
+  "Sức khỏe",
+  "Trẻ đẹp",
+  "Mẹ và bé",
+  "Răng miệng",
+  "Bệnh về mắt",
+  "Thảo được",
+  "Phòng bệnh",
+];
