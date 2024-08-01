@@ -9,7 +9,6 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "jspdf-autotable";
 import { Button } from "primereact/button";
 import { Sidebar } from "primereact/sidebar";
-import { Divider } from "primereact/divider";
 import useGetPostStats from "./useGetPostStats";
 import ChartSection from "../../components/ChartSection";
 import MonthlyPostChart from "./MonthlyPostChart";
@@ -19,9 +18,7 @@ const ManagePost = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [detail, setDetail] = useState(null);
-
   const { postStats } = useGetPostStats();
-  console.log("🚀 ~ ManagePost ~ postStats:", postStats);
 
   const {
     data,

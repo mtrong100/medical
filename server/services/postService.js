@@ -35,13 +35,6 @@ export const getPostsService = async (page, limit, category) => {
           path: "author",
           select: "name avatar",
         },
-        {
-          path: "comments",
-          populate: {
-            path: "user",
-            select: "name",
-          },
-        },
       ])
       .sort({ createdAt: -1 });
 
@@ -55,7 +48,6 @@ export const getPostsService = async (page, limit, category) => {
         authorId: post.author._id,
         category: post.category,
         views: post.views,
-        comments: post.comments,
         totalComments: post.comments.length,
         createdAt: post.createdAt,
       };
@@ -76,13 +68,30 @@ export const getPostsService = async (page, limit, category) => {
 
 export const getPostDetailService = async (id) => {
   try {
-    const post = await Post.findById(id);
+    const post = await Post.findById(id).populate({
+      path: "author",
+      select: "name avatar",
+    });
 
     if (!post) {
       throw new Error("Không tìm thấy bài đăng");
     }
 
-    return post;
+    const result = {
+      _id: post._id,
+      title: post.title,
+      image: post.image,
+      content: post.content,
+      author: post.author.name,
+      authorId: post.author._id,
+      category: post.category,
+      views: post.views,
+      comments: post.comments,
+      totalComments: post.comments.length,
+      createdAt: post.createdAt,
+    };
+
+    return result;
   } catch (error) {
     console.log("Lỗi tại service getPostDetailService", error);
     throw new Error(error.message);

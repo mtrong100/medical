@@ -9,6 +9,8 @@ import { FaHeartPulse, FaUserDoctor } from "react-icons/fa6";
 import { GiMedicines } from "react-icons/gi";
 import { AiFillLike } from "react-icons/ai";
 
+export const LIMIT_AMOUNT = 6;
+
 export const NAV_LINKS = [
   {
     name: "Trang chủ",
@@ -118,4 +120,15 @@ export const KEYFEATURE_DATA = [
     caption:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut erat nec leo lobortis blandit.",
   },
+];
+
+export const POST_CATGORIES = [
+  "Dinh dưỡng",
+  "Sức khỏe",
+  "Trẻ đẹp",
+  "Mẹ và bé",
+  "Răng miệng",
+  "Bệnh về mắt",
+  "Thảo được",
+  "Phòng bệnh",
 ];

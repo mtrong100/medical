@@ -8,6 +8,7 @@ const Profile = lazy(() => import("../modules/profile/Profile"));
 const Home = lazy(() => import("../pages/Home"));
 const About = lazy(() => import("../pages/About"));
 const Post = lazy(() => import("../pages/Post"));
+const PostDetail = lazy(() => import("../pages/PostDetail"));
 const BookAppointment = lazy(() =>
   import("../modules/book-appointment/BookAppointment")
 );
@@ -23,6 +24,7 @@ const mainRoutes = [
   { path: "/post", element: <Post /> },
   { path: "/profile", element: <Profile /> },
   { path: "/book-appointment", element: <BookAppointment /> },
+  { path: "/post/:id", element: <PostDetail /> },
 ];
 
 const AppRouter = () => {

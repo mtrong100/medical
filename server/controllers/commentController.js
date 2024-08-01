@@ -3,6 +3,7 @@ import {
   createCommentService,
   deleteCommentService,
   getCommentCollectionService,
+  getCommentsInPostService,
 } from "../services/commentService.js";
 
 export const getCommentCollection = async (req, res) => {
@@ -11,6 +12,23 @@ export const getCommentCollection = async (req, res) => {
     return res.status(200).json(comments);
   } catch (error) {
     console.log("Lỗi tại controller getCommentCollection", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getCommentsInPost = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const { postId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(postId)) {
+    return res.status(404).json({ message: "ID không đúng định dạng" });
+  }
+
+  try {
+    const comments = await getCommentsInPostService(page, limit, postId);
+    return res.status(200).json(comments);
+  } catch (error) {
+    console.log("Lỗi tại controller getCommentsInPost", error);
     return res.status(500).json({ message: error.message });
   }
 };
