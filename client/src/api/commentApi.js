@@ -1,7 +1,7 @@
 import axios from "./axiosConfig";
 
-export const getCommentsInPostApi = async (postId) => {
-  const response = await axios.get(`/comments/${postId}`);
+export const getCommentsInPostApi = async (postId, params) => {
+  const response = await axios.get(`/comments/${postId}`, { params });
   return response;
 };
 

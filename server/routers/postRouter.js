@@ -9,6 +9,7 @@ import {
   getPosts,
   getPostStats,
   updatePost,
+  viewPost,
 } from "../controllers/postController.js";
 import {
   validateCreatePost,
@@ -28,6 +29,8 @@ router.get("/:id", verifyUser, getPostDetail);
 router.post("/create", verifyAdmin, validateCreatePost, createPost);
 
 router.put("/update/:id", verifyAdmin, validateUpdatePost, updatePost);
+
+router.put("/view/:id", verifyUser, viewPost);
 
 router.delete("/delete/:id", verifyAdmin, deletePost);
 

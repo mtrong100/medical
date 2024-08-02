@@ -1,25 +1,40 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Tag } from "primereact/tag";
+import toast from "react-hot-toast";
+import { viewPostApi } from "../api/postApi";
 
 const PostCard = ({ data }) => {
+  const navigate = useNavigate();
+
+  const onViewPost = async (postId) => {
+    try {
+      const res = await viewPostApi(postId);
+      if (res) navigate(`/post/${postId}`);
+    } catch (error) {
+      console.log("Error:", error);
+      toast.error(error.message);
+    }
+  };
+
   return (
     <article className="overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm hover:shadow-lg transition-all">
-      <Link to={`/post/${data?._id}`}>
+      <div onClick={() => onViewPost(data?._id)}>
         <img
           alt={data?.title}
           src={data?.image}
           className="h-56 w-full object-cover"
         />
-      </Link>
+      </div>
 
       <div className="p-4 sm:p-6">
-        <Tag
-          value={data?.category}
-          severity="success"
-          rounded
-          className="mb-3"
-        ></Tag>
+        <div className="flex items-center justify-between mb-3">
+          <Tag value={data?.category} severity="success" rounded></Tag>
+          <div className="flex items-center gap-1">
+            <i className="pi pi-eye"></i>
+            <span>{data?.views}</span>
+          </div>
+        </div>
 
         <h3 className="text-lg font-medium text-gray-900 line-clamp-2 min-h-[56px]">
           {data?.title}
@@ -33,8 +48,8 @@ const PostCard = ({ data }) => {
           dignissimos. Molestias explicabo corporis voluptatem?
         </p>
 
-        <Link
-          to={`/post/${data?._id}`}
+        <div
+          onClick={() => onViewPost(data?._id)}
           className="group mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600"
         >
           Xem chi tiết
@@ -44,7 +59,7 @@ const PostCard = ({ data }) => {
           >
             &rarr;
           </span>
-        </Link>
+        </div>
       </div>
     </article>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TitleSection from "../components/TitleSection";
 import useGetPosts from "../hooks/useGetPosts";
 import PostCard from "../components/PostCard";
@@ -10,6 +10,7 @@ import { Dropdown } from "primereact/dropdown";
 const Post = () => {
   const {
     data,
+    isLoading,
     query,
     setQuery,
     paginator,
@@ -17,12 +18,17 @@ const Post = () => {
     onNextPage,
     setSelectedCategory,
     selectedCategory,
+    onResetFilter,
   } = useGetPosts();
+
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   return (
     <section className="mt-10 mb-20">
       <div className="page-container">
-        <TitleSection>Những bài viết mới nhất</TitleSection>
+        <TitleSection>Những bài viết của chúng tôi</TitleSection>
 
         <div className="flex items-center justify-between mt-8">
           <div className="p-inputgroup max-w-md">
@@ -34,20 +40,38 @@ const Post = () => {
             <Button icon="pi pi-search" />
           </div>
 
-          <Dropdown
-            options={POST_CATGORIES}
-            placeholder="Chọn danh mục"
-            scrollHeight="300px"
-            className="max-w-xs w-full"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.value)}
-          />
+          <div className="flex items-center gap-2 w-full max-w-xs">
+            <Dropdown
+              options={POST_CATGORIES}
+              placeholder="Chọn danh mục"
+              scrollHeight="300px"
+              value={selectedCategory}
+              className="w-full"
+              onChange={(e) => setSelectedCategory(e.value)}
+            />
+            <Button
+              onClick={onResetFilter}
+              className="flex-shrink-0"
+              icon="pi pi-refresh"
+            ></Button>
+          </div>
         </div>
 
+        {isLoading && (
+          <div className="text-center opacity-80 font-medium mt-32">
+            Loading...
+          </div>
+        )}
+
+        {!isLoading && data?.length === 0 && (
+          <div className="text-center opacity-80 font-medium mt-32">
+            Không tìm thấy bài viết
+          </div>
+        )}
+
         <div className="grid grid-cols-3 gap-5 mt-8">
-          {data?.map((item) => (
-            <PostCard key={item._id} data={item} />
-          ))}
+          {!isLoading &&
+            data?.map((item) => <PostCard key={item._id} data={item} />)}
         </div>
 
         {paginator.totalResults > LIMIT_AMOUNT && (

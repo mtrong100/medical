@@ -6,6 +6,7 @@ import {
 } from "../api/commentApi";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { LIMIT_AMOUNT } from "../utils/constants";
 
 export default function useComment() {
   const { id: postId } = useParams();
@@ -14,6 +15,7 @@ export default function useComment() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [limit, setLimit] = useState(LIMIT_AMOUNT);
   const [paginator, setPaginator] = useState({
     totalPages: 1,
     currentPage: 1,
@@ -22,14 +24,20 @@ export default function useComment() {
 
   useEffect(() => {
     fetchComments();
-  }, [postId, paginator.currentPage]);
+  }, [postId, paginator.currentPage, limit]);
 
   const fetchComments = async () => {
     setIsLoading(true);
 
     try {
-      const res = await getCommentsInPostApi(postId);
+      const params = {
+        page: paginator.currentPage,
+        limit,
+      };
+
+      const res = await getCommentsInPostApi(postId, params);
       if (res) {
+        console.log(res);
         setComments(res.results);
         setPaginator({
           ...paginator,
@@ -40,7 +48,6 @@ export default function useComment() {
       }
     } catch (error) {
       console.log("Failed to fetch comments: ", error);
-      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -82,14 +89,8 @@ export default function useComment() {
     }
   };
 
-  const onPrevPage = () => {
-    if (paginator.currentPage === 1) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage - 1 }));
-  };
-
-  const onNextPage = () => {
-    if (paginator.currentPage === paginator.totalPages) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage + 1 }));
+  const loadMoreComments = () => {
+    setLimit((prev) => prev + LIMIT_AMOUNT);
   };
 
   return {
@@ -101,8 +102,6 @@ export default function useComment() {
     onDeleteComment,
     comments,
     isLoading,
-    paginator,
-    onPrevPage,
-    onNextPage,
+    loadMoreComments,
   };
 }

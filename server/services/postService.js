@@ -224,3 +224,17 @@ export const deletePostService = async (id) => {
     throw new Error(error.message);
   }
 };
+
+export const viewPostService = async (id) => {
+  try {
+    const post = await Post.findById(id);
+    if (!post) {
+      throw new Error("Không tìm thấy bài đăng");
+    }
+    post.views += 1;
+    post.save();
+  } catch (error) {
+    console.log("Lỗi tại service postViewService", error);
+    throw new Error(error.message);
+  }
+};

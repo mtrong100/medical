@@ -50,6 +50,11 @@ export default function useGetPosts() {
     }
   };
 
+  const onResetFilter = () => {
+    setQuery("");
+    setSelectedCategory(null);
+  };
+
   const filteredQuery = posts.filter((item) => {
     const lowerCaseQuery = queryValue.toLowerCase();
 
@@ -77,5 +82,6 @@ export default function useGetPosts() {
     onNextPage,
     setSelectedCategory,
     selectedCategory,
+    onResetFilter,
   };
 }

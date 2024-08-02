@@ -6,6 +6,7 @@ import {
   getPostDetailService,
   getPostsService,
   getPostStatsService,
+  viewPostService,
   updatePostService,
 } from "../services/postService.js";
 
@@ -95,6 +96,22 @@ export const deletePost = async (req, res) => {
     return res.status(200).json({ message: "Xóa thành công" });
   } catch (error) {
     console.log("Lỗi tại controller deletePost", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const viewPost = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ message: "ID không đúng định dạng" });
+  }
+
+  try {
+    await viewPostService(id);
+    return res.status(200).json({ message: "Cập nhật lượt xem hoàn tất" });
+  } catch (error) {
+    console.log("Lỗi tại controller viewPost", error);
     return res.status(500).json({ message: error.message });
   }
 };

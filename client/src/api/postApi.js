@@ -29,3 +29,8 @@ export const deletePostApi = async (id) => {
   const response = await axios.delete(`/posts/delete/${id}`);
   return response;
 };
+
+export const viewPostApi = async (id) => {
+  const response = await axios.put(`/posts/view/${id}`);
+  return response;
+};

@@ -1,6 +1,4 @@
-import React, { useEffect } from "react";
 import parse from "html-react-parser";
-import { useParams } from "react-router-dom";
 import useGetPostDetail from "../hooks/useGetPostDetail";
 import { Tag } from "primereact/tag";
 import { formatDate } from "../utils/helper";
@@ -11,25 +9,25 @@ import useComment from "../hooks/useComment";
 import { useSelector } from "react-redux";
 import { ProgressSpinner } from "primereact/progressspinner";
 import Comment from "../components/Comment";
+import { useEffect } from "react";
 
 const PostDetail = () => {
   const { currentUser } = useSelector((state) => state.user);
-
   const { detail, loading } = useGetPostDetail();
-
   const {
     textValue,
     isSending,
-    isDeleting,
     setTextValue,
     onCreateComment,
     onDeleteComment,
     comments,
     isLoading,
-    paginator,
-    onPrevPage,
-    onNextPage,
+    loadMoreComments,
   } = useComment();
+
+  useEffect(() => {
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, []);
 
   if (loading) {
     return (
@@ -44,7 +42,13 @@ const PostDetail = () => {
       <div className="page-container">
         <div className="grid grid-cols-2 gap-5">
           <div className="space-y-3">
-            <Tag value={detail?.category} severity="success" rounded></Tag>
+            <div className="flex items-center gap-5">
+              <Tag value={detail?.category} severity="success" rounded></Tag>
+              <div className="flex items-center gap-1">
+                <i className="pi pi-eye"></i>
+                <span>{detail?.views}</span>
+              </div>
+            </div>
             <h1 className="text-5xl font-bold leading-relaxed tracking-normal">
               {detail?.title}
             </h1>
@@ -90,6 +94,12 @@ const PostDetail = () => {
           <div>
             <TitleSection className="mt-10">Danh sách bình luận</TitleSection>
             <div className="mt-5 space-y-3">
+              {!isLoading && comments?.length === 0 && (
+                <p className="text-center opacity-70 font-medium">
+                  Không có bình luận
+                </p>
+              )}
+
               {isLoading ? (
                 <p className="text-center opacity-70">Đang tải bình luận...</p>
               ) : (
@@ -102,6 +112,15 @@ const PostDetail = () => {
                 ))
               )}
             </div>
+
+            <Button
+              className="flex mx-auto gap-2"
+              icon="pi pi-spinner"
+              severity="secondary"
+              onClick={loadMoreComments}
+            >
+              Tải thêm bình luận
+            </Button>
           </div>
         </div>
       </div>
