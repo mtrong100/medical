@@ -14,13 +14,13 @@ import ChartSection from "../../components/ChartSection";
 import MonthlyPostChart from "./MonthlyPostChart";
 import PostByCategoryChart from "./PostByCategoryChart";
 import ViewAndCommentChart from "./ViewAndCommentChart";
+import useGetCommentsInPost from "./useGetCommentsInPost";
+import Comment from "./Comment";
 
 const ManagePost = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
-  const [detail, setDetail] = useState(null);
   const { postStats } = useGetPostStats();
-
   const {
     data,
     query,
@@ -34,6 +34,9 @@ const ManagePost = () => {
     exportPdf,
     exportExcel,
   } = useManagePost();
+
+  const { comments, isLoading, fetchComments, onDeleteComment } =
+    useGetCommentsInPost();
 
   const header = (
     <div className="flex items-center justify-between">
@@ -86,7 +89,7 @@ const ManagePost = () => {
           severity="secondary"
           onClick={() => {
             setVisible(true);
-            setDetail(rowData);
+            fetchComments(rowData._id);
           }}
         />
         <Button
@@ -136,6 +139,12 @@ const ManagePost = () => {
         </ChartSection>
         <ChartSection title="Biểu đồ danh mục">
           <PostByCategoryChart data={postStats?.postsByCategory} />
+        </ChartSection>
+      </div>
+
+      <div className="mt-5">  
+        <ChartSection title="Biểu đồ lượt xem và bình luận">
+          <ViewAndCommentChart data={postStats?.postsUploadedByMonth} />
         </ChartSection>
       </div>
 
@@ -192,12 +201,6 @@ const ManagePost = () => {
         </div>
       )}
 
-      <div className="mt-5">
-        <ChartSection title="Biểu đồ lượt xem và bình luận">
-          <ViewAndCommentChart data={postStats?.postsUploadedByMonth} />
-        </ChartSection>
-      </div>
-
       <Sidebar
         visible={visible}
         onHide={() => setVisible(false)}
@@ -205,13 +208,27 @@ const ManagePost = () => {
         className="w-2/4"
       >
         <h2 className="text-3xl font-semibold">
-          Lượt bình luận ({detail?.views})
+          Tổng bình luận ({comments?.length})
         </h2>
-        <div className="mt-6">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
+        <div className="mt-5 space-y-3">
+          {isLoading && (
+            <p className="text-center opacity-70">Đang tải bình luận...</p>
+          )}
+
+          {!isLoading && comments?.length === 0 && (
+            <p className="text-center opacity-70 font-medium">
+              Không có bình luận
+            </p>
+          )}
+
+          {!isLoading &&
+            comments?.map((cmt) => (
+              <Comment
+                key={cmt?._id}
+                cmt={cmt}
+                onDelete={() => onDeleteComment(cmt?._id, cmt?.postId)}
+              />
+            ))}
         </div>
       </Sidebar>
     </div>

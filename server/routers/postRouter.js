@@ -20,9 +20,9 @@ const router = express.Router();
 
 router.get("/collection", verifyAdmin, getPostCollection);
 
-router.get("/", getPosts);
+router.get("/", verifyUser, getPosts);
 
-router.get("/stats", getPostStats);
+router.get("/stats", verifyAdmin, getPostStats);
 
 router.get("/:id", verifyUser, getPostDetail);
 

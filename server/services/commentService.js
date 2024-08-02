@@ -31,6 +31,10 @@ export const getCommentsInPostService = async (page, limit, postId) => {
           path: "user",
           select: "name avatar",
         },
+        {
+          path: "post",
+          select: "_id",
+        },
       ])
       .sort({ createdAt: -1 });
 
@@ -45,6 +49,7 @@ export const getCommentsInPostService = async (page, limit, postId) => {
         avatar: comment.user.avatar,
         user: comment.user.name,
         userId: comment.user._id,
+        postId: comment.post._id,
         createdAt: comment.createdAt,
       };
     });
