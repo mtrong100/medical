@@ -32,7 +32,7 @@ const Chatbox = () => {
             <div className="w-[360px]  bg-white rounded-lg shadow-lg border-blue-gray-300 overflow-hidden ">
               <header className="bg-gray-100 shadow-sm border py-3 px-5 w-full rounded-sm">
                 <div className="flex items-center gap-2 justify-between">
-                  <h3 className="font-semibold">Nhân viên tư vấn</h3>
+                  <h3 className="font-semibold"></h3>
                   <span className="text-green-500 font-medium text-sm">
                     Online
                   </span>

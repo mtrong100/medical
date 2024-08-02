@@ -23,15 +23,15 @@ const COLORS = [
 
 const PostByCategoryChart = ({ data = [] }) => {
   return (
-    <ResponsiveContainer width="100%" height={500}>
+    <ResponsiveContainer width="100%" height={300}>
       <PieChart>
         <Pie
           data={data}
-          cx={400}
-          cy={200}
+          cx={270}
+          cy={130}
           labelLine={false}
           label={({ category, postCount }) => `${category}: ${postCount}`}
-          outerRadius={150}
+          outerRadius={80}
           fill="#8884d8"
           dataKey="postCount"
           nameKey="category"
@@ -41,7 +41,7 @@ const PostByCategoryChart = ({ data = [] }) => {
           ))}
         </Pie>
         <Tooltip />
-        <Legend layout="horizontal" align="center" verticalAlign="bottom" />
+        <Legend layout="vertical" align="right" verticalAlign="right" />
       </PieChart>
     </ResponsiveContainer>
   );

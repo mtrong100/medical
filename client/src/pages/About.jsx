@@ -58,7 +58,9 @@ const About = () => {
               <div className="flex items-center justify-center rounded-full bg-black text-white w-[55px] h-[55px]">
                 {item.icon}
               </div>
-              <h1 className="text-xl font-semibold">{item.title}</h1>
+              <h1 className="text-xl font-semibold text-center">
+                {item.title}
+              </h1>
               <p className="text-center">{item.caption}</p>
             </div>
           ))}

@@ -1,3 +1,4 @@
+import Comment from "../models/commentModel.js";
 import Post from "../models/postModel.js";
 
 export const getPostCollectionService = async () => {
@@ -38,20 +39,27 @@ export const getPostsService = async (page, limit, category) => {
       ])
       .sort({ createdAt: -1 });
 
-    const formattedResults = data.map((post) => {
-      return {
-        _id: post._id,
-        title: post.title,
-        image: post.image,
-        content: post.content,
-        author: post.author.name,
-        authorId: post.author._id,
-        category: post.category,
-        views: post.views,
-        totalComments: post.comments.length,
-        createdAt: post.createdAt,
-      };
-    });
+    const formattedResults = await Promise.all(
+      data.map(async (post) => {
+        const comments = await Comment.find({ post: post._id }).populate(
+          "user",
+          "_id name avatar"
+        );
+
+        return {
+          _id: post._id,
+          title: post.title,
+          image: post.image,
+          content: post.content,
+          author: post.author.name,
+          authorId: post.author._id,
+          category: post.category,
+          views: post.views,
+          totalComments: comments.length,
+          createdAt: post.createdAt,
+        };
+      })
+    );
 
     return {
       results: formattedResults,
@@ -116,21 +124,7 @@ export const getPostStatsService = async () => {
     ];
 
     // Lấy dữ liệu bài viết
-    const posts = await Post.find()
-      .populate([
-        {
-          path: "author",
-          select: "name avatar",
-        },
-        {
-          path: "comments",
-          populate: {
-            path: "user",
-            select: "name",
-          },
-        },
-      ])
-      .sort({ createdAt: -1 });
+    const posts = await Post.find();
 
     // Khởi tạo mảng để chứa tổng số bài viết, views và comments cho mỗi tháng
     const postStatsByMonth = allMonths.map((month) => ({
@@ -144,7 +138,12 @@ export const getPostStatsService = async () => {
     const postCountByCategoryObj = {};
 
     // Tính tổng số bài viết, views và comments cho mỗi tháng
-    posts.forEach((post) => {
+    for (const post of posts) {
+      const comments = await Comment.find({ post: post._id }).populate(
+        "user",
+        "_id name avatar"
+      );
+
       const month = new Date(post.createdAt).toLocaleString("default", {
         month: "long",
       });
@@ -154,7 +153,7 @@ export const getPostStatsService = async () => {
       if (monthStats) {
         monthStats.postCount += 1;
         monthStats.totalViews += post.views;
-        monthStats.totalComments += post.comments.length;
+        monthStats.totalComments += comments.length;
       }
 
       // Tính tổng số bài viết trong mỗi danh mục
@@ -163,8 +162,7 @@ export const getPostStatsService = async () => {
       } else {
         postCountByCategoryObj[post.category] = 1;
       }
-    });
-
+    }
     // Chuyển đổi đối tượng thành mảng
     const postCountByCategory = Object.keys(postCountByCategoryObj).map(
       (category) => ({

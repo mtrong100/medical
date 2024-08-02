@@ -13,6 +13,7 @@ import useGetPostStats from "./useGetPostStats";
 import ChartSection from "../../components/ChartSection";
 import MonthlyPostChart from "./MonthlyPostChart";
 import PostByCategoryChart from "./PostByCategoryChart";
+import ViewAndCommentChart from "./ViewAndCommentChart";
 
 const ManagePost = () => {
   const navigate = useNavigate();
@@ -129,6 +130,15 @@ const ManagePost = () => {
         />
       </div>
 
+      <div className="mt-5 grid grid-cols-2 gap-5">
+        <ChartSection title="Biểu đồ bài viết">
+          <MonthlyPostChart data={postStats?.postsUploadedByMonth} />
+        </ChartSection>
+        <ChartSection title="Biểu đồ danh mục">
+          <PostByCategoryChart data={postStats?.postsByCategory} />
+        </ChartSection>
+      </div>
+
       <div className="mt-5">
         <DataTable
           ref={dt}
@@ -182,12 +192,9 @@ const ManagePost = () => {
         </div>
       )}
 
-      <div className="mt-5 grid grid-cols-2 gap-5">
-        <ChartSection title="Thống kê bài viết">
-          <MonthlyPostChart data={postStats?.postsUploadedByMonth} />
-        </ChartSection>
-        <ChartSection title="Thống kê danh mục">
-          <PostByCategoryChart data={postStats?.postsByCategory} />
+      <div className="mt-5">
+        <ChartSection title="Biểu đồ lượt xem và bình luận">
+          <ViewAndCommentChart data={postStats?.postsUploadedByMonth} />
         </ChartSection>
       </div>
 
