@@ -1,7 +1,10 @@
 import React from "react";
 import { formatDate } from "../utils/helper";
+import { useSelector } from "react-redux";
 
 const Comment = ({ cmt, onDelete }) => {
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <div className="flex items-start p-4 ">
       <img
@@ -17,12 +20,14 @@ const Comment = ({ cmt, onDelete }) => {
           </span>
         </div>
         <p className="mt-1 text-gray-700">{cmt?.content}</p>
-        <button
-          onClick={() => onDelete(cmt?._id)}
-          className="text-red-500 text-sm font-medium"
-        >
-          Delete
-        </button>
+        {currentUser && currentUser?._id === cmt?.userId && (
+          <button
+            onClick={() => onDelete(cmt?._id)}
+            className="text-red-500 text-sm font-medium"
+          >
+            Delete
+          </button>
+        )}
       </div>
     </div>
   );
