@@ -20,17 +20,17 @@ const router = express.Router();
 
 router.get("/collection", verifyAdmin, getPostCollection);
 
-router.get("/", verifyUser, getPosts);
+router.get("/", getPosts);
 
 router.get("/stats", verifyAdmin, getPostStats);
 
-router.get("/:id", verifyUser, getPostDetail);
+router.get("/:id", getPostDetail);
 
 router.post("/create", verifyAdmin, validateCreatePost, createPost);
 
 router.put("/update/:id", verifyAdmin, validateUpdatePost, updatePost);
 
-router.put("/view/:id", verifyUser, viewPost);
+router.put("/view/:id", viewPost);
 
 router.delete("/delete/:id", verifyAdmin, deletePost);
 

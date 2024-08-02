@@ -9,15 +9,6 @@ import { Navigate, Outlet } from "react-router-dom";
 
 const MainLayout = () => {
   const { currentUser } = useSelector((state) => state.user);
-  const { fetchUserDetail } = useGetUserDetail();
-
-  useEffect(() => {
-    fetchUserDetail(currentUser?._id);
-  }, []);
-
-  if (!currentUser) {
-    return <Navigate to="/login" />;
-  }
 
   return (
     <>

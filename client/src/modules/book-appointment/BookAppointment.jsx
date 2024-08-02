@@ -59,6 +59,11 @@ const BookAppointment = () => {
   }, []);
 
   const onBookAppointment = async (values) => {
+    if (!currentUser) {
+      toast.error("Vui lòng đăng nhập");
+      return;
+    }
+
     const { doctor, time, gender, dateOfBirth, date } = selectedValue;
     if (!doctor || !time || !gender || !dateOfBirth || !date) {
       toast.error("Vui lòng điền đầy đủ thông tin");

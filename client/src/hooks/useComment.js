@@ -54,6 +54,11 @@ export default function useComment() {
   };
 
   const onCreateComment = async (userId, postId) => {
+    if (!userId) {
+      toast.error("Vui lòng đăng nhập");
+      return;
+    }
+
     if (!textValue.trim() && !userId && !postId) return;
 
     setIsSending(true);
