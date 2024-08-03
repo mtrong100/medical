@@ -1,8 +1,7 @@
 import express from "express";
 import {
   getFigures,
-  getMonthlyExpense,
-  getMonthlyRevenue,
+  getMonthlyRevenueAndExpense,
   getRevenue,
 } from "../controllers/stastisticController.js";
 import { verifyAdmin } from "../middlewares/verifyAdmin.js";
@@ -13,8 +12,10 @@ router.get("/revenue", verifyAdmin, getRevenue);
 
 router.get("/figures", verifyAdmin, getFigures);
 
-router.get("/monthly-revenue", verifyAdmin, getMonthlyRevenue);
-
-router.get("/monthly-expense", verifyAdmin, getMonthlyExpense);
+router.get(
+  "/monthly-revenue-expense",
+  verifyAdmin,
+  getMonthlyRevenueAndExpense
+);
 
 export default router;

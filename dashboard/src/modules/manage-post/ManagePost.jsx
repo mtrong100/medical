@@ -1,26 +1,24 @@
 import useManagePost from "./useManagePost";
+import useGetPostStats from "./useGetPostStats";
+import useGetCommentsInPost from "./useGetCommentsInPost";
 import TitleSection from "../../components/TitleSection";
+import StackedBarChart from "../../components/charts/StackedBarChart";
 import React, { useState } from "react";
+import DoughnutChart from "../../components/charts/DoughnutChart";
+import Comment from "./Comment";
 import { useNavigate } from "react-router-dom";
+import { Sidebar } from "primereact/sidebar";
 import { LIMIT_AMOUNT } from "../../utils/constants";
 import { InputText } from "primereact/inputtext";
 import { formatDate } from "../../utils/helper";
 import { DataTable } from "primereact/datatable";
 import { Column } from "jspdf-autotable";
 import { Button } from "primereact/button";
-import { Sidebar } from "primereact/sidebar";
-import useGetPostStats from "./useGetPostStats";
-import ChartSection from "../../components/ChartSection";
-import MonthlyPostChart from "./MonthlyPostChart";
-import PostByCategoryChart from "./PostByCategoryChart";
-import ViewAndCommentChart from "./ViewAndCommentChart";
-import useGetCommentsInPost from "./useGetCommentsInPost";
-import Comment from "./Comment";
 
 const ManagePost = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
-  const { postStats } = useGetPostStats();
+  const { postStats, loadingStats } = useGetPostStats();
   const {
     data,
     query,
@@ -134,18 +132,21 @@ const ManagePost = () => {
       </div>
 
       <div className="mt-5 grid grid-cols-2 gap-5">
-        <ChartSection title="Biểu đồ bài viết">
-          <MonthlyPostChart data={postStats?.postsUploadedByMonth} />
-        </ChartSection>
-        <ChartSection title="Biểu đồ danh mục">
-          <PostByCategoryChart data={postStats?.postsByCategory} />
-        </ChartSection>
-      </div>
-
-      <div className="mt-5">  
-        <ChartSection title="Biểu đồ lượt xem và bình luận">
-          <ViewAndCommentChart data={postStats?.postsUploadedByMonth} />
-        </ChartSection>
+        <StackedBarChart
+          loading={loadingStats}
+          labels={postStats?.postsUploadedByMonth?.labels}
+          dataSet1={postStats?.postsUploadedByMonth?.postCount}
+          dataSet2={postStats?.postsUploadedByMonth?.commentCount}
+          dataSet3={postStats?.postsUploadedByMonth?.viewCount}
+          labelDataSet1="Bài viết"
+          labelDataSet2="Bình luận"
+          labelDataSet3="Lượt xem"
+        />
+        <DoughnutChart
+          loading={loadingStats}
+          labels={postStats?.postsByCategory?.labels}
+          results={postStats?.postsByCategory?.postCount}
+        />
       </div>
 
       <div className="mt-5">

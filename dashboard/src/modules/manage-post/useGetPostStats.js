@@ -23,5 +23,5 @@ export default function useGetPostStats() {
     }
   };
 
-  return { postStats: data, isLoading };
+  return { postStats: data, loadingStats: isLoading };
 }

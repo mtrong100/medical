@@ -1,5 +1,6 @@
 import Comment from "../models/commentModel.js";
 import Post from "../models/postModel.js";
+import { MONTH_NAMES } from "../utils/constanst.js";
 
 export const getPostCollectionService = async () => {
   try {
@@ -108,72 +109,59 @@ export const getPostDetailService = async (id) => {
 
 export const getPostStatsService = async () => {
   try {
-    const allMonths = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
-    // Lấy dữ liệu bài viết
     const posts = await Post.find();
 
-    // Khởi tạo mảng để chứa tổng số bài viết, views và comments cho mỗi tháng
-    const postStatsByMonth = allMonths.map((month) => ({
-      month,
-      postCount: 0,
-      totalViews: 0,
-      totalComments: 0,
-    }));
+    const postStatsByMonthObj = {};
+    MONTH_NAMES.forEach((month) => {
+      postStatsByMonthObj[month] = {
+        postCount: 0,
+        viewCount: 0,
+        commentCount: 0,
+      };
+    });
 
-    // Tạo đối tượng để chứa tổng số bài viết trong mỗi danh mục
     const postCountByCategoryObj = {};
 
-    // Tính tổng số bài viết, views và comments cho mỗi tháng
     for (const post of posts) {
-      const comments = await Comment.find({ post: post._id }).populate(
-        "user",
-        "_id name avatar"
-      );
+      const comments = await Comment.find({ post: post._id });
 
       const month = new Date(post.createdAt).toLocaleString("default", {
         month: "long",
       });
-      const monthStats = postStatsByMonth.find(
-        (stats) => stats.month === month
-      );
-      if (monthStats) {
-        monthStats.postCount += 1;
-        monthStats.totalViews += post.views;
-        monthStats.totalComments += comments.length;
+      if (postStatsByMonthObj[month]) {
+        postStatsByMonthObj[month].postCount += 1;
+        postStatsByMonthObj[month].viewCount += post.views;
+        postStatsByMonthObj[month].commentCount += comments.length;
       }
 
-      // Tính tổng số bài viết trong mỗi danh mục
       if (post.category in postCountByCategoryObj) {
         postCountByCategoryObj[post.category] += 1;
       } else {
         postCountByCategoryObj[post.category] = 1;
       }
     }
-    // Chuyển đổi đối tượng thành mảng
-    const postCountByCategory = Object.keys(postCountByCategoryObj).map(
-      (category) => ({
-        category,
-        postCount: postCountByCategoryObj[category],
-      })
-    );
+
+    const postsUploadedByMonth = {
+      labels: Object.keys(postStatsByMonthObj),
+      postCount: Object.values(postStatsByMonthObj).map(
+        (stats) => stats.postCount
+      ),
+      viewCount: Object.values(postStatsByMonthObj).map(
+        (stats) => stats.viewCount
+      ),
+      commentCount: Object.values(postStatsByMonthObj).map(
+        (stats) => stats.commentCount
+      ),
+    };
+
+    const postsByCategory = {
+      labels: Object.keys(postCountByCategoryObj),
+      postCount: Object.values(postCountByCategoryObj),
+    };
 
     return {
-      postsUploadedByMonth: postStatsByMonth,
-      postsByCategory: postCountByCategory,
+      postsUploadedByMonth,
+      postsByCategory,
     };
   } catch (error) {
     console.log("Lỗi tại service getPostStatsService", error);

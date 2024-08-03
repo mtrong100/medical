@@ -86,3 +86,13 @@ export const getMonthName = (date) => {
   ];
   return monthNames[date.getMonth()];
 };
+
+export const accumulateValues = (data, accumulator) => {
+  data.forEach((item) => {
+    const monthName = getMonthName(new Date(item.createdAt));
+    if (!accumulator[monthName]) {
+      accumulator[monthName] = 0;
+    }
+    accumulator[monthName] += item.total;
+  });
+};

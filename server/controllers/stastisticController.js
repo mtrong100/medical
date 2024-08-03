@@ -1,8 +1,7 @@
 import {
-  caculateExpenseInventoryService,
   calculateFiguresService,
   calculateTotalRevenueService,
-  getMonthlyRevenueService,
+  getMonthlyRevenueAndExpenseService,
 } from "../services/statisticService.js";
 
 export const getRevenue = async (req, res) => {
@@ -25,22 +24,12 @@ export const getFigures = async (req, res) => {
   }
 };
 
-export const getMonthlyRevenue = async (req, res) => {
+export const getMonthlyRevenueAndExpense = async (req, res) => {
   try {
-    const result = await getMonthlyRevenueService();
+    const result = await getMonthlyRevenueAndExpenseService();
     return res.status(200).json(result);
   } catch (error) {
     console.log("Lỗi tại controller getMonthlyRevenue", error);
-    return res.status(500).json({ message: error.message });
-  }
-};
-
-export const getMonthlyExpense = async (req, res) => {
-  try {
-    const result = await caculateExpenseInventoryService();
-    return res.status(200).json(result);
-  } catch (error) {
-    console.log("Lỗi tại controller getMonthlyExpense", error);
     return res.status(500).json({ message: error.message });
   }
 };

@@ -10,12 +10,7 @@ export const getFiguresApi = async () => {
   return response;
 };
 
-export const getMonthlyRevenueApi = async () => {
-  const response = await axios.get("/statistic/monthly-revenue");
-  return response;
-};
-
-export const getMonthlyExpenseApi = async () => {
-  const response = await axios.get("/statistic/monthly-expense");
+export const getMonthlyRevenueAndExpenseApi = async () => {
+  const response = await axios.get("/statistic/monthly-revenue-expense");
   return response;
 };

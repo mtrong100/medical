@@ -55,3 +55,18 @@ export const APPOINTMENT_STATUS = {
 };
 
 export const ADMIN_ID = "6695d0bb4272e683f0032f31";
+
+export const MONTH_NAMES = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];

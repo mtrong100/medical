@@ -132,3 +132,11 @@ export const getEmployeeSalary = (role) => {
       return 100000000;
   }
 };
+
+export const repeatColors = (colors, count) => {
+  let repeatedColors = [];
+  for (let i = 0; i < count; i++) {
+    repeatedColors.push(colors[i % colors.length]);
+  }
+  return repeatedColors;
+};
