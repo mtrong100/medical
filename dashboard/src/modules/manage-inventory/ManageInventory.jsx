@@ -1,17 +1,21 @@
 import useManageInventory from "./useManageInventory";
 import TitleSection from "../../components/TitleSection";
 import React, { useState } from "react";
-import jsPDF from "jspdf";
-import { Tag } from "primereact/tag";
-import { LIMIT_AMOUNT, PAYMENT_STATUS } from "../../utils/constants";
-import { InputText } from "primereact/inputtext";
 import { formatCurrencyVND, formatDate } from "../../utils/helper";
-import { font } from "../../assets/font";
 import { Fieldset } from "primereact/fieldset";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "jspdf-autotable";
 import { Button } from "primereact/button";
+import TableToolbar from "../../components/TableToolbar";
+import {
+  itemQuantityBodyTemplate,
+  itemTypeBodyTemplate,
+  priceBodyTemplate,
+  statusBodyTemplate,
+  sumTotalBodyTemplate,
+  totalPriceColumn,
+} from "../../utils/columnTemplate";
 
 const ManageInventory = () => {
   const [visible, setVisible] = useState(false);
@@ -21,195 +25,46 @@ const ManageInventory = () => {
     query,
     setQuery,
     onDelete,
-    paginator,
-    onPrevPage,
-    onNextPage,
     dt,
     exportCSV,
     exportPdf,
     exportExcel,
+    onExportSinglePDF,
+    onUpdateStatus,
   } = useManageInventory();
-
-  const onExportPDF = (rowData) => {
-    console.log("🚀 ~ onExportPDF ~ rowData:", rowData);
-    const doc = new jsPDF();
-
-    doc.addFileToVFS("Roboto-Regular.ttf", font);
-    doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
-    doc.setFont("Roboto");
-
-    doc.setFontSize(18);
-    doc.text("Hóa đơn nhập kho", 14, 22);
-
-    doc.setFontSize(12);
-    doc.text(`Mã hóa đơn: ${rowData._id}`, 14, 40);
-    doc.text(`Nhà cung cấp: ${rowData.supplier}`, 14, 50);
-    doc.text(
-      `Mặc hàng: ${rowData.itemType === "Device" ? "Thiết bị y tế" : "Thuốc"}`,
-      14,
-      60
-    );
-    doc.text(`Trạng thái: ${rowData.status}`, 14, 70);
-    doc.text(
-      `Ngày lập phiếu: ${new Date(rowData.createdAt).toLocaleDateString()}`,
-      14,
-      80
-    );
-
-    // Tạo bảng chi tiết thuốc
-    const tableColumn = ["Tên", "Đơn giá", "Số lượng", "Tổng tiền"];
-
-    const tableRows = [];
-
-    rowData.items.forEach((item) => {
-      const data = [
-        item.name,
-        item.price.toLocaleString("vi-VN", {
-          style: "currency",
-          currency: "VND",
-        }),
-        item.quantity,
-        (item.price * item.quantity).toLocaleString("vi-VN", {
-          style: "currency",
-          currency: "VND",
-        }),
-      ];
-      tableRows.push(data);
-    });
-
-    doc.autoTable({
-      head: [tableColumn],
-      body: tableRows,
-      startY: 90,
-      theme: "striped",
-      styles: {
-        font: "Roboto",
-      },
-      headStyles: { fillColor: [22, 160, 133] },
-    });
-
-    // Tổng cộng
-    const finalY = doc.previousAutoTable.finalY;
-    doc.setFontSize(12);
-    doc.text(
-      `Tổng cộng: ${rowData.total.toLocaleString("vi-VN", {
-        style: "currency",
-        currency: "VND",
-      })}`,
-      14,
-      finalY + 10
-    );
-
-    // Xuất file PDF
-    doc.save(`hoa-don-nhap-kho.pdf`);
-  };
-
-  const header = (
-    <div className="flex items-center justify-between">
-      <div className="p-inputgroup max-w-md">
-        <InputText
-          placeholder="Tìm kiếm"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <Button icon="pi pi-search" />
-      </div>
-
-      <div className="flex items-center flex-shrink-0  gap-5">
-        <Button
-          type="button"
-          icon="pi pi-file"
-          label="Xuất file CSV"
-          rounded
-          onClick={() => exportCSV(false)}
-          data-pr-tooltip="CSV"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-excel"
-          severity="success"
-          label="Xuất file Excel"
-          rounded
-          onClick={exportExcel}
-          data-pr-tooltip="XLS"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-pdf"
-          severity="warning"
-          label="Xuất file PDF"
-          rounded
-          onClick={exportPdf}
-          data-pr-tooltip="PDF"
-        />
-      </div>
-    </div>
-  );
 
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex items-center gap-2 ">
         <Button
           icon="pi pi-eye"
-          rounded
           severity="secondary"
+          outlined
           onClick={() => {
             setVisible(true);
             setDetail(rowData);
           }}
         />
         <Button
+          icon="pi pi-credit-card"
+          severity="success"
+          outlined
+          onClick={() => onUpdateStatus(rowData._id)}
+        />
+        <Button
           icon="pi pi-print"
-          rounded
-          severity="info"
-          onClick={() => onExportPDF(rowData)}
+          severity="help"
+          outlined
+          onClick={() => onExportSinglePDF(rowData)}
         />
         <Button
           icon="pi pi-trash"
-          rounded
           severity="danger"
+          outlined
           onClick={() => onDelete(rowData._id)}
         />
       </div>
     );
-  };
-
-  const priceBodyTemplate = (rowData) => {
-    return <div>{formatCurrencyVND(rowData.total)}</div>;
-  };
-
-  const price2BodyTemplate = (rowData) => {
-    return <div>{formatCurrencyVND(rowData.price)}</div>;
-  };
-
-  const statusBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        value={rowData.status}
-        rounded
-        severity={
-          rowData.status === PAYMENT_STATUS.UNPAID ? "danger" : "success"
-        }
-      />
-    );
-  };
-
-  const itemTypeBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        value={rowData.itemType === "Device" ? "Thiết bị y tế" : "Thuốc"}
-        rounded
-        severity={rowData.itemType === "Device" ? "contrast" : "warning"}
-      />
-    );
-  };
-
-  const quantityBodyTemplate = (rowData) => {
-    return <div>{rowData?.items?.length || 0}</div>;
-  };
-
-  const totalBodyTemplate = (rowData) => {
-    return <div>{formatCurrencyVND(rowData.price * rowData.quantity)}</div>;
   };
 
   return (
@@ -220,11 +75,24 @@ const ManageInventory = () => {
         <DataTable
           ref={dt}
           value={data}
-          header={header}
+          paginator
+          rows={5}
+          paginatorLeft
+          rowsPerPageOptions={[5, 10, 25, 50]}
           scrollable
           stripedRows
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
+          className="bg-white border-gray-200 shadow-sm border rounded-md"
+          header={
+            <TableToolbar
+              query={query}
+              setQuery={setQuery}
+              onExportCSV={exportCSV}
+              onExportPdf={exportPdf}
+              onExportExcel={exportExcel}
+            />
+          }
         >
           <Column field="_id" header="Mã phiếu" sortable />
           <Column field="supplier" header="Nhà cung cấp" sortable />
@@ -234,12 +102,12 @@ const ManageInventory = () => {
             sortable
             body={itemTypeBodyTemplate}
           />
-          <Column header="Số lượng" sortable body={quantityBodyTemplate} />
+          <Column header="Số lượng" sortable body={itemQuantityBodyTemplate} />
           <Column
             field="total"
             header="Tổng tiền"
             sortable
-            body={priceBodyTemplate}
+            body={totalPriceColumn}
           />
           <Column
             field="status"
@@ -254,25 +122,6 @@ const ManageInventory = () => {
           />
         </DataTable>
       </div>
-
-      {/* Pagination */}
-      {paginator.totalResults > LIMIT_AMOUNT && (
-        <div className="flex items-center  justify-end mt-8 gap-2">
-          <Button
-            severity="secondary"
-            onClick={onPrevPage}
-            icon="pi pi-angle-left"
-          />
-          <div className="flex items-center gap-2 text-xl font-semibold">
-            <p>{paginator.currentPage}</p> / <p>{paginator.totalPages}</p>
-          </div>
-          <Button
-            severity="secondary"
-            onClick={onNextPage}
-            icon="pi pi-angle-right"
-          />
-        </div>
-      )}
 
       <Dialog
         header={`Thông tin chi tiết phiếu nhập kho`}
@@ -321,10 +170,10 @@ const ManageInventory = () => {
                 field="price"
                 header="Đơn giá"
                 sortable
-                body={price2BodyTemplate}
+                body={priceBodyTemplate}
               />
               <Column field="quantity" header="Số lượng" />
-              <Column header="Tồng tiền" sortable body={totalBodyTemplate} />
+              <Column header="Tồng tiền" sortable body={sumTotalBodyTemplate} />
             </DataTable>
           </div>
         </div>

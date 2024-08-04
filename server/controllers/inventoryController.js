@@ -3,6 +3,7 @@ import {
   deleteInventoryService,
   getInventoryDetailService,
   getInventoryService,
+  updateInventoryService,
 } from "../services/inventoryService.js";
 import mongoose from "mongoose";
 
@@ -40,6 +41,22 @@ export const createInventory = async (req, res) => {
     return res.status(200).json(inventory);
   } catch (error) {
     console.log("Lỗi tại controller createInventory", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateInventory = async (req, res) => {
+  const { id } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ message: "ID không đúng định dạng" });
+  }
+
+  try {
+    const inventory = await updateInventoryService(id);
+    return res.status(200).json(inventory);
+  } catch (error) {
+    console.log("Lỗi tại controller updateInventory", error);
     return res.status(500).json({ message: error.message });
   }
 };

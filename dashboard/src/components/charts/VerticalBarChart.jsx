@@ -26,14 +26,14 @@ export default function VerticalBarChart({
       datasets: [
         {
           label: labelDataSet1,
-          backgroundColor: documentStyle.getPropertyValue("--yellow-500"),
-          borderColor: documentStyle.getPropertyValue("--yellow-500"),
+          backgroundColor: documentStyle.getPropertyValue("--green-500"),
+          borderColor: documentStyle.getPropertyValue("--green-500"),
           data: dataSet1,
         },
         {
           label: labelDataSet2,
-          backgroundColor: documentStyle.getPropertyValue("--pink-500"),
-          borderColor: documentStyle.getPropertyValue("--pink-500"),
+          backgroundColor: documentStyle.getPropertyValue("--orange-500"),
+          borderColor: documentStyle.getPropertyValue("--orange-500"),
           data: dataSet2,
         },
       ],

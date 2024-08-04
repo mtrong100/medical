@@ -1,10 +1,15 @@
 import useDebounce from "../../hooks/useDebounce";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import jsPDF from "jspdf";
 import { useEffect, useRef, useState } from "react";
-import { font } from "../../assets/font";
 import { LIMIT_AMOUNT } from "../../utils/constants";
-import { deleteInventoryApi, getInventoriesApi } from "../../api/inventoryApi";
+import { font } from "../../assets/font";
+import {
+  deleteInventoryApi,
+  getInventoriesApi,
+  updateInventoryApi,
+} from "../../api/inventoryApi";
 
 export default function useManageInventory() {
   const dt = useRef(null);
@@ -12,22 +17,17 @@ export default function useManageInventory() {
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
   const queryValue = useDebounce(query, 500);
-  const [paginator, setPaginator] = useState({
-    totalPages: 1,
-    currentPage: 1,
-    totalResults: 0,
-  });
 
   useEffect(() => {
     fetchData();
-  }, [paginator.currentPage]);
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);
 
     try {
       const params = {
-        page: paginator.currentPage,
+        page: 1,
         limit: LIMIT_AMOUNT,
       };
 
@@ -35,12 +35,6 @@ export default function useManageInventory() {
 
       if (res) {
         setData(res.results);
-        setPaginator({
-          ...paginator,
-          totalResults: res.totalResults,
-          totalPages: res.totalPages,
-          currentPage: res.currentPage,
-        });
       }
     } catch (error) {
       console.log("Lỗi fetch data device: ", error);
@@ -58,11 +52,6 @@ export default function useManageInventory() {
       item._id.toLowerCase().includes(lowerCaseQuery)
     );
   });
-
-  const onResetFilter = () => {
-    setQuery("");
-    setPaginator((prev) => ({ ...prev, currentPage: 1 }));
-  };
 
   const onDelete = async (itemId) => {
     Swal.fire({
@@ -87,14 +76,16 @@ export default function useManageInventory() {
     });
   };
 
-  const onPrevPage = () => {
-    if (paginator.currentPage === 1) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage - 1 }));
-  };
-
-  const onNextPage = () => {
-    if (paginator.currentPage === paginator.totalPages) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage + 1 }));
+  const onUpdateStatus = async (itemId) => {
+    try {
+      const res = await updateInventoryApi(itemId);
+      if (res) toast.success("Cập nhật trạng thái thanh toán hoàn tất");
+    } catch (error) {
+      console.log("Đã xảy ra sự cố: ", error.message);
+      toast.error(error.message);
+    } finally {
+      fetchData();
+    }
   };
 
   const cols = [
@@ -170,20 +161,90 @@ export default function useManageInventory() {
     });
   };
 
+  const onExportSinglePDF = (rowData) => {
+    const doc = new jsPDF();
+
+    doc.addFileToVFS("Roboto-Regular.ttf", font);
+    doc.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+    doc.setFont("Roboto");
+
+    doc.setFontSize(18);
+    doc.text("Hóa đơn nhập kho", 14, 22);
+
+    doc.setFontSize(12);
+    doc.text(`Mã hóa đơn: ${rowData._id}`, 14, 40);
+    doc.text(`Nhà cung cấp: ${rowData.supplier}`, 14, 50);
+    doc.text(
+      `Mặc hàng: ${rowData.itemType === "Device" ? "Thiết bị y tế" : "Thuốc"}`,
+      14,
+      60
+    );
+    doc.text(`Trạng thái: ${rowData.status}`, 14, 70);
+    doc.text(
+      `Ngày lập phiếu: ${new Date(rowData.createdAt).toLocaleDateString()}`,
+      14,
+      80
+    );
+
+    // Tạo bảng chi tiết thuốc
+    const tableColumn = ["Tên", "Đơn giá", "Số lượng", "Tổng tiền"];
+
+    const tableRows = [];
+
+    rowData.items.forEach((item) => {
+      const data = [
+        item.name,
+        item.price.toLocaleString("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }),
+        item.quantity,
+        (item.price * item.quantity).toLocaleString("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }),
+      ];
+      tableRows.push(data);
+    });
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 90,
+      theme: "striped",
+      styles: {
+        font: "Roboto",
+      },
+      headStyles: { fillColor: [22, 160, 133] },
+    });
+
+    // Tổng cộng
+    const finalY = doc.previousAutoTable.finalY;
+    doc.setFontSize(12);
+    doc.text(
+      `Tổng cộng: ${rowData.total.toLocaleString("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      })}`,
+      14,
+      finalY + 10
+    );
+
+    // Xuất file PDF
+    doc.save(`hoa-don-nhap-kho.pdf`);
+  };
+
   return {
     data: filteredQuery,
     loading,
     query,
     setQuery,
-    onResetFilter,
     onDelete,
-    paginator,
-    setPaginator,
-    onPrevPage,
-    onNextPage,
     dt,
     exportCSV,
     exportPdf,
     exportExcel,
+    onExportSinglePDF,
+    onUpdateStatus,
   };
 }

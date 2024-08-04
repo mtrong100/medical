@@ -4,6 +4,7 @@ import {
   deleteInventory,
   getInventory,
   getInventoryDetail,
+  updateInventory,
 } from "../controllers/inventoryController.js";
 import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 import { validateInventory } from "../validation/inventoryValidate.js";
@@ -15,6 +16,8 @@ router.get("/", verifyAdmin, getInventory);
 router.get("/:id", verifyAdmin, getInventoryDetail);
 
 router.post("/create", verifyAdmin, validateInventory, createInventory);
+
+router.put("/update/:id", verifyAdmin, updateInventory);
 
 router.delete("/delete/:id", verifyAdmin, deleteInventory);
 

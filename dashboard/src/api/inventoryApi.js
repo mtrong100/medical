@@ -15,6 +15,11 @@ export const createInventoryApi = async (data) => {
   return response;
 };
 
+export const updateInventoryApi = async (id) => {
+  const response = await axios.put(`/inventories/update/${id}`);
+  return response;
+};
+
 export const deleteInventoryApi = async (id) => {
   const response = await axios.delete(`/inventories/delete/${id}`);
   return response;

@@ -1,6 +1,7 @@
 import Device from "../models/deviceModel.js";
 import Inventory from "../models/inventoryModel.js";
 import Medicine from "../models/medicineModel.js";
+import { PAYMENT_STATUS } from "../utils/constanst.js";
 
 export const getInventoryService = async (page = 1, limit = 10) => {
   try {
@@ -118,6 +119,38 @@ export const createInventoryService = async (data) => {
     return inventory;
   } catch (error) {
     console.log("Lỗi tại service createInventoryService: ", error);
+    throw new Error(error.message);
+  }
+};
+
+export const updateInventoryService = async (id) => {
+  try {
+    // Fetch the current inventory item
+    const inventory = await Inventory.findById(id);
+    if (!inventory) {
+      throw new Error("Inventory not found");
+    }
+
+    // Toggle the status
+    const newStatus =
+      inventory.status === PAYMENT_STATUS.PAID
+        ? PAYMENT_STATUS.UNPAID
+        : PAYMENT_STATUS.PAID;
+
+    // Update the inventory item with the new status
+    const updatedInventory = await Inventory.findByIdAndUpdate(
+      id,
+      {
+        status: newStatus,
+      },
+      {
+        new: true,
+      }
+    );
+
+    return updatedInventory;
+  } catch (error) {
+    console.log("Lỗi tại service updateInventoryService: ", error);
     throw new Error(error.message);
   }
 };

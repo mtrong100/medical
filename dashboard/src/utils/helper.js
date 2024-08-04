@@ -67,9 +67,7 @@ export const getAppointmentServerity = (status) => {
 };
 
 export const formatCurrencyVND = (amount) => {
-  if (typeof amount !== "number") {
-    return "Input must be a number";
-  }
+  if (typeof amount !== "number") return "Input must be a number";
   return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + "  VNĐ";
 };
 
@@ -139,4 +137,14 @@ export const repeatColors = (colors, count) => {
     repeatedColors.push(colors[i % colors.length]);
   }
   return repeatedColors;
+};
+
+export const calculateAverage = (numbers) => {
+  if (numbers.length === 0) return;
+
+  const totalSum = numbers.reduce((acc, num) => acc + num, 0);
+
+  const average = totalSum / numbers.length;
+
+  return average.toFixed(2);
 };
