@@ -280,3 +280,11 @@ export const POST_CATGORIES = [
   "Thảo được",
   "Phòng bệnh",
 ];
+
+export const MATERIALS = [
+  "Vật tư y tế",
+  "Thiết bị y tế",
+  "Đồ dùng văn phòng",
+  "Nội thất",
+  "Tài liệu và sách",
+];

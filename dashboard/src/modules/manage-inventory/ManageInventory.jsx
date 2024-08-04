@@ -74,7 +74,7 @@ const ManageInventory = () => {
 
   return (
     <div>
-      <TitleSection>Quản lí kho</TitleSection>
+      <TitleSection>Quản lí phiếu nhập kho</TitleSection>
 
       <div className="mt-5 grid grid-cols-3 gap-3">
         <ExpenseChart dataSet={stats?.expenseStats} loading={loadingStats} />

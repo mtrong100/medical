@@ -22,7 +22,7 @@ const inventorySchema = new mongoose.Schema(
       required: true,
       default: PAYMENT_STATUS.UNPAID,
     },
-    items: [
+    items: [  
       {
         medicine: {
           type: mongoose.Schema.Types.ObjectId,

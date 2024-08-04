@@ -1,5 +1,5 @@
 import { Tag } from "primereact/tag";
-import { formatCurrencyVND } from "./helper";
+import { formatCurrencyVND, formatDate } from "./helper";
 import { PAYMENT_STATUS } from "./constants";
 
 export const totalPriceColumn = (rowData) => {
@@ -44,4 +44,22 @@ export const itemTypeBodyTemplate = (rowData) => {
 
 export const sumTotalBodyTemplate = (rowData) => {
   return <div>{formatCurrencyVND(rowData.price * rowData.quantity)}</div>;
+};
+
+export const totalPriceStockTemplate = (rowData) => {
+  return <div>{formatCurrencyVND(rowData.price * rowData.stock)}</div>;
+};
+
+export const imageBodyTemplate = (rowData) => {
+  return (
+    <img
+      src={rowData.image}
+      alt={rowData.image}
+      className="w-full h-[70px] object-contain rounded-sm"
+    />
+  );
+};
+
+export const createdAtBodyTemplate = (rowData) => {
+  return <div>{formatDate(rowData.createdAt)}</div>;
 };

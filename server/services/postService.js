@@ -141,28 +141,40 @@ export const getPostStatsService = async () => {
       }
     }
 
-    const postsUploadedByMonth = {
-      labels: Object.keys(postStatsByMonthObj),
-      postCount: Object.values(postStatsByMonthObj).map(
+    const results = {
+      months: Object.keys(postStatsByMonthObj),
+      totalPostsByMonth: Object.values(postStatsByMonthObj).map(
         (stats) => stats.postCount
       ),
-      viewCount: Object.values(postStatsByMonthObj).map(
+      totalViewsByMonth: Object.values(postStatsByMonthObj).map(
         (stats) => stats.viewCount
       ),
-      commentCount: Object.values(postStatsByMonthObj).map(
+      totalCommentsByMonth: Object.values(postStatsByMonthObj).map(
         (stats) => stats.commentCount
       ),
+      categories: Object.keys(postCountByCategoryObj),
+      totalPostsByCategory: Object.values(postCountByCategoryObj),
     };
 
-    const postsByCategory = {
-      labels: Object.keys(postCountByCategoryObj),
-      postCount: Object.values(postCountByCategoryObj),
-    };
+    // const postsUploadedByMonth = {
+    //   labels: Object.keys(postStatsByMonthObj),
+    //   postCount: Object.values(postStatsByMonthObj).map(
+    //     (stats) => stats.postCount
+    //   ),
+    //   viewCount: Object.values(postStatsByMonthObj).map(
+    //     (stats) => stats.viewCount
+    //   ),
+    //   commentCount: Object.values(postStatsByMonthObj).map(
+    //     (stats) => stats.commentCount
+    //   ),
+    // };
 
-    return {
-      postsUploadedByMonth,
-      postsByCategory,
-    };
+    // const postsByCategory = {
+    //   labels: Object.keys(postCountByCategoryObj),
+    //   postCount: Object.values(postCountByCategoryObj),
+    // };
+
+    return results;
   } catch (error) {
     console.log("Lỗi tại service getPostStatsService", error);
     throw new Error(error.message);
