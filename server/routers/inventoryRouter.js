@@ -4,6 +4,7 @@ import {
   deleteInventory,
   getInventory,
   getInventoryDetail,
+  getInventoryStats,
   updateInventory,
 } from "../controllers/inventoryController.js";
 import { verifyAdmin } from "../middlewares/verifyAdmin.js";
@@ -12,6 +13,8 @@ import { validateInventory } from "../validation/inventoryValidate.js";
 const router = express.Router();
 
 router.get("/", verifyAdmin, getInventory);
+
+router.get("/stats", verifyAdmin, getInventoryStats);
 
 router.get("/:id", verifyAdmin, getInventoryDetail);
 

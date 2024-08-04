@@ -98,6 +98,53 @@ export const getInventoryDetailService = async (id) => {
   }
 };
 
+export const getInventoryStatsService = async () => {
+  try {
+    // Count unpaid and paid inventory items
+    const unPaidInventory = await Inventory.find({
+      status: PAYMENT_STATUS.UNPAID,
+    }).countDocuments();
+
+    const paidInventory = await Inventory.find({
+      status: PAYMENT_STATUS.PAID,
+    }).countDocuments();
+
+    // Count device and medicine inventory items
+    const deviceInventory = await Inventory.find({
+      itemType: "Device",
+    }).countDocuments();
+
+    const medicineInventory = await Inventory.find({
+      itemType: "Medicine",
+    }).countDocuments();
+
+    // Calculate total expenses for device and medicine inventory items
+    const deviceTotalExpense = await Inventory.aggregate([
+      { $match: { itemType: "Device" } },
+      { $group: { _id: null, totalExpense: { $sum: "$total" } } },
+    ]);
+
+    const medicineTotalExpense = await Inventory.aggregate([
+      { $match: { itemType: "Medicine" } },
+      { $group: { _id: null, totalExpense: { $sum: "$total" } } },
+    ]);
+
+    const results = {
+      statusStats: [paidInventory, unPaidInventory],
+      categoryStats: [deviceInventory, medicineInventory],
+      expenseStats: [
+        deviceTotalExpense[0] ? deviceTotalExpense[0].totalExpense : 0,
+        medicineTotalExpense[0] ? medicineTotalExpense[0].totalExpense : 0,
+      ],
+    };
+
+    return results;
+  } catch (error) {
+    console.log("Lỗi tại service getInventoryStats: ", error);
+    throw new Error(error.message);
+  }
+};
+
 export const createInventoryService = async (data) => {
   const { items, itemType } = data;
 

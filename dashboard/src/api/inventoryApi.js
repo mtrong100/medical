@@ -5,6 +5,11 @@ export const getInventoriesApi = async (params) => {
   return response;
 };
 
+export const getInventoryStatsApi = async () => {
+  const response = await axios.get(`/inventories/stats`);
+  return response;
+};
+
 export const getInventoryDetailApi = async (id) => {
   const response = await axios.get(`/inventories/${id}`);
   return response;

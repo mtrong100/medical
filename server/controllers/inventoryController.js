@@ -3,6 +3,7 @@ import {
   deleteInventoryService,
   getInventoryDetailService,
   getInventoryService,
+  getInventoryStatsService,
   updateInventoryService,
 } from "../services/inventoryService.js";
 import mongoose from "mongoose";
@@ -31,6 +32,16 @@ export const getInventoryDetail = async (req, res) => {
     return res.status(200).json(inventoryDetail);
   } catch (error) {
     console.log("Lỗi tại controller getInventoryDetail", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getInventoryStats = async (req, res) => {
+  try {
+    const results = await getInventoryStatsService();
+    return res.status(200).json(results);
+  } catch (error) {
+    console.log("Lỗi tại controller getInventoryStats", error);
     return res.status(500).json({ message: error.message });
   }
 };

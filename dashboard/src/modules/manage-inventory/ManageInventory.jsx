@@ -1,13 +1,17 @@
 import useManageInventory from "./useManageInventory";
+import useGetInventoryStats from "./useGetInventoryStats";
 import TitleSection from "../../components/TitleSection";
+import TableToolbar from "../../components/TableToolbar";
+import StatusChart from "./StatusChart";
 import React, { useState } from "react";
+import ExpenseChart from "./ExpenseChart";
+import CategoryChart from "./CategoryChart";
 import { formatCurrencyVND, formatDate } from "../../utils/helper";
 import { Fieldset } from "primereact/fieldset";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "jspdf-autotable";
 import { Button } from "primereact/button";
-import TableToolbar from "../../components/TableToolbar";
 import {
   itemQuantityBodyTemplate,
   itemTypeBodyTemplate,
@@ -20,12 +24,13 @@ import {
 const ManageInventory = () => {
   const [visible, setVisible] = useState(false);
   const [detail, setDetail] = useState(null);
+  const { stats, loadingStats } = useGetInventoryStats();
   const {
+    dt,
     data,
     query,
     setQuery,
     onDelete,
-    dt,
     exportCSV,
     exportPdf,
     exportExcel,
@@ -70,6 +75,12 @@ const ManageInventory = () => {
   return (
     <div>
       <TitleSection>Quản lí kho</TitleSection>
+
+      <div className="mt-5 grid grid-cols-3 gap-3">
+        <ExpenseChart dataSet={stats?.expenseStats} loading={loadingStats} />
+        <CategoryChart dataSet={stats?.categoryStats} loading={loadingStats} />
+        <StatusChart dataSet={stats?.statusStats} loading={loadingStats} />
+      </div>
 
       <div className="mt-5">
         <DataTable
