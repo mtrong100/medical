@@ -2,22 +2,22 @@ import React, { useMemo } from "react";
 import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
-const CategoryChart = ({ dataSet = [], loading }) => {
+const PatientGenderPieChart = ({ loading, dataSet = [] }) => {
   const documentStyle = getComputedStyle(document.documentElement);
 
   const chartData = useMemo(
     () => ({
-      labels: ["Thiết bị", "Thuốc"],
+      labels: ["Nam", "Nữ"],
       datasets: [
         {
           data: dataSet,
           backgroundColor: [
-            documentStyle.getPropertyValue("--cyan-500"),
             documentStyle.getPropertyValue("--orange-500"),
+            documentStyle.getPropertyValue("--purple-500"),
           ],
           hoverBackgroundColor: [
-            documentStyle.getPropertyValue("--cyan-400"),
             documentStyle.getPropertyValue("--orange-400"),
+            documentStyle.getPropertyValue("--purple-400"),
           ],
         },
       ],
@@ -52,4 +52,4 @@ const CategoryChart = ({ dataSet = [], loading }) => {
   );
 };
 
-export default CategoryChart;
+export default PatientGenderPieChart;

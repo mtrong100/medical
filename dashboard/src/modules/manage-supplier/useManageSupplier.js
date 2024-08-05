@@ -12,22 +12,17 @@ export default function useManageSupplier() {
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState("");
   const queryValue = useDebounce(query, 500);
-  const [paginator, setPaginator] = useState({
-    totalPages: 1,
-    currentPage: 1,
-    totalResults: 0,
-  });
 
   useEffect(() => {
     fetchData();
-  }, [paginator.currentPage]);
+  }, []);
 
   const fetchData = async () => {
     setLoading(true);
 
     try {
       const params = {
-        page: paginator.currentPage,
+        page: 1,
         limit: LIMIT_AMOUNT,
       };
 
@@ -35,12 +30,6 @@ export default function useManageSupplier() {
 
       if (res) {
         setData(res.results);
-        setPaginator({
-          ...paginator,
-          totalResults: res.totalResults,
-          totalPages: res.totalPages,
-          currentPage: res.currentPage,
-        });
       }
     } catch (error) {
       console.log("Lỗi fetch data supplier: ", error);
@@ -61,11 +50,6 @@ export default function useManageSupplier() {
       item._id.toLowerCase().includes(lowerCaseQuery)
     );
   });
-
-  const onResetFilter = () => {
-    setQuery("");
-    setPaginator((prev) => ({ ...prev, currentPage: 1 }));
-  };
 
   const onDelete = async (itemId) => {
     Swal.fire({
@@ -88,16 +72,6 @@ export default function useManageSupplier() {
         }
       }
     });
-  };
-
-  const onPrevPage = () => {
-    if (paginator.currentPage === 1) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage - 1 }));
-  };
-
-  const onNextPage = () => {
-    if (paginator.currentPage === paginator.totalPages) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage + 1 }));
   };
 
   const cols = [
@@ -178,12 +152,8 @@ export default function useManageSupplier() {
     loading,
     query,
     setQuery,
-    onResetFilter,
     onDelete,
-    paginator,
-    setPaginator,
-    onPrevPage,
-    onNextPage,
+
     dt,
     exportCSV,
     exportPdf,

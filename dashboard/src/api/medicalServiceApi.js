@@ -7,6 +7,11 @@ export const getMedicalServicesApi = async (params) => {
   return response;
 };
 
+export const getMedicalServiceStatsApi = async () => {
+  const response = await axios.get(`/medical-services/stats`);
+  return response;
+};
+
 export const createMedicalServiceApi = async (data) => {
   const response = await axios.post("/medical-services/create", data);
   return response;

@@ -7,26 +7,36 @@ import {
   getEmployeeDetail,
   terminatedEmployee,
   updateEmployee,
+  getEmployeeStats,
 } from "../controllers/employeeController.js";
 import {
   validateCreateEmployeeData,
   validateUpdateEmployeeData,
 } from "../validation/employeeValidate.js";
+import { verifyAdmin } from "../middlewares/verifyAdmin.js";
+import { verifyUser } from "../middlewares/verifyUser.js";
 
 const router = express.Router();
 
-router.get("/collection", getEmployeeCollection);
+router.get("/collection", verifyAdmin, getEmployeeCollection);
 
-router.get("/", getEmployees);
+router.get("/", verifyUser, getEmployees);
 
-router.get("/:id", getEmployeeDetail);
+router.get("/stats", verifyAdmin, getEmployeeStats);
 
-router.post("/create", validateCreateEmployeeData, createEmployee);
+router.get("/:id", verifyAdmin, getEmployeeDetail);
 
-router.put("/update/:id", validateUpdateEmployeeData, updateEmployee);
+router.post("/create", verifyAdmin, validateCreateEmployeeData, createEmployee);
 
-router.delete("/delete/:id", deleteEmployee);
+router.put(
+  "/update/:id",
+  verifyAdmin,
+  validateUpdateEmployeeData,
+  updateEmployee
+);
 
-router.put("/terminated/:id", terminatedEmployee);
+router.delete("/delete/:id", verifyAdmin, deleteEmployee);
+
+router.put("/terminated/:id", verifyAdmin, terminatedEmployee);
 
 export default router;

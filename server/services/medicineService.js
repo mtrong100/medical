@@ -1,3 +1,4 @@
+import MedicineCategory from "../models/medicineCategoryModel.js";
 import Medicine from "../models/medicineModel.js";
 
 export const getMedicineCollectionService = async () => {
@@ -63,6 +64,43 @@ export const getMedicineDetailService = async (id) => {
   } catch (error) {
     console.log("Lỗi tại service getMedicineDetailService", error);
     throw new Error("Lỗi khi lấy chi tiết thuốc từ cơ sở dữ liệu");
+  }
+};
+
+export const getMedicineStatsService = async () => {
+  try {
+    const categories = await MedicineCategory.find();
+    const categoriesResults = categories.map((item) => item.name);
+
+    const medicineCountResults = [];
+    const averagePriceResults = [];
+
+    for (const cat of categories) {
+      const medicinesInCategory = await Medicine.find({
+        category: cat._id,
+      });
+
+      const medicineCount = medicinesInCategory.length;
+      medicineCountResults.push(medicineCount);
+
+      const totalPrice = medicinesInCategory.reduce(
+        (acc, medicine) => acc + medicine.price,
+        0
+      );
+      const averagePrice = medicineCount > 0 ? totalPrice / medicineCount : 0;
+      averagePriceResults.push(averagePrice.toFixed(2));
+    }
+
+    const results = {
+      categories: categoriesResults,
+      medicineCount: medicineCountResults,
+      averagePrices: averagePriceResults,
+    };
+
+    return results;
+  } catch (error) {
+    console.log("Lỗi tại service getMedicineStatsService", error);
+    throw new Error(error.message);
   }
 };
 

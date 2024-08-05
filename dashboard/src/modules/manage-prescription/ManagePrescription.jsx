@@ -2,13 +2,15 @@ import useManagePrescription from "./useManagePrescription";
 import TitleSection from "../../components/TitleSection";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Tag } from "primereact/tag";
-import { LIMIT_AMOUNT, PAYMENT_STATUS } from "../../utils/constants";
-import { InputText } from "primereact/inputtext";
-import { formatCurrencyVND, formatDate } from "../../utils/helper";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import TableToolbar from "../../components/TableToolbar";
+import {
+  createdAtBodyTemplate,
+  statusBodyTemplate,
+  totalPriceColumn,
+} from "../../utils/columnTemplate";
 
 const ManagePrescription = () => {
   const navigate = useNavigate();
@@ -17,9 +19,6 @@ const ManagePrescription = () => {
     query,
     setQuery,
     onDelete,
-    paginator,
-    onPrevPage,
-    onNextPage,
     dt,
     exportCSV,
     exportPdf,
@@ -31,81 +30,19 @@ const ManagePrescription = () => {
       <div className="flex items-center gap-2 ">
         <Button
           icon="pi pi-eye"
-          rounded
+          outlined
           severity="secondary"
           onClick={() => navigate(`/prescription/${rowData._id}`)}
         />
         <Button
           icon="pi pi-trash"
-          rounded
+          outlined
           severity="danger"
           onClick={() => onDelete(rowData._id)}
         />
       </div>
     );
   };
-
-  const statusBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        value={rowData.status}
-        rounded
-        severity={
-          rowData.status === PAYMENT_STATUS.UNPAID ? "danger" : "success"
-        }
-      />
-    );
-  };
-
-  const totalBodyTemplate = (rowData) => {
-    return <div>{formatCurrencyVND(rowData.total)}</div>;
-  };
-
-  const createdAtBodyTemplate = (rowData) => {
-    return <div>{formatDate(rowData.createdAt)}</div>;
-  };
-
-  const header = (
-    <div className="flex items-center justify-between">
-      <div className="p-inputgroup max-w-md">
-        <InputText
-          placeholder="Tìm kiếm"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <Button icon="pi pi-search" />
-      </div>
-
-      <div className="flex items-center flex-shrink-0  gap-5">
-        <Button
-          type="button"
-          icon="pi pi-file"
-          label="Xuất file CSV"
-          rounded
-          onClick={() => exportCSV(false)}
-          data-pr-tooltip="CSV"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-excel"
-          severity="success"
-          label="Xuất file Excel"
-          rounded
-          onClick={exportExcel}
-          data-pr-tooltip="XLS"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-pdf"
-          severity="warning"
-          label="Xuất file PDF"
-          rounded
-          onClick={exportPdf}
-          data-pr-tooltip="PDF"
-        />
-      </div>
-    </div>
-  );
 
   return (
     <div>
@@ -121,12 +58,25 @@ const ManagePrescription = () => {
       <div className="mt-5">
         <DataTable
           ref={dt}
+          value={data}
+          paginator
+          rows={5}
+          paginatorLeft
+          rowsPerPageOptions={[5, 10, 25, 50]}
           scrollable
           stripedRows
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
-          value={data}
-          header={header}
+          className="bg-white border-gray-200 shadow-sm border rounded-md"
+          header={
+            <TableToolbar
+              query={query}
+              setQuery={setQuery}
+              onExportCSV={exportCSV}
+              onExportPdf={exportPdf}
+              onExportExcel={exportExcel}
+            />
+          }
         >
           <Column field="_id" header="Mã hóa đơn" sortable />
           <Column field="doctor" header="Bác sĩ" sortable />
@@ -135,7 +85,7 @@ const ManagePrescription = () => {
             field="total"
             header="Tổng tiền"
             sortable
-            body={totalBodyTemplate}
+            body={totalPriceColumn}
           />
           <Column
             field="status"
@@ -156,25 +106,6 @@ const ManagePrescription = () => {
           />
         </DataTable>
       </div>
-
-      {/* Pagination */}
-      {paginator.totalResults > LIMIT_AMOUNT && (
-        <div className="flex items-center  justify-end mt-8 gap-2">
-          <Button
-            severity="secondary"
-            onClick={onPrevPage}
-            icon="pi pi-angle-left"
-          />
-          <div className="flex items-center gap-2 text-xl font-semibold">
-            <p>{paginator.currentPage}</p> / <p>{paginator.totalPages}</p>
-          </div>
-          <Button
-            severity="secondary"
-            onClick={onNextPage}
-            icon="pi pi-angle-right"
-          />
-        </div>
-      )}
     </div>
   );
 };

@@ -73,6 +73,51 @@ export const getEmployeeDetailService = async (id) => {
   }
 };
 
+export const getEmployeeStatsService = async () => {
+  try {
+    // Aggregate for roles and average salary
+    const roleStats = await Employee.aggregate([
+      {
+        $group: {
+          _id: "$role",
+          count: { $sum: 1 },
+          averageSalary: { $avg: "$salary" },
+        },
+      },
+    ]);
+
+    // Aggregate for gender
+    const genderStats = await Employee.aggregate([
+      {
+        $group: {
+          _id: "$gender",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // Extract roles, counts, and average salaries
+    const roles = roleStats.map((stat) => stat._id);
+    const employeeCountsByRole = roleStats.map((stat) => stat.count);
+    const averageSalariesByRole = roleStats.map((stat) => stat.averageSalary);
+
+    // Extract genders and counts
+    const genders = genderStats.map((stat) => stat._id);
+    const employeeCountsByGender = genderStats.map((stat) => stat.count);
+
+    return {
+      roles,
+      employeeCountsByRole,
+      averageSalariesByRole,
+      genders,
+      employeeCountsByGender,
+    };
+  } catch (error) {
+    console.log("Lỗi tại service getEmployeeStatsService", error);
+    throw new Error(error.message);
+  }
+};
+
 export const createEmployeeService = async (data) => {
   const { role, salary, ...rest } = data;
 

@@ -31,13 +31,13 @@ const ManageMedicalServiceInvoice = () => {
       <div className="flex items-center gap-2 ">
         <Button
           icon="pi pi-eye"
-          rounded
+          outlined
           severity="secondary"
           onClick={() => navigate(`/medical-service-invoice/${rowData._id}`)}
         />
         <Button
           icon="pi pi-pencil"
-          rounded
+          outlined
           severity="info"
           onClick={() =>
             navigate(`/medical-service-invoice/update/${rowData._id}`)
@@ -45,7 +45,7 @@ const ManageMedicalServiceInvoice = () => {
         />
         <Button
           icon="pi pi-trash"
-          rounded
+          outlined
           severity="danger"
           onClick={() => onDelete(rowData._id)}
         />

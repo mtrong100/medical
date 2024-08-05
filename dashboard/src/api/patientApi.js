@@ -10,6 +10,11 @@ export const getPatientDetailApi = async (id) => {
   return response;
 };
 
+export const getPatientStatsApi = async () => {
+  const response = await axios.get("/patients/stats");
+  return response;
+};
+
 export const createPatientApi = async (data) => {
   const response = await axios.post("/patients/create", data);
   return response;

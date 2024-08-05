@@ -1,14 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
 const StatusChart = ({ dataSet = [], loading }) => {
-  const [chartData, setChartData] = useState({});
-  const [chartOptions, setChartOptions] = useState({});
+  const documentStyle = getComputedStyle(document.documentElement);
 
-  useEffect(() => {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const data = {
+  const chartData = useMemo(
+    () => ({
       labels: ["Thanh toán", "Chưa thanh toán"],
       datasets: [
         {
@@ -23,14 +21,16 @@ const StatusChart = ({ dataSet = [], loading }) => {
           ],
         },
       ],
-    };
-    const options = {
-      cutout: "60%",
-    };
+    }),
+    [dataSet, documentStyle]
+  );
 
-    setChartData(data);
-    setChartOptions(options);
-  }, [dataSet]);
+  const chartOptions = useMemo(
+    () => ({
+      cutout: "60%",
+    }),
+    []
+  );
 
   if (loading) {
     return <Skeleton height={250}></Skeleton>;
@@ -41,7 +41,7 @@ const StatusChart = ({ dataSet = [], loading }) => {
       type="doughnut"
       data={chartData}
       options={chartOptions}
-      className={`rounded-md border border-gray-200 py-5 bg-white shadow-sm flex items-center justify-center h-[250px]`}
+      className="rounded-md border border-gray-200 py-5 bg-white shadow-sm flex items-center justify-center h-[250px]"
     />
   );
 };

@@ -8,6 +8,7 @@ import {
   getMedicalRecordsFromPatient,
   getAppointmentsFromPatient,
   getPatientCollection,
+  getPatientStats,
 } from "../controllers/patientController.js";
 import { validatePatientData } from "../validation/patientValidate.js";
 import { verifyAdmin } from "../middlewares/verifyAdmin.js";
@@ -18,6 +19,8 @@ const router = express.Router();
 router.get("/collection", verifyAdmin, getPatientCollection);
 
 router.get("/", verifyAdmin, getPatients);
+
+router.get("/stats", verifyAdmin, getPatientStats);
 
 router.get("/:id", verifyUser, getPatientDetail);
 

@@ -6,6 +6,7 @@ import {
   getMedicineCollection,
   updateMedicine,
   getMedicineDetail,
+  getMedicineStats,
 } from "../controllers/medicineController.js";
 import {
   validateCreateMedicine,
@@ -18,6 +19,8 @@ const router = express.Router();
 router.get("/collection", verifyAdmin, getMedicineCollection);
 
 router.get("/", verifyAdmin, getMedicines);
+
+router.get("/stats", verifyAdmin, getMedicineStats);
 
 router.get("/:id", verifyAdmin, getMedicineDetail);
 

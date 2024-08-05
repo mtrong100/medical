@@ -3,27 +3,26 @@ import UpdateMedicineCategory from "./UpdateMedicineCategory";
 import TitleSection from "../../components/TitleSection";
 import React, { useState } from "react";
 import CreateMedicineCategory from "./CreateMedicineCategory";
-import { LIMIT_AMOUNT } from "../../utils/constants";
-import { InputText } from "primereact/inputtext";
-import { formatDate } from "../../utils/helper";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import TableToolbar from "../../components/TableToolbar";
+import { createdAtBodyTemplate } from "../../utils/columnTemplate";
+import useGetMedicineStats from "../manage-medicine/useGetMedicineStats";
+import MedicineCategoryChart from "./MedicineCategoryChart";
+import PatientGenderPieChart from "./MedicineCategoryPieChart";
 
 const ManageMedicineCategory = () => {
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [detail, setDetail] = useState(null);
-
+  const { loadingStats, stats } = useGetMedicineStats();
   const {
     data,
     query,
     setQuery,
     fetchCategories,
     onDelete,
-    onPrevPage,
-    onNextPage,
-    paginator,
     exportCSV,
     exportPdf,
     exportExcel,
@@ -35,7 +34,7 @@ const ManageMedicineCategory = () => {
       <div className="flex items-center gap-2">
         <Button
           icon="pi pi-pencil"
-          rounded
+          outlined
           onClick={() => {
             setVisible2(true);
             setDetail(rowData);
@@ -43,58 +42,12 @@ const ManageMedicineCategory = () => {
         />
         <Button
           icon="pi pi-trash"
-          rounded
+          outlined
           severity="danger"
           onClick={() => onDelete(rowData._id)}
         />
       </div>
     );
-  };
-
-  const header = (
-    <div className="flex items-center justify-between">
-      <div className="p-inputgroup max-w-md">
-        <InputText
-          placeholder="Tìm kiếm"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <Button icon="pi pi-search" />
-      </div>
-
-      <div className="flex items-center flex-shrink-0  gap-5">
-        <Button
-          type="button"
-          icon="pi pi-file"
-          label="Xuất file CSV"
-          rounded
-          onClick={() => exportCSV(false)}
-          data-pr-tooltip="CSV"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-excel"
-          severity="success"
-          label="Xuất file Excel"
-          rounded
-          onClick={exportExcel}
-          data-pr-tooltip="XLS"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-pdf"
-          severity="warning"
-          label="Xuất file PDF"
-          rounded
-          onClick={exportPdf}
-          data-pr-tooltip="PDF"
-        />
-      </div>
-    </div>
-  );
-
-  const createdAtBodyTemplate = (rowData) => {
-    return <div>{formatDate(rowData.createdAt)}</div>;
   };
 
   return (
@@ -108,15 +61,41 @@ const ManageMedicineCategory = () => {
         />
       </div>
 
+      <div className="mt-5 grid grid-cols-[minmax(0,_1fr)_450px] gap-5">
+        <MedicineCategoryChart
+          loading={loadingStats}
+          dataSet={stats?.medicineCount}
+          labels={stats?.categories}
+        />
+        <PatientGenderPieChart
+          loading={loadingStats}
+          dataSet={stats?.medicineCount}
+          labels={stats?.categories}
+        />
+      </div>
+
       <div className="mt-5">
         <DataTable
           ref={dt}
           value={data}
-          header={header}
+          paginator
+          rows={5}
+          paginatorLeft
+          rowsPerPageOptions={[5, 10, 25, 50]}
           scrollable
           stripedRows
           showGridlines
-          emptyMessage="Không tìm thấy nhân viên"
+          emptyMessage="Không tìm thấy dữ liệu"
+          className="bg-white border-gray-200 shadow-sm border rounded-md"
+          header={
+            <TableToolbar
+              query={query}
+              setQuery={setQuery}
+              onExportCSV={exportCSV}
+              onExportPdf={exportPdf}
+              onExportExcel={exportExcel}
+            />
+          }
         >
           <Column field="_id" header="Mã danh mục" sortable />
           <Column field="name" header="Tên" sortable />
@@ -134,25 +113,6 @@ const ManageMedicineCategory = () => {
           />
         </DataTable>
       </div>
-
-      {/* Pagination */}
-      {paginator.totalResults > LIMIT_AMOUNT && (
-        <div className="flex items-center  justify-end mt-8 gap-2">
-          <Button
-            severity="secondary"
-            onClick={onPrevPage}
-            icon="pi pi-angle-left"
-          />
-          <div className="flex items-center gap-2 text-xl font-semibold">
-            <p>{paginator.currentPage}</p> / <p>{paginator.totalPages}</p>
-          </div>
-          <Button
-            severity="secondary"
-            onClick={onNextPage}
-            icon="pi pi-angle-right"
-          />
-        </div>
-      )}
 
       <CreateMedicineCategory
         visible={visible}

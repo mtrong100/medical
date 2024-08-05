@@ -2,36 +2,31 @@ import React, { useMemo } from "react";
 import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
-const CategoryChart = ({ dataSet = [], loading }) => {
-  const documentStyle = getComputedStyle(document.documentElement);
-
+const PatientGenderChart = ({ loading, dataSet = [] }) => {
   const chartData = useMemo(
     () => ({
-      labels: ["Thiết bị", "Thuốc"],
+      labels: ["Nam", "Nữ"],
       datasets: [
         {
+          label: "Giới tính",
           data: dataSet,
           backgroundColor: [
-            documentStyle.getPropertyValue("--cyan-500"),
-            documentStyle.getPropertyValue("--orange-500"),
+            "rgba(255, 159, 64, 0.2)",
+            "rgba(153, 102, 255, 0.2)",
           ],
-          hoverBackgroundColor: [
-            documentStyle.getPropertyValue("--cyan-400"),
-            documentStyle.getPropertyValue("--orange-400"),
-          ],
+          borderColor: ["rgb(255, 159, 64)", "rgb(153, 102, 255)"],
+          borderWidth: 1,
         },
       ],
     }),
-    [dataSet, documentStyle]
+    [dataSet]
   );
 
   const chartOptions = useMemo(
     () => ({
-      plugins: {
-        legend: {
-          labels: {
-            usePointStyle: true,
-          },
+      scales: {
+        y: {
+          beginAtZero: true,
         },
       },
     }),
@@ -44,7 +39,7 @@ const CategoryChart = ({ dataSet = [], loading }) => {
 
   return (
     <Chart
-      type="pie"
+      type="bar"
       data={chartData}
       options={chartOptions}
       className="rounded-md border border-gray-200 py-5 bg-white shadow-sm flex items-center justify-center h-[250px]"
@@ -52,4 +47,4 @@ const CategoryChart = ({ dataSet = [], loading }) => {
   );
 };
 
-export default CategoryChart;
+export default PatientGenderChart;

@@ -24,6 +24,20 @@ export const getMedicalServicesService = async (page, limit) => {
   }
 };
 
+export const getMedicalServiceStatsService = async () => {
+  try {
+    const services = await MedicalService.find();
+
+    const sericeNames = services.map((service) => service.name);
+    const servicePrices = services.map((service) => service.price);
+
+    return { sericeNames, servicePrices };
+  } catch (error) {
+    console.log("Lỗi tại service getMedicalServiceStatsService", error);
+    throw new Error(error.message);
+  }
+};
+
 export const createMedicalServiceSerivce = async (body) => {
   try {
     const newService = new MedicalService(body);

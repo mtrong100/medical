@@ -10,6 +10,11 @@ export const getEmployeeDetaillApi = async (id) => {
   return response;
 };
 
+export const getEmployeeStatsApi = async () => {
+  const response = await axios.get("/employees/stats");
+  return response;
+};
+
 export const createEmployeeApi = async (data) => {
   const response = await axios.post("/employees/create", data);
   return response;

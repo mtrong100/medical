@@ -1,6 +1,7 @@
+import Employee from "../models/employeeModel.js";
 import Medicine from "../models/medicineModel.js";
 import Prescription from "../models/prescriptionModel.js";
-import { PAYMENT_STATUS } from "../utils/constanst.js";
+import { EMPLOYEE_ROLE, PAYMENT_STATUS } from "../utils/constanst.js";
 
 export const getPrescriptionCollectionService = async () => {
   try {
@@ -98,6 +99,42 @@ export const getPrescriptionDetailService = async (id) => {
     return formattedPrescription;
   } catch (error) {
     console.log("Lỗi tại service getPrescriptionDetailService", error);
+    throw new Error(error.message);
+  }
+};
+
+export const getPrescriptionStatsService = async () => {
+  try {
+    const doctors = await Employee.find({ role: EMPLOYEE_ROLE.DOCTOR });
+    const paidPrescription = await Prescription.countDocuments({
+      status: PAYMENT_STATUS.PAID,
+    });
+
+    const unPaidPrescription = await Prescription.countDocuments({
+      status: PAYMENT_STATUS.UNPAID,
+    });
+
+    const prescriptionCount = [];
+
+    for (const doc of doctors) {
+      const prescriptionByDoctor = await Prescription.countDocuments({
+        doctor: doc._id,
+        status: PAYMENT_STATUS.PAID,
+      });
+
+      prescriptionCount.push(prescriptionByDoctor);
+    }
+
+    const results = {
+      doctors,
+      prescriptionCount,
+      paidPrescription,
+      unPaidPrescription,
+    };
+
+    return results;
+  } catch (error) {
+    console.log("Lỗi tại service getPrescriptionStatsService", error);
     throw new Error(error.message);
   }
 };

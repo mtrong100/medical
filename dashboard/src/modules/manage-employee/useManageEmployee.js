@@ -19,15 +19,10 @@ export default function useManageEmployee() {
     graduatedFrom: null,
     specialization: null,
   });
-  const [paginator, setPaginator] = useState({
-    totalPages: 1,
-    currentPage: 1,
-    totalResults: 0,
-  });
 
   useEffect(() => {
     fetchData();
-  }, [paginator.currentPage, selectedFilter]);
+  }, [selectedFilter]);
 
   const fetchData = async () => {
     setLoading(true);
@@ -37,7 +32,7 @@ export default function useManageEmployee() {
         selectedFilter;
 
       const params = {
-        page: paginator.currentPage,
+        page: 1,
         limit: LIMIT_AMOUNT,
         gender,
         status,
@@ -50,12 +45,6 @@ export default function useManageEmployee() {
 
       if (res) {
         setData(res.results);
-        setPaginator({
-          ...paginator,
-          totalResults: res.totalResults,
-          totalPages: res.totalPages,
-          currentPage: res.currentPage,
-        });
       }
     } catch (error) {
       console.log("Lỗi fetch data: ", error);
@@ -83,7 +72,6 @@ export default function useManageEmployee() {
       specialization: null,
     });
     setQuery("");
-    setPaginator((prev) => ({ ...prev, currentPage: 1 }));
   };
 
   const onDelete = async (itemId) => {
@@ -107,16 +95,6 @@ export default function useManageEmployee() {
         }
       }
     });
-  };
-
-  const onPrevPage = () => {
-    if (paginator.currentPage === 1) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage - 1 }));
-  };
-
-  const onNextPage = () => {
-    if (paginator.currentPage === paginator.totalPages) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage + 1 }));
   };
 
   const cols = [
@@ -214,10 +192,6 @@ export default function useManageEmployee() {
     setSelectedFilter,
     onResetFilter,
     onDelete,
-    paginator,
-    setPaginator,
-    onPrevPage,
-    onNextPage,
     dt,
     exportCSV,
     exportPdf,

@@ -10,6 +10,11 @@ export const getMedicinesApi = async (params) => {
   return response;
 };
 
+export const getMedicineStatsApi = async () => {
+  const response = await axios.get("/medicines/stats");
+  return response;
+};
+
 export const getMedicineDetail = async (id) => {
   const response = await axios.get(`/medicines/${id}`);
   return response;

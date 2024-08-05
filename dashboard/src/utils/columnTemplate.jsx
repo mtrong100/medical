@@ -1,6 +1,6 @@
 import { Tag } from "primereact/tag";
 import { formatCurrencyVND, formatDate } from "./helper";
-import { PAYMENT_STATUS } from "./constants";
+import { EMPLOYEE_STATUS, PAYMENT_STATUS } from "./constants";
 
 export const totalPriceColumn = (rowData) => {
   return <div>{formatCurrencyVND(rowData.total)}</div>;
@@ -62,4 +62,24 @@ export const imageBodyTemplate = (rowData) => {
 
 export const createdAtBodyTemplate = (rowData) => {
   return <div>{formatDate(rowData.createdAt)}</div>;
+};
+
+export const employeeStatusBodyTemplate = (rowData) => {
+  return (
+    <>
+      {rowData.status === EMPLOYEE_STATUS.ISFIRED ? (
+        <Tag
+          value={rowData.status}
+          icon="pi pi-info-circle"
+          severity="danger"
+        />
+      ) : (
+        <Tag value={rowData.status} icon="pi pi-check" severity="success" />
+      )}
+    </>
+  );
+};
+
+export const salaryBodyTemplate = (rowData) => {
+  return <div>{formatCurrencyVND(rowData.salary)}</div>;
 };

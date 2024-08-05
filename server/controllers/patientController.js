@@ -7,6 +7,7 @@ import {
   getPatientCollectionService,
   getPatientDetailService,
   getPatientsService,
+  getPatientStatsService,
   updatePatientService,
 } from "../services/patientService.js";
 
@@ -44,6 +45,16 @@ export const getPatientDetail = async (req, res) => {
     return res.status(200).json(patientDetail);
   } catch (error) {
     console.log("Lỗi tại controller getPatientDetail", error);
+    return res.status(500).json({ message: "Lỗi server" });
+  }
+};
+
+export const getPatientStats = async (req, res) => {
+  try {
+    const stats = await getPatientStatsService();
+    return res.status(200).json(stats);
+  } catch (error) {
+    console.log("Lỗi tại controller getPatientStats", error);
     return res.status(500).json({ message: "Lỗi server" });
   }
 };

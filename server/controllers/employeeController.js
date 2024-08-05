@@ -5,6 +5,7 @@ import {
   getEmployeeCollectionService,
   getEmployeeDetailService,
   getEmployeesService,
+  getEmployeeStatsService,
   terminatedEmployeeService,
   updateEmployeeService,
 } from "../services/employeeService.js";
@@ -60,6 +61,16 @@ export const getEmployeeDetail = async (req, res) => {
     return res.status(200).json(employee);
   } catch (error) {
     console.log("Lỗi tại controller getEmployeeDetail", error);
+    return res.status(500).json({ message: "Lỗi server" });
+  }
+};
+
+export const getEmployeeStats = async (req, res) => {
+  try {
+    const stats = await getEmployeeStatsService();
+    return res.status(200).json(stats);
+  } catch (error) {
+    console.log("Lỗi tại controller getEmployeeStats", error);
     return res.status(500).json({ message: "Lỗi server" });
   }
 };

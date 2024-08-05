@@ -47,6 +47,26 @@ export const getPatientsService = async ({ page, limit, gender }) => {
   }
 };
 
+export const getPatientStatsService = async () => {
+  try {
+    const stats = await Patient.aggregate([
+      {
+        $group: {
+          _id: "$gender",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const genders = stats.map((stat) => stat._id);
+    const counts = stats.map((stat) => stat.count);
+
+    return { genders, counts };
+  } catch (error) {
+    console.log("Lỗi tại service getPatientStats", error);
+    throw new Error(error.message);
+  }
+};
 export const createPatientService = async (data) => {
   try {
     const newPatient = new Patient(data);

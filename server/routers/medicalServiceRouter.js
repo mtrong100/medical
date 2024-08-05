@@ -2,6 +2,7 @@ import express from "express";
 import {
   createMedicalService,
   deleteMedicalService,
+  getMedicalService,
   getMedicalServices,
   updateMedicalService,
 } from "../controllers/medicalServiceController.js";
@@ -14,6 +15,8 @@ import {
 const router = express.Router();
 
 router.get("/", verifyAdmin, getMedicalServices);
+
+router.get("/stats", verifyAdmin, getMedicalService);
 
 router.post(
   "/create",

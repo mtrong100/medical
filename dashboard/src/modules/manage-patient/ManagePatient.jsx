@@ -2,7 +2,6 @@ import useManagePatient from "./useManagePatient";
 import TitleSection from "../../components/TitleSection";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { InputText } from "primereact/inputtext";
 import { formatDate } from "../../utils/helper";
 import { Fieldset } from "primereact/fieldset";
 import { Dropdown } from "primereact/dropdown";
@@ -10,13 +9,18 @@ import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
-import { genders, LIMIT_AMOUNT } from "../../utils/constants";
+import { genders } from "../../utils/constants";
+import TableToolbar from "../../components/TableToolbar";
+import useGetPatientStats from "./useGetPatientStats";
+import PatientGenderChart from "./PatientGenderChart";
+import PatientGenderPieChart from "./PatientGenderPieChart";
+import PatientRoleDoughnutChart from "./PatientRoleDoughnutChart";
 
 const ManagePatient = () => {
   const navigate = useNavigate();
   const [detail, setDetail] = useState(null);
   const [visible, setVisible] = useState(false);
-
+  const { loadingStats, stats } = useGetPatientStats();
   const {
     data,
     query,
@@ -25,9 +29,6 @@ const ManagePatient = () => {
     setSelectedFilter,
     onResetFilter,
     onDelete,
-    paginator,
-    onPrevPage,
-    onNextPage,
     dt,
     exportCSV,
     exportPdf,
@@ -39,7 +40,7 @@ const ManagePatient = () => {
       <div className="flex items-center gap-2">
         <Button
           icon="pi pi-eye"
-          rounded
+          outlined
           severity="secondary"
           onClick={() => {
             setVisible(true);
@@ -49,60 +50,18 @@ const ManagePatient = () => {
         <Button
           icon="pi pi-pencil"
           severity="info"
-          rounded
+          outlined
           onClick={() => navigate(`/patient/update/${rowData._id}`)}
         />
         <Button
           icon="pi pi-trash"
-          rounded
+          outlined
           severity="danger"
           onClick={() => onDelete(rowData._id)}
         />
       </div>
     );
   };
-
-  const header = (
-    <div className="flex items-center justify-between">
-      <div className="p-inputgroup max-w-md">
-        <InputText
-          placeholder="Tìm kiếm"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <Button icon="pi pi-search" />
-      </div>
-
-      <div className="flex items-center flex-shrink-0  gap-5">
-        <Button
-          type="button"
-          icon="pi pi-file"
-          label="Xuất file CSV"
-          rounded
-          onClick={() => exportCSV(false)}
-          data-pr-tooltip="CSV"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-excel"
-          severity="success"
-          label="Xuất file Excel"
-          rounded
-          onClick={exportExcel}
-          data-pr-tooltip="XLS"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-pdf"
-          severity="warning"
-          label="Xuất file PDF"
-          rounded
-          onClick={exportPdf}
-          data-pr-tooltip="PDF"
-        />
-      </div>
-    </div>
-  );
 
   return (
     <div>
@@ -112,6 +71,15 @@ const ManagePatient = () => {
           label="Thêm mới bệnh nhân"
           icon="pi pi-plus"
           onClick={() => navigate("/patient/create")}
+        />
+      </div>
+
+      <div className="mt-5 grid grid-cols-3 gap-5">
+        <PatientGenderChart loading={loadingStats} dataSet={stats?.counts} />
+        <PatientGenderPieChart loading={loadingStats} dataSet={stats?.counts} />
+        <PatientRoleDoughnutChart
+          loading={loadingStats}
+          dataSet={stats?.counts}
         />
       </div>
 
@@ -140,11 +108,24 @@ const ManagePatient = () => {
         <DataTable
           ref={dt}
           value={data}
-          header={header}
+          paginator
+          rows={5}
+          paginatorLeft
+          rowsPerPageOptions={[5, 10, 25, 50]}
           scrollable
           stripedRows
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
+          className="bg-white border-gray-200 shadow-sm border rounded-md"
+          header={
+            <TableToolbar
+              query={query}
+              setQuery={setQuery}
+              onExportCSV={exportCSV}
+              onExportPdf={exportPdf}
+              onExportExcel={exportExcel}
+            />
+          }
         >
           <Column field="_id" header="Mã bệnh nhân" sortable />
           <Column field="name" header="Tên" sortable />
@@ -159,25 +140,6 @@ const ManagePatient = () => {
           />
         </DataTable>
       </div>
-
-      {/* Pagination */}
-      {paginator.totalResults > LIMIT_AMOUNT && (
-        <div className="flex items-center  justify-end mt-8 gap-2">
-          <Button
-            severity="secondary"
-            onClick={onPrevPage}
-            icon="pi pi-angle-left"
-          />
-          <div className="flex items-center gap-2 text-xl font-semibold">
-            <p>{paginator.currentPage}</p> / <p>{paginator.totalPages}</p>
-          </div>
-          <Button
-            severity="secondary"
-            onClick={onNextPage}
-            icon="pi pi-angle-right"
-          />
-        </div>
-      )}
 
       {/* Detail Modal */}
       <Dialog

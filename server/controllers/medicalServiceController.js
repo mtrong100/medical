@@ -2,6 +2,7 @@ import {
   createMedicalServiceSerivce,
   deleteMedicalServiceService,
   getMedicalServicesService,
+  getMedicalServiceStatsService,
   updateMedicalServiceService,
 } from "../services/medicalService.js";
 import mongoose from "mongoose";
@@ -14,6 +15,16 @@ export const getMedicalServices = async (req, res) => {
     return res.status(200).json(result);
   } catch (error) {
     console.log("Lỗi tại controller getMedicalServices", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getMedicalService = async (req, res) => {
+  try {
+    const results = await getMedicalServiceStatsService();
+    return res.status(200).json(results);
+  } catch (error) {
+    console.log("Lỗi tại controller getMedicalService", error);
     return res.status(500).json({ message: error.message });
   }
 };

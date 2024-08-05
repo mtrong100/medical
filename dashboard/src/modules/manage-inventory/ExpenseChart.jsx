@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
 const ExpenseChart = ({ dataSet = [], loading }) => {
-  console.log(dataSet);
-  const [chartData, setChartData] = useState({});
-  const [chartOptions, setChartOptions] = useState({});
-
-  useEffect(() => {
-    const data = {
+  const chartData = useMemo(
+    () => ({
       labels: ["Thiết bị", "Thuốc"],
       datasets: [
         {
@@ -22,18 +18,20 @@ const ExpenseChart = ({ dataSet = [], loading }) => {
           borderWidth: 1,
         },
       ],
-    };
-    const options = {
+    }),
+    [dataSet]
+  );
+
+  const chartOptions = useMemo(
+    () => ({
       scales: {
         y: {
           beginAtZero: true,
         },
       },
-    };
-
-    setChartData(data);
-    setChartOptions(options);
-  }, [dataSet]);
+    }),
+    []
+  );
 
   if (loading) {
     return <Skeleton height={250}></Skeleton>;
@@ -44,7 +42,7 @@ const ExpenseChart = ({ dataSet = [], loading }) => {
       type="bar"
       data={chartData}
       options={chartOptions}
-      className={`rounded-md border border-gray-200 py-5 bg-white shadow-sm flex items-center justify-center h-[250px]`}
+      className="rounded-md border border-gray-200 py-5 bg-white shadow-sm flex items-center justify-center h-[250px]"
     />
   );
 };

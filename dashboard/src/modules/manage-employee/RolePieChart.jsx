@@ -2,11 +2,12 @@ import React, { useMemo } from "react";
 import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
-const PostCategoriesChart = ({ loading, dataSet = [], labels = [] }) => {
+const RolePieChart = ({ labels = [], dataSet = [], loading }) => {
   const documentStyle = getComputedStyle(document.documentElement);
 
-  const chartData = useMemo(
-    () => ({
+  // Memoize chart data
+  const chartData = useMemo(() => {
+    return {
       labels,
       datasets: [
         {
@@ -16,11 +17,11 @@ const PostCategoriesChart = ({ loading, dataSet = [], labels = [] }) => {
             documentStyle.getPropertyValue("--green-500"),
             documentStyle.getPropertyValue("--pink-500"),
             documentStyle.getPropertyValue("--cyan-500"),
+            documentStyle.getPropertyValue("--red-500"),
             documentStyle.getPropertyValue("--indigo-500"),
-            documentStyle.getPropertyValue("--teal-500"),
             documentStyle.getPropertyValue("--orange-500"),
             documentStyle.getPropertyValue("--purple-500"),
-            documentStyle.getPropertyValue("--red-500"),
+            documentStyle.getPropertyValue("--teal-500"),
             documentStyle.getPropertyValue("--bluegray-500"),
           ],
           hoverBackgroundColor: [
@@ -28,28 +29,27 @@ const PostCategoriesChart = ({ loading, dataSet = [], labels = [] }) => {
             documentStyle.getPropertyValue("--green-400"),
             documentStyle.getPropertyValue("--pink-400"),
             documentStyle.getPropertyValue("--cyan-400"),
-            documentStyle.getPropertyValue("--indigo-400"),
-            documentStyle.getPropertyValue("--teal-400"),
-            documentStyle.getPropertyValue("--orange-400"),
-            documentStyle.getPropertyValue("--purple-400"),
             documentStyle.getPropertyValue("--red-400"),
+            documentStyle.getPropertyValue("--indigo-400"),
+            documentStyle.getPropertyValue("--orange-400"),
+            documentStyle.getPropertyValue("--teal-400"),
+            documentStyle.getPropertyValue("--purple-400"),
             documentStyle.getPropertyValue("--bluegray-400"),
           ],
         },
       ],
-    }),
-    [dataSet, labels, documentStyle]
-  );
+    };
+  }, [labels, dataSet, documentStyle]);
 
-  const chartOptions = useMemo(
-    () => ({
+  // Memoize chart options
+  const chartOptions = useMemo(() => {
+    return {
       cutout: "50%",
-    }),
-    []
-  );
+    };
+  }, []);
 
   if (loading) {
-    return <Skeleton height={300}></Skeleton>;
+    return <Skeleton height={350}></Skeleton>;
   }
 
   return (
@@ -57,9 +57,9 @@ const PostCategoriesChart = ({ loading, dataSet = [], labels = [] }) => {
       type="doughnut"
       data={chartData}
       options={chartOptions}
-      className="rounded-md border border-gray-200 py-5 bg-white shadow-sm flex items-center justify-center h-[300px]"
+      className="rounded-md border p-5 bg-white shadow-md flex items-center justify-center h-[350px]"
     />
   );
 };
 
-export default PostCategoriesChart;
+export default RolePieChart;

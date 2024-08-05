@@ -2,33 +2,34 @@ import useManageEmployee from "./useManageEmployee";
 import TitleSection from "../../components/TitleSection";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tag } from "primereact/tag";
-import { InputText } from "primereact/inputtext";
 import { Fieldset } from "primereact/fieldset";
 import { Dropdown } from "primereact/dropdown";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import { formatCurrencyVND, formatDate } from "../../utils/helper";
 import {
-  formatCurrencyVND,
-  formatDate,
-  getEmployeeServerity,
-} from "../../utils/helper";
-import {
-  LIMIT_AMOUNT,
   commonSpecialtiesInPrivateClinics,
   employeeStatus,
   genders,
   medicalSchoolsInVietnam,
   roles,
 } from "../../utils/constants";
+import TableToolbar from "../../components/TableToolbar";
+import {
+  employeeStatusBodyTemplate,
+  salaryBodyTemplate,
+} from "../../utils/columnTemplate";
+import useGetEmployeeStats from "./useGetEmployeeStats";
+import EmployeeRoleChart from "./EmployeeRoleChart";
+import RolePieChart from "./RolePieChart";
 
 const ManageEmployee = () => {
   const navigate = useNavigate();
   const [detail, setDetail] = useState(null);
   const [visible, setVisible] = useState(false);
-
+  const { stats, loadingStats } = useGetEmployeeStats();
   const {
     data,
     query,
@@ -37,63 +38,18 @@ const ManageEmployee = () => {
     setSelectedFilter,
     onResetFilter,
     onDelete,
-    paginator,
-    onPrevPage,
-    onNextPage,
     dt,
     exportCSV,
     exportPdf,
     exportExcel,
   } = useManageEmployee();
 
-  const header = (
-    <div className="flex items-center justify-between">
-      <div className="p-inputgroup max-w-md">
-        <InputText
-          placeholder="Tìm kiếm"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <Button icon="pi pi-search" />
-      </div>
-
-      <div className="flex items-center flex-shrink-0  gap-5">
-        <Button
-          type="button"
-          icon="pi pi-file"
-          label="Xuất file CSV"
-          rounded
-          onClick={() => exportCSV(false)}
-          data-pr-tooltip="CSV"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-excel"
-          severity="success"
-          label="Xuất file Excel"
-          rounded
-          onClick={exportExcel}
-          data-pr-tooltip="XLS"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-pdf"
-          severity="warning"
-          label="Xuất file PDF"
-          rounded
-          onClick={exportPdf}
-          data-pr-tooltip="PDF"
-        />
-      </div>
-    </div>
-  );
-
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex items-center gap-2">
         <Button
           icon="pi pi-eye"
-          rounded
+          outlined
           severity="secondary"
           onClick={() => {
             setVisible(true);
@@ -102,32 +58,18 @@ const ManageEmployee = () => {
         />
         <Button
           icon="pi pi-pencil"
-          rounded
+          outlined
           severity="info"
           onClick={() => navigate(`/employee/update/${rowData._id}`)}
         />
         <Button
           icon="pi pi-trash"
-          rounded
+          outlined
           severity="danger"
           onClick={() => onDelete(rowData._id)}
         />
       </div>
     );
-  };
-
-  const statusBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        value={rowData.status}
-        severity={getEmployeeServerity(rowData.status)}
-        rounded
-      />
-    );
-  };
-
-  const salaryBodyTemplate = (rowData) => {
-    return <div>{formatCurrencyVND(rowData.salary)}</div>;
   };
 
   return (
@@ -138,6 +80,19 @@ const ManageEmployee = () => {
           label="Thêm mới nhân viên"
           icon="pi pi-plus"
           onClick={() => navigate("/employee/create")}
+        />
+      </div>
+
+      <div className="mt-5 grid grid-cols-[minmax(0,_1fr)_400px] gap-5">
+        <EmployeeRoleChart
+          loading={loadingStats}
+          labels={stats?.roles}
+          dataSet2={stats?.averageSalariesByRole}
+        />
+        <RolePieChart
+          loading={loadingStats}
+          labels={stats?.roles}
+          dataSet={stats?.employeeCountsByRole}
         />
       </div>
 
@@ -222,11 +177,24 @@ const ManageEmployee = () => {
         <DataTable
           ref={dt}
           value={data}
-          header={header}
+          paginator
+          rows={5}
+          paginatorLeft
+          rowsPerPageOptions={[5, 10, 25, 50]}
           scrollable
           stripedRows
           showGridlines
-          emptyMessage="Không tìm thấy nhân viên"
+          emptyMessage="Không tìm thấy dữ liệu"
+          className="bg-white border-gray-200 shadow-sm border rounded-md"
+          header={
+            <TableToolbar
+              query={query}
+              setQuery={setQuery}
+              onExportCSV={exportCSV}
+              onExportPdf={exportPdf}
+              onExportExcel={exportExcel}
+            />
+          }
         >
           <Column field="_id" header="Mã nhân viên" sortable />
           <Column field="name" header="Tên" sortable />
@@ -244,7 +212,7 @@ const ManageEmployee = () => {
             field="status"
             header="Trạng thái"
             exportable={false}
-            body={statusBodyTemplate}
+            body={employeeStatusBodyTemplate}
             sortable
           />
           <Column
@@ -254,25 +222,6 @@ const ManageEmployee = () => {
           />
         </DataTable>
       </div>
-
-      {/* Pagiantion */}
-      {paginator.totalResults > LIMIT_AMOUNT && (
-        <div className="flex items-center  justify-end mt-8 gap-2">
-          <Button
-            severity="secondary"
-            onClick={onPrevPage}
-            icon="pi pi-angle-left"
-          />
-          <div className="flex items-center gap-2 text-xl  font-semibold">
-            <p>{paginator.currentPage}</p> / <p>{paginator.totalPages}</p>
-          </div>
-          <Button
-            severity="secondary"
-            onClick={onNextPage}
-            icon="pi pi-angle-right"
-          />
-        </div>
-      )}
 
       {/* Detail Modal */}
       <Dialog

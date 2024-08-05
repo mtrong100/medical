@@ -15,22 +15,17 @@ export default function useManageMedicineCategory() {
   const [loading, setloading] = useState(false);
   const [query, setQuery] = useState("");
   const queryValue = useDebounce(query, 500);
-  const [paginator, setPaginator] = useState({
-    totalPages: 1,
-    currentPage: 1,
-    totalResults: 0,
-  });
 
   useEffect(() => {
     fetchCategories();
-  }, [paginator.currentPage]);
+  }, []);
 
   const fetchCategories = async () => {
     setloading(true);
 
     try {
       const params = {
-        page: paginator.currentPage,
+        page: 1,
         limit: LIMIT_AMOUNT,
       };
 
@@ -38,12 +33,6 @@ export default function useManageMedicineCategory() {
 
       if (res) {
         setCategories(res.results);
-        setPaginator({
-          ...paginator,
-          totalResults: res.totalResults,
-          totalPages: res.totalPages,
-          currentPage: res.currentPage,
-        });
       }
     } catch (error) {
       console.log("Lỗi fetch data danh mục thuốc: ", error);
@@ -83,16 +72,6 @@ export default function useManageMedicineCategory() {
         }
       }
     });
-  };
-
-  const onPrevPage = () => {
-    if (paginator.currentPage === 1) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage - 1 }));
-  };
-
-  const onNextPage = () => {
-    if (paginator.currentPage === paginator.totalPages) return;
-    setPaginator((prev) => ({ ...prev, currentPage: prev.currentPage + 1 }));
   };
 
   const cols = [
@@ -174,9 +153,7 @@ export default function useManageMedicineCategory() {
     setQuery,
     fetchCategories,
     onDelete,
-    onPrevPage,
-    onNextPage,
-    paginator,
+
     exportCSV,
     exportPdf,
     exportExcel,

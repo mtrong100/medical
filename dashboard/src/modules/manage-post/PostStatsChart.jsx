@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
@@ -9,17 +9,10 @@ const PostStatsChart = ({
   dataSet2 = [],
   dataSet3 = [],
 }) => {
-  const [chartData, setChartData] = useState({});
-  const [chartOptions, setChartOptions] = useState({});
+  const documentStyle = getComputedStyle(document.documentElement);
 
-  useEffect(() => {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue("--text-color");
-    const textColorSecondary = documentStyle.getPropertyValue(
-      "--text-color-secondary"
-    );
-    const surfaceBorder = documentStyle.getPropertyValue("--surface-border");
-    const data = {
+  const chartData = useMemo(
+    () => ({
       labels,
       datasets: [
         {
@@ -41,8 +34,12 @@ const PostStatsChart = ({
           data: dataSet3,
         },
       ],
-    };
-    const options = {
+    }),
+    [dataSet1, dataSet2, dataSet3, labels, documentStyle]
+  );
+
+  const chartOptions = useMemo(
+    () => ({
       maintainAspectRatio: false,
       aspectRatio: 0.8,
       plugins: {
@@ -52,7 +49,7 @@ const PostStatsChart = ({
         },
         legend: {
           labels: {
-            color: textColor,
+            color: documentStyle.getPropertyValue("--text-color"),
           },
         },
       },
@@ -60,27 +57,25 @@ const PostStatsChart = ({
         x: {
           stacked: true,
           ticks: {
-            color: textColorSecondary,
+            color: documentStyle.getPropertyValue("--text-color-secondary"),
           },
           grid: {
-            color: surfaceBorder,
+            color: documentStyle.getPropertyValue("--surface-border"),
           },
         },
         y: {
           stacked: true,
           ticks: {
-            color: textColorSecondary,
+            color: documentStyle.getPropertyValue("--text-color-secondary"),
           },
           grid: {
-            color: surfaceBorder,
+            color: documentStyle.getPropertyValue("--surface-border"),
           },
         },
       },
-    };
-
-    setChartData(data);
-    setChartOptions(options);
-  }, [dataSet1, dataSet2, dataSet3, labels]);
+    }),
+    [documentStyle]
+  );
 
   if (loading) {
     return <Skeleton height={300}></Skeleton>;
@@ -91,7 +86,7 @@ const PostStatsChart = ({
       type="bar"
       data={chartData}
       options={chartOptions}
-      className={`rounded-md border border-gray-200 p-5 bg-white shadow-sm flex items-center justify-center h-[300px]`}
+      className="rounded-md border border-gray-200 p-5 bg-white shadow-sm flex items-center justify-center h-[300px]"
     />
   );
 };

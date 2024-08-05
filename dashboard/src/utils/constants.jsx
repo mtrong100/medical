@@ -61,7 +61,7 @@ export const SIDEBAR_LINKS = [
   },
   {
     icon: "pi pi-box",
-    name: "Thuốc",
+    name: "Dược phẩm & thuốc",
     link: "/medicine",
   },
   {
@@ -180,7 +180,7 @@ export const doctorSchedules = [
   "16:00 - 17:00",
 ];
 
-export const LIMIT_AMOUNT = 6;
+export const LIMIT_AMOUNT = 999;
 
 export const objectIdRegex = /^[0-9a-fA-F]{24}$/;
 
