@@ -10,6 +10,11 @@ export const getAppointmentDetailApi = async (id) => {
   return response;
 };
 
+export const getAppointmentStatsApi = async () => {
+  const response = await axios.get("/appointments/stats");
+  return response;
+};
+
 export const createAppointmentApi = async (data) => {
   const response = await axios.post("/appointments/create", data);
   return response;

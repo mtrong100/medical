@@ -10,11 +10,15 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import TableToolbar from "../../components/TableToolbar";
 import { appointmentStatusBodyTemplate } from "../../utils/columnTemplate";
+import useGetAppointmentStats from "./useGetAppointmentStats";
+import AppointmentByMonthChart from "./AppointmentByMonthChart";
+import AppointmentStatusChart from "./AppointmentStatusChart";
 
 const ManageAppointment = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [detail, setDetail] = useState(null);
+  const { loadingStats, stats } = useGetAppointmentStats();
   const {
     data,
     query,
@@ -62,6 +66,18 @@ const ManageAppointment = () => {
           label="Tạo lịch khám bệnh mới"
           icon="pi pi-plus"
           onClick={() => navigate("/appointment/create")}
+        />
+      </div>
+
+      <div className="mt-5 grid grid-cols-[minmax(0,_1fr)_400px] gap-5">
+        <AppointmentByMonthChart
+          loading={loadingStats}
+          labels={stats?.months}
+          dataSet={stats?.appointmentCountByMonth}
+        />
+        <AppointmentStatusChart
+          loading={loadingStats}
+          dataSet={stats?.appointmentStatus}
         />
       </div>
 

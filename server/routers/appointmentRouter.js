@@ -7,6 +7,7 @@ import {
   updateAppointment,
   bookingAppointment,
   getAppoinmentCollection,
+  getAppointmentStats,
 } from "../controllers/appointmentController.js";
 import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 import {
@@ -21,6 +22,8 @@ const router = express.Router();
 router.get("/collection", verifyAdmin, getAppoinmentCollection);
 
 router.get("/", verifyAdmin, getAppointments);
+
+router.get("/stats", getAppointmentStats);
 
 router.get("/:id", verifyAdmin, getAppointmentDetail);
 

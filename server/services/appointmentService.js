@@ -2,7 +2,7 @@ import Appointment from "../models/appointmentModel.js";
 import Employee from "../models/employeeModel.js";
 import Patient from "../models/patientModel.js";
 import User from "../models/userModel.js";
-import { APPOINTMENT_STATUS } from "../utils/constanst.js";
+import { APPOINTMENT_STATUS, MONTH_NAMES } from "../utils/constanst.js";
 import {
   sendAppointmentCancellation,
   sendAppointmentConfirmation,
@@ -91,6 +91,54 @@ export const getAppointmentDetailService = async (id) => {
       createdAt: appointment.createdAt,
     };
   } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const getAppointmentStatsService = async () => {
+  try {
+    const pendingAppointments = await Appointment.countDocuments({
+      status: APPOINTMENT_STATUS.PENDING,
+    });
+
+    const cancelAppointments = await Appointment.countDocuments({
+      status: APPOINTMENT_STATUS.CANCELLED,
+    });
+
+    const completedAppointments = await Appointment.countDocuments({
+      status: APPOINTMENT_STATUS.COMPLETED,
+    });
+
+    const appointmentsByMonth = await Appointment.aggregate([
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.month": 1 },
+      },
+    ]);
+
+    const appointmentCountByMonth = new Array(12).fill(0);
+    appointmentsByMonth.forEach((app) => {
+      appointmentCountByMonth[app._id.month - 1] = app.count;
+    });
+
+    const results = {
+      months: MONTH_NAMES,
+      appointmentCountByMonth,
+      appointmentStatus: [
+        completedAppointments,
+        pendingAppointments,
+        cancelAppointments,
+      ],
+    };
+
+    return results;
+  } catch (error) {
+    console.log("Lỗi tại service getAppointmentStatsService", error);
     throw new Error(error.message);
   }
 };

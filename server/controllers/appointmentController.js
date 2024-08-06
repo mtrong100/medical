@@ -6,6 +6,7 @@ import {
   getAppoinmentCollectionService,
   getAppointmentDetailService,
   getAppointmentsService,
+  getAppointmentStatsService,
   updateAppointmentService,
 } from "../services/appointmentService.js";
 
@@ -42,6 +43,16 @@ export const getAppointmentDetail = async (req, res) => {
       return res.status(404).json({ message: error.message });
     }
     console.log("Lỗi tại controller getAppointmentDetail", error);
+    return res.status(500).json({ message: "Lỗi server" });
+  }
+};
+
+export const getAppointmentStats = async (req, res) => {
+  try {
+    const stats = await getAppointmentStatsService();
+    return res.status(200).json(stats);
+  } catch (error) {
+    console.log("Lỗi tại controller getAppointmentStats", error);
     return res.status(500).json({ message: "Lỗi server" });
   }
 };
