@@ -11,9 +11,13 @@ import {
   statusBodyTemplate,
   totalPriceColumn,
 } from "../../utils/columnTemplate";
+import useGetPrescriptionStats from "./useGetPrescriptionStats";
+import PrescriptionByDoctorChart from "./PrescriptionByDoctorChart";
+import PresccriptionStatusChart from "./PresccriptionStatusChart";
 
 const ManagePrescription = () => {
   const navigate = useNavigate();
+  const { loadingStats, stats } = useGetPrescriptionStats();
   const {
     data,
     query,
@@ -52,6 +56,18 @@ const ManagePrescription = () => {
           label="Kê toa đơn thuốc mới"
           icon="pi pi-plus"
           onClick={() => navigate("/prescription/create")}
+        />
+      </div>
+
+      <div className="mt-5 grid grid-cols-[minmax(0,_1fr)_350px] gap-5">
+        <PrescriptionByDoctorChart
+          loading={loadingStats}
+          labels={stats?.doctors}
+          dataSet={stats?.prescriptionCount}
+        />
+        <PresccriptionStatusChart
+          loading={loadingStats}
+          dataSet={stats?.prescriptionStatus}
         />
       </div>
 

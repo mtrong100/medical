@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
-const MedicineStatsLineChart = ({ labels = [], dataSet = [], loading }) => {
+const MedicalRecordByMonthChart = ({ labels = [], dataSet = [], loading }) => {
   const documentStyle = getComputedStyle(document.documentElement);
   const textColor = documentStyle.getPropertyValue("--text-color");
   const textColorSecondary = documentStyle.getPropertyValue(
@@ -16,7 +16,7 @@ const MedicineStatsLineChart = ({ labels = [], dataSet = [], loading }) => {
       labels,
       datasets: [
         {
-          label: "Giá trung bình thuốc theo danh mục",
+          label: "Hồ sơ bệnh án theo tháng",
           backgroundColor: documentStyle.getPropertyValue("--cyan-500"),
           borderColor: documentStyle.getPropertyValue("--cyan-500"),
           data: dataSet,
@@ -78,4 +78,4 @@ const MedicineStatsLineChart = ({ labels = [], dataSet = [], loading }) => {
   );
 };
 
-export default MedicineStatsLineChart;
+export default MedicalRecordByMonthChart;

@@ -4,6 +4,7 @@ import {
   getMedicalServiceInvoiceCollectionService,
   getMedicalServiceInvoiceDetailService,
   getMedicalServiceInvoicesService,
+  getMedicalServiceInvoiceStatsService,
   updateMedicalServiceInvoiceService,
 } from "../services/medicalServiceInvoiceService.js";
 import mongoose from "mongoose";
@@ -42,6 +43,16 @@ export const getMedicalServiceInvoiceDetail = async (req, res) => {
     return res.status(200).json(result);
   } catch (error) {
     console.log("Lỗi tại controller getMedicalServiceInvoiceDetail", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getMedicalServiceInvoiceStats = async (req, res) => {
+  try {
+    const result = await getMedicalServiceInvoiceStatsService();
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log("Lỗi tại controller getMedicalServiceInvoiceStats", error);
     return res.status(500).json({ message: error.message });
   }
 };

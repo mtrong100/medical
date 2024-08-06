@@ -12,6 +12,11 @@ export const getMedicalServiceInvoiceDetailApi = async (id) => {
   return response;
 };
 
+export const getMedicalServiceInvoicesStatsApi = async () => {
+  const response = await axios.get(`/medical-service-invoices/stats`);
+  return response;
+};
+
 export const createMedicalServiceInvoiceApi = async (data) => {
   const response = await axios.post("/medical-service-invoices/create", data);
   return response;

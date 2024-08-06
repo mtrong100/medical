@@ -94,8 +94,7 @@ const ManageMedicine = () => {
         <MedicineStatsLineChart
           loading={loadingStats}
           labels={stats?.categories}
-          dataSet1={stats?.medicineCount}
-          dataSet2={stats?.averagePrices}
+          dataSet={stats?.averagePrices}
         />
       </div>
 

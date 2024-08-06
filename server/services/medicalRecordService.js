@@ -1,4 +1,6 @@
+import Employee from "../models/employeeModel.js";
 import MedicalRecord from "../models/medicalRecordModel.js";
+import { EMPLOYEE_ROLE, MONTH_NAMES } from "../utils/constanst.js";
 
 export const getMedicalRecordsService = async (page, limit) => {
   try {
@@ -71,6 +73,52 @@ export const getMedicalRecordDetailService = async (id) => {
   } catch (error) {
     console.log("Lỗi tại service getMedicalRecordDetailService", error);
     throw new Error(error.message);
+  }
+};
+
+export const getMedicalRecordStatsService = async () => {
+  try {
+    const doctors = await Employee.find({ role: EMPLOYEE_ROLE.DOCTOR });
+    const doctorNames = doctors.map((doctor) => doctor.name);
+
+    const recordCount = [];
+
+    for (const doc of doctors) {
+      const recordCountByDoctor = await MedicalRecord.countDocuments({
+        doctor: doc._id,
+      });
+
+      recordCount.push(recordCountByDoctor);
+    }
+
+    const recordsByMonth = await MedicalRecord.aggregate([
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.month": 1 },
+      },
+    ]);
+
+    const recordCountbyMonth = new Array(12).fill(0);
+    recordsByMonth.forEach((r) => {
+      recordCountbyMonth[r._id.month - 1] = r.count;
+    });
+
+    const results = {
+      months: MONTH_NAMES,
+      recordCountbyMonth,
+      doctors: doctorNames,
+      recordCountByDoctor: recordCount,
+    };
+
+    return results;
+  } catch (error) {
+    console.log("Lỗi tại service getMedicalRecordStatsService", error);
+    throw new Error("Lỗi server");
   }
 };
 

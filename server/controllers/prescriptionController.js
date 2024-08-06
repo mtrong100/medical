@@ -4,6 +4,7 @@ import {
   getPrescriptionCollectionService,
   getPrescriptionDetailService,
   getPrescriptionsService,
+  getPrescriptionStatsService,
 } from "../services/prescriptionService.js";
 import mongoose from "mongoose";
 
@@ -37,6 +38,16 @@ export const getPrescriptionDetail = async (req, res) => {
     return res.status(200).json(result);
   } catch (error) {
     console.log("Lỗi tại controller getPrescriptionDetail", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getPrescriptionStats = async (req, res) => {
+  try {
+    const data = await getPrescriptionStatsService();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Lỗi tại controller getPrescriptionStats", error);
     return res.status(500).json({ message: error.message });
   }
 };

@@ -6,6 +6,7 @@ import {
   getMedicalServiceInvoiceDetail,
   getMedicalServiceInvoiceCollection,
   updateMedicalServiceInvoice,
+  getMedicalServiceInvoiceStats,
 } from "../controllers/medicalServiceInvoiceController.js";
 import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 import {
@@ -18,6 +19,8 @@ const router = express.Router();
 router.get("/collection", verifyAdmin, getMedicalServiceInvoiceCollection);
 
 router.get("/", verifyAdmin, getMedicalServiceInvoices);
+
+router.get("/stats", verifyAdmin, getMedicalServiceInvoiceStats);
 
 router.get("/:id", verifyAdmin, getMedicalServiceInvoiceDetail);
 

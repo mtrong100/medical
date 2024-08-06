@@ -1,6 +1,14 @@
 import { Tag } from "primereact/tag";
-import { formatCurrencyVND, formatDate } from "./helper";
-import { EMPLOYEE_STATUS, PAYMENT_STATUS } from "./constants";
+import {
+  formatCurrencyVND,
+  formatDate,
+  getAppointmentServerity,
+} from "./helper";
+import {
+  APPOINTMENT_STATUS,
+  EMPLOYEE_STATUS,
+  PAYMENT_STATUS,
+} from "./constants";
 
 export const totalPriceColumn = (rowData) => {
   return <div>{formatCurrencyVND(rowData.total)}</div>;
@@ -82,4 +90,62 @@ export const employeeStatusBodyTemplate = (rowData) => {
 
 export const salaryBodyTemplate = (rowData) => {
   return <div>{formatCurrencyVND(rowData.salary)}</div>;
+};
+
+export const healthInsuranceBodyTemplate = (rowData) => {
+  return (
+    <>
+      {!rowData.healthInsurance ? (
+        <Tag value="Không BHYT" icon="pi pi-info-circle" severity="warning" />
+      ) : (
+        <Tag value="Có BHYT" icon="pi pi-check" severity="info" />
+      )}
+    </>
+  );
+};
+
+export const invoiceStatusBodyTemplate = (rowData) => {
+  return (
+    <>
+      {rowData.paymentStatus === PAYMENT_STATUS.UNPAID ? (
+        <Tag
+          value={rowData.paymentStatus}
+          icon="pi pi-info-circle"
+          severity="danger"
+        />
+      ) : (
+        <Tag
+          value={rowData.paymentStatus}
+          icon="pi pi-check"
+          severity="success"
+        />
+      )}
+    </>
+  );
+};
+
+export const appointmentStatusBodyTemplate = (rowData) => {
+  return (
+    <>
+      {rowData.status === APPOINTMENT_STATUS.CANCELLED ? (
+        <Tag
+          value={rowData.status}
+          icon="pi pi-info-circle"
+          severity="danger"
+        />
+      ) : rowData.status === APPOINTMENT_STATUS.COMPLETED ? (
+        <Tag
+          value={rowData.status}
+          icon="pi pi-info-circle"
+          severity="success"
+        />
+      ) : (
+        <Tag
+          value={rowData.status}
+          icon="pi pi-pause-circle"
+          severity="warning"
+        />
+      )}
+    </>
+  );
 };

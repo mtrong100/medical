@@ -48,8 +48,8 @@ const CreateMedicalServiceInvoice = () => {
     <div>
       <TitleSection>Tạo phiếu dịch vụ mới</TitleSection>
 
-      <div className="my-10">
-        <div className="grid grid-cols-2 gap-5">
+      <div className="mt-10 w-full max-w-6xl mx-auto space-y-5">
+        <div className="grid grid-cols-3 gap-5">
           <div className="flex flex-col gap-2">
             <label htmlFor="patient">Mã bệnh nhân</label>
             <InputText
@@ -58,6 +58,19 @@ const CreateMedicalServiceInvoice = () => {
                 setForm((prev) => ({ ...prev, patient: e.target.value }))
               }
               placeholder="Mã bệnh nhân"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label>Trạng thái</label>
+            <Dropdown
+              options={paymentStatus}
+              placeholder="Chọn trạng thái"
+              className="w-full "
+              value={form.status}
+              onChange={(e) =>
+                setForm((prev) => ({ ...prev, status: e.value }))
+              }
             />
           </div>
 
@@ -83,68 +96,54 @@ const CreateMedicalServiceInvoice = () => {
               />
             </div>
           </div>
-
-          <div className="flex flex-col gap-2">
-            <label>Trạng thái</label>
-            <Dropdown
-              options={paymentStatus}
-              placeholder="Chọn trạng thái"
-              className="w-full "
-              value={form.status}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, status: e.value }))
-              }
-            />
-          </div>
         </div>
-      </div>
 
-      {/* Service table  */}
-      <div className="mt-5 space-y-5">
-        <h1 className="text-2xl font-semibold">Danh sách dịch vụ khám</h1>
-        <DataTable
-          scrollable
-          stripedRows
-          showGridlines
-          emptyMessage="Không tìm thấy dữ liệu"
-          value={servicesUsed}
-        >
-          <Column field="name" header="Tên" sortable />
-          <Column
-            field="price"
-            header="Giá tiền"
-            sortable
-            body={priceBodyTemplate}
+        <div className=" space-y-5">
+          <h1 className="text-2xl font-semibold">Danh sách dịch vụ khám</h1>
+          <DataTable
+            scrollable
+            stripedRows
+            showGridlines
+            emptyMessage="Không tìm thấy dữ liệu"
+            value={servicesUsed}
+          >
+            <Column field="name" header="Tên" sortable />
+            <Column
+              field="price"
+              header="Giá tiền"
+              sortable
+              body={priceBodyTemplate}
+            />
+            <Column
+              body={actionBodyTemplate}
+              exportable={false}
+              header="Thao tác"
+            />
+          </DataTable>
+        </div>
+
+        <div className="flex items-center justify-end">
+          <p className="text-xl font-semibold">
+            Tổng tiền: {formatCurrencyVND(total)}
+          </p>
+        </div>
+
+        <div className="flex items-center justify-end gap-5 ">
+          <Button
+            type="submit"
+            label="Quay về"
+            severity="secondary"
+            onClick={() => navigate("/medical-service-invoice")}
+            icon="pi pi-arrow-left"
           />
-          <Column
-            body={actionBodyTemplate}
-            exportable={false}
-            header="Thao tác"
+          <Button
+            onClick={onCreate}
+            type="submit"
+            label="Xác nhận"
+            disabled={loading}
+            icon="pi pi-check-circle"
           />
-        </DataTable>
-      </div>
-
-      <div className="flex items-center justify-end mt-5">
-        <p className="text-xl font-semibold">
-          Tổng tiền: {formatCurrencyVND(total)}
-        </p>
-      </div>
-
-      <div className="flex items-center justify-end gap-5 mt-8">
-        <Button
-          type="submit"
-          label="Quay về"
-          severity="secondary"
-          onClick={() => navigate("/medical-service-invoice")}
-          icon="pi pi-arrow-left"
-        />
-        <Button
-          onClick={onCreate}
-          type="submit"
-          label="Xác nhận"
-          disabled={loading}
-          icon="pi pi-check-circle"
-        />
+        </div>
       </div>
     </div>
   );

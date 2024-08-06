@@ -12,15 +12,15 @@ import { Button } from "primereact/button";
 import { genders } from "../../utils/constants";
 import TableToolbar from "../../components/TableToolbar";
 import useGetPatientStats from "./useGetPatientStats";
-import PatientGenderChart from "./PatientGenderChart";
 import PatientGenderPieChart from "./PatientGenderPieChart";
-import PatientRoleDoughnutChart from "./PatientRoleDoughnutChart";
+import PatientsByMonthChart from "./PatientsByMonthChart";
 
 const ManagePatient = () => {
   const navigate = useNavigate();
   const [detail, setDetail] = useState(null);
   const [visible, setVisible] = useState(false);
   const { loadingStats, stats } = useGetPatientStats();
+  console.log("🚀 ~ ManagePatient ~ stats:", stats);
   const {
     data,
     query,
@@ -74,13 +74,13 @@ const ManagePatient = () => {
         />
       </div>
 
-      <div className="mt-5 grid grid-cols-3 gap-5">
-        <PatientGenderChart loading={loadingStats} dataSet={stats?.counts} />
-        <PatientGenderPieChart loading={loadingStats} dataSet={stats?.counts} />
-        <PatientRoleDoughnutChart
+      <div className="mt-5 grid grid-cols-[minmax(0,_1fr)_400px] gap-5">
+        <PatientsByMonthChart
           loading={loadingStats}
-          dataSet={stats?.counts}
+          labels={stats?.months}
+          dataSet={stats?.patientsCountByMonth}
         />
+        <PatientGenderPieChart loading={loadingStats} dataSet={stats?.counts} />
       </div>
 
       {/* Filter */}

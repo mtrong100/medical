@@ -106,6 +106,9 @@ export const getPrescriptionDetailService = async (id) => {
 export const getPrescriptionStatsService = async () => {
   try {
     const doctors = await Employee.find({ role: EMPLOYEE_ROLE.DOCTOR });
+
+    const doctorNames = doctors.map((doctor) => doctor.name);
+
     const paidPrescription = await Prescription.countDocuments({
       status: PAYMENT_STATUS.PAID,
     });
@@ -119,17 +122,15 @@ export const getPrescriptionStatsService = async () => {
     for (const doc of doctors) {
       const prescriptionByDoctor = await Prescription.countDocuments({
         doctor: doc._id,
-        status: PAYMENT_STATUS.PAID,
       });
 
       prescriptionCount.push(prescriptionByDoctor);
     }
 
     const results = {
-      doctors,
+      doctors: doctorNames,
       prescriptionCount,
-      paidPrescription,
-      unPaidPrescription,
+      prescriptionStatus: [paidPrescription, unPaidPrescription],
     };
 
     return results;

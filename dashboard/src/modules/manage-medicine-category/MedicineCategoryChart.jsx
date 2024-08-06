@@ -3,59 +3,69 @@ import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
 const MedicineCategoryChart = ({ loading, dataSet = [], labels }) => {
-  const chartData = useMemo(
-    () => ({
+  const documentStyle = getComputedStyle(document.documentElement);
+  const textColor = documentStyle.getPropertyValue("--text-color");
+  const textColorSecondary = documentStyle.getPropertyValue(
+    "--text-color-secondary"
+  );
+  const surfaceBorder = documentStyle.getPropertyValue("--surface-border");
+
+  // Memoize chart data
+  const chartData = useMemo(() => {
+    return {
       labels,
       datasets: [
         {
-          label: "Danh mục thuốc",
+          label: "Số lượng thuốc theo danh mục",
+          backgroundColor: documentStyle.getPropertyValue("--cyan-500"),
+          borderColor: documentStyle.getPropertyValue("--cyan-500"),
           data: dataSet,
-          backgroundColor: [
-            "rgba(255, 159, 64, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-            "rgba(75, 192, 192, 0.2)",
-            "rgba(153, 102, 255, 0.2)",
-            "rgba(255, 159, 64, 0.2)",
-            "rgba(255, 99, 132, 0.2)",
-            "rgba(54, 162, 235, 0.2)",
-            "rgba(255, 206, 86, 0.2)",
-          ],
-          borderColor: [
-            "rgb(255, 159, 64)",
-            "rgb(153, 102, 255)",
-            "rgb(255, 99, 132)",
-            "rgb(54, 162, 235)",
-            "rgb(255, 206, 86)",
-            "rgb(75, 192, 192)",
-            "rgb(153, 102, 255)",
-            "rgb(255, 159, 64)",
-            "rgb(255, 99, 132)",
-            "rgb(54, 162, 235)",
-            "rgb(255, 206, 86)",
-          ],
-          borderWidth: 1,
         },
       ],
-    }),
-    [dataSet, labels]
-  );
+    };
+  }, [labels, documentStyle, dataSet]);
 
-  const chartOptions = useMemo(
-    () => ({
-      scales: {
-        y: {
-          beginAtZero: true,
+  // Memoize chart options
+  const chartOptions = useMemo(() => {
+    return {
+      indexAxis: "y",
+      maintainAspectRatio: false,
+      aspectRatio: 0.8,
+      plugins: {
+        legend: {
+          labels: {
+            color: textColor,
+          },
         },
       },
-    }),
-    []
-  );
+      scales: {
+        x: {
+          ticks: {
+            color: textColorSecondary,
+            font: {
+              weight: 500,
+            },
+          },
+          grid: {
+            display: false,
+            drawBorder: false,
+          },
+        },
+        y: {
+          ticks: {
+            color: textColorSecondary,
+          },
+          grid: {
+            color: surfaceBorder,
+            drawBorder: false,
+          },
+        },
+      },
+    };
+  }, [textColor, textColorSecondary, surfaceBorder]);
 
   if (loading) {
-    return <Skeleton height={570}></Skeleton>;
+    return <Skeleton height={350}></Skeleton>;
   }
 
   return (
@@ -63,7 +73,7 @@ const MedicineCategoryChart = ({ loading, dataSet = [], labels }) => {
       type="bar"
       data={chartData}
       options={chartOptions}
-      className="rounded-md border w-full border-gray-200 p-5 bg-white shadow-sm h-[570px]"
+      className="rounded-md border border-gray-200 p-5 bg-white shadow-sm flex items-center justify-center h-[350px]"
     />
   );
 };

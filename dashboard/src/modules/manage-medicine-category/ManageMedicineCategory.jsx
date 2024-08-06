@@ -61,7 +61,7 @@ const ManageMedicineCategory = () => {
         />
       </div>
 
-      <div className="mt-5 grid grid-cols-[minmax(0,_1fr)_450px] gap-5">
+      <div className="mt-5 grid grid-cols-[minmax(0,_1fr)_400px] gap-5">
         <MedicineCategoryChart
           loading={loadingStats}
           dataSet={stats?.medicineCount}

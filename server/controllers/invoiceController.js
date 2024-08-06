@@ -4,6 +4,7 @@ import {
   getInvoiceCollectionService,
   getInvoiceDetailService,
   getInvoicesService,
+  getInvoiceStatsService,
   updateInvoiceService,
 } from "../services/invoiceService.js";
 import mongoose from "mongoose";
@@ -43,6 +44,16 @@ export const getInvoiceDetail = async (req, res) => {
   } catch (error) {
     console.log("Error in getInvoiceDetail controller", error);
     return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getInvoiceStats = async (req, res) => {
+  try {
+    const data = await getInvoiceStatsService();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.log("Error in getInvoiceStats controller", error);
+    return res.status(500).json({ message: error.message });
   }
 };
 

@@ -10,6 +10,11 @@ export const getPrescriptionDetailApi = async (id) => {
   return response;
 };
 
+export const getPrescriptionStatsApi = async () => {
+  const response = await axios.get("/prescriptions/stats");
+  return response;
+};
+
 export const createPrescriptionApi = async (data) => {
   const response = await axios.post("/prescriptions/create", data);
   return response;

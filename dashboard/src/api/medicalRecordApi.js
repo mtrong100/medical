@@ -12,6 +12,11 @@ export const getMedicalRecordDetailApi = async (id) => {
   return response;
 };
 
+export const getMedicalRecordStatsApi = async () => {
+  const response = await axios.get("/medical-records/stats");
+  return response;
+};
+
 export const createMedicalRecordApi = async (data) => {
   const response = await axios.post("/medical-records/create", data);
   return response;

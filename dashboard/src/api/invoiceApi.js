@@ -10,6 +10,11 @@ export const getInvoiceDetailApi = async (id) => {
   return response;
 };
 
+export const getInvoiceStatsApi = async () => {
+  const response = await axios.get("/invoices/stats");
+  return response;
+};
+
 export const createInvoiceApi = async (data) => {
   const response = await axios.post("/invoices/create", data);
   return response;

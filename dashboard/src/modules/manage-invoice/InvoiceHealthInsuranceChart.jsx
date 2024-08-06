@@ -2,22 +2,22 @@ import React, { useMemo } from "react";
 import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
-const PatientGenderPieChart = ({ loading, dataSet = [] }) => {
+const InvoiceHealthInsuranceChart = ({ dataSet = [], loading }) => {
   const documentStyle = getComputedStyle(document.documentElement);
 
   const chartData = useMemo(
     () => ({
-      labels: ["Nam", "Nữ"],
+      labels: ["Có BHYT", "Không BHYT"],
       datasets: [
         {
           data: dataSet,
           backgroundColor: [
+            documentStyle.getPropertyValue("--cyan-500"),
             documentStyle.getPropertyValue("--orange-500"),
-            documentStyle.getPropertyValue("--pink-500"),
           ],
           hoverBackgroundColor: [
+            documentStyle.getPropertyValue("--cyan-400"),
             documentStyle.getPropertyValue("--orange-400"),
-            documentStyle.getPropertyValue("--pink-400"),
           ],
         },
       ],
@@ -27,29 +27,23 @@ const PatientGenderPieChart = ({ loading, dataSet = [] }) => {
 
   const chartOptions = useMemo(
     () => ({
-      plugins: {
-        legend: {
-          labels: {
-            usePointStyle: true,
-          },
-        },
-      },
+      cutout: "60%",
     }),
     []
   );
 
   if (loading) {
-    return <Skeleton height={350}></Skeleton>;
+    return <Skeleton height={300}></Skeleton>;
   }
 
   return (
     <Chart
-      type="pie"
+      type="doughnut"
       data={chartData}
       options={chartOptions}
-      className="rounded-md border border-gray-200 py-5 bg-white shadow-sm flex items-center justify-center h-[350px]"
+      className="rounded-md border border-gray-200 py-5 bg-white shadow-sm flex items-center justify-center h-[300px]"
     />
   );
 };
 
-export default PatientGenderPieChart;
+export default InvoiceHealthInsuranceChart;

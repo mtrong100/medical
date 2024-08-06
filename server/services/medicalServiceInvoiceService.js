@@ -1,5 +1,5 @@
 import MedicalServiceInvoice from "../models/medicalServiceInvoiceModel.js";
-import { PAYMENT_STATUS } from "../utils/constanst.js";
+import { MONTH_NAMES, PAYMENT_STATUS } from "../utils/constanst.js";
 
 export const getMedicalServiceInvoiceCollectionService = async () => {
   try {
@@ -102,6 +102,46 @@ export const getMedicalServiceInvoiceDetailService = async (id) => {
     return formattedResults;
   } catch (error) {
     console.log("Lỗi tại service getMedicalServiceInvoiceDetailService", error);
+    throw new Error(error.message);
+  }
+};
+
+export const getMedicalServiceInvoiceStatsService = async () => {
+  try {
+    const paidInvoices = await MedicalServiceInvoice.countDocuments({
+      status: PAYMENT_STATUS.PAID,
+    });
+
+    const unpaidInvoices = await MedicalServiceInvoice.countDocuments({
+      status: PAYMENT_STATUS.UNPAID,
+    });
+
+    const invoicesByMonth = await MedicalServiceInvoice.aggregate([
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.month": 1 },
+      },
+    ]);
+
+    const invoicesCountByMonth = new Array(12).fill(0);
+    invoicesByMonth.forEach((invoice) => {
+      invoicesCountByMonth[invoice._id.month - 1] = invoice.count;
+    });
+
+    const results = {
+      months: MONTH_NAMES,
+      invoicesCountByMonth,
+      invoiceStatus: [paidInvoices, unpaidInvoices],
+    };
+
+    return results;
+  } catch (error) {
+    console.log("Lỗi tại service getMedicalServiceInvoiceStatsService", error);
     throw new Error(error.message);
   }
 };

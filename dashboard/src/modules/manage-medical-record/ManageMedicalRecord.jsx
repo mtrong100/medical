@@ -10,11 +10,15 @@ import { Column } from "jspdf-autotable";
 import { Button } from "primereact/button";
 import TableToolbar from "../../components/TableToolbar";
 import { createdAtBodyTemplate } from "../../utils/columnTemplate";
+import useGetMedicalRecordStats from "./useGetMedicalRecordStats";
+import MedicalRecordByMonthChart from "./MedicalRecordByMonthChart";
+import MedicalRecordByDoctorChart from "./MedicalRecordByDoctorChart";
 
 const ManageMedicalRecord = () => {
   const navigate = useNavigate();
   const [detail, setDetail] = useState(null);
   const [visible, setVisible] = useState(false);
+  const { loadingStats, stats } = useGetMedicalRecordStats();
   const {
     data,
     query,
@@ -62,6 +66,19 @@ const ManageMedicalRecord = () => {
           label="Lập hồ sơ bệnh án mới"
           icon="pi pi-plus"
           onClick={() => navigate("/medical-record/create")}
+        />
+      </div>
+
+      <div className="mt-5 grid grid-cols-2 gap-5">
+        <MedicalRecordByMonthChart
+          loading={loadingStats}
+          labels={stats?.months}
+          dataSet={stats?.recordCountbyMonth}
+        />
+        <MedicalRecordByDoctorChart
+          loading={loadingStats}
+          labels={stats?.doctors}
+          dataSet={stats?.recordCountByDoctor}
         />
       </div>
 

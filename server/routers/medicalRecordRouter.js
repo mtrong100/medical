@@ -5,6 +5,7 @@ import {
   getMedicalRecords,
   getMedicalRecordDetail,
   updateMedicalRecord,
+  getMedicalRecordStats,
 } from "../controllers/medicalRecordController.js";
 import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 import {
@@ -15,6 +16,8 @@ import {
 const router = express.Router();
 
 router.get("/", verifyAdmin, getMedicalRecords);
+
+router.get("/stats", getMedicalRecordStats);
 
 router.get("/:id", verifyAdmin, getMedicalRecordDetail);
 

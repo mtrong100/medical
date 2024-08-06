@@ -39,7 +39,7 @@ const MedicalServiceInvoiceDetail = () => {
         />
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 w-full max-w-6xl mx-auto">
         <div className="grid grid-cols-2 gap-5">
           <Fieldset legend="Mã phiếu dịch vụ">
             <p className="m-0">{detail?._id}</p>

@@ -45,7 +45,7 @@ const PatientGenderPieChart = ({ loading, dataSet = [], labels = [] }) => {
   );
 
   if (loading) {
-    return <Skeleton height={570}></Skeleton>;
+    return <Skeleton height={350}></Skeleton>;
   }
 
   return (
@@ -53,7 +53,7 @@ const PatientGenderPieChart = ({ loading, dataSet = [], labels = [] }) => {
       type="pie"
       data={chartData}
       options={chartOptions}
-      className="rounded-md border border-gray-200 p-5 bg-white shadow-sm flex items-center justify-center h-[570px]"
+      className="rounded-md border border-gray-200 p-5 bg-white shadow-sm flex items-center justify-center h-[350px]"
     />
   );
 };

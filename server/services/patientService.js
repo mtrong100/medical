@@ -1,6 +1,7 @@
 import Appointment from "../models/appointmentModel.js";
 import MedicalRecord from "../models/medicalRecordModel.js";
 import Patient from "../models/patientModel.js";
+import { MONTH_NAMES } from "../utils/constanst.js";
 
 export const getPatientCollectionService = async () => {
   try {
@@ -58,10 +59,27 @@ export const getPatientStatsService = async () => {
       },
     ]);
 
+    const patientsByMonth = await Patient.aggregate([
+      {
+        $group: {
+          _id: { month: { $month: "$createdAt" } },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.month": 1 },
+      },
+    ]);
+
+    const patientsCountByMonth = new Array(12).fill(0);
+    patientsByMonth.forEach((p) => {
+      patientsCountByMonth[p._id.month - 1] = p.count;
+    });
+
     const genders = stats.map((stat) => stat._id);
     const counts = stats.map((stat) => stat.count);
 
-    return { genders, counts };
+    return { genders, counts, months: MONTH_NAMES, patientsCountByMonth };
   } catch (error) {
     console.log("Lỗi tại service getPatientStats", error);
     throw new Error(error.message);

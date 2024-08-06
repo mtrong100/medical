@@ -6,6 +6,7 @@ import {
   getInvoiceDetail,
   updateInvoice,
   getInvoiceCollection,
+  getInvoiceStats,
 } from "../controllers/invoiceController.js";
 import { verifyAdmin } from "../middlewares/verifyAdmin.js";
 import {
@@ -18,6 +19,8 @@ const router = express.Router();
 router.get("/collection", verifyAdmin, getInvoiceCollection);
 
 router.get("/", verifyAdmin, getInvoices);
+
+router.get("/stats", getInvoiceStats);
 
 router.get("/:id", verifyAdmin, getInvoiceDetail);
 

@@ -1,7 +1,7 @@
 import Employee from "../models/employeeModel.js";
 import Invoice from "../models/invoiceModel.js";
 import Patient from "../models/patientModel.js";
-import { PAYMENT_STATUS } from "../utils/constanst.js";
+import { EMPLOYEE_ROLE, PAYMENT_STATUS } from "../utils/constanst.js";
 
 export const getInvoiceCollectionService = async () => {
   try {
@@ -95,6 +95,59 @@ export const getInvoiceDetailService = async (id) => {
   } catch (error) {
     console.log("Error in getInvoiceDetail service", error);
     throw error;
+  }
+};
+
+export const getInvoiceStatsService = async () => {
+  try {
+    const [
+      paidInvoice,
+      unPaidInvoice,
+      invoiceHasHealthInsurance,
+      invoiceHasNoHealthInsurance,
+      doctors,
+    ] = await Promise.all([
+      Invoice.countDocuments({ paymentStatus: PAYMENT_STATUS.PAID }),
+      Invoice.countDocuments({ paymentStatus: PAYMENT_STATUS.UNPAID }),
+      Invoice.countDocuments({ healthInsurance: true }),
+      Invoice.countDocuments({ healthInsurance: false }),
+      Employee.find({ role: EMPLOYEE_ROLE.DOCTOR }),
+    ]);
+
+    const doctorNames = doctors.map((doctor) => doctor.name);
+
+    const invoicesByDoctor = await Invoice.aggregate([
+      {
+        $group: {
+          _id: "$doctor",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const doctorInvoiceCountMap = new Map();
+    invoicesByDoctor.forEach(({ _id, count }) => {
+      doctorInvoiceCountMap.set(_id.toString(), count);
+    });
+
+    const invoiceCountByDoctor = doctors.map(
+      (doctor) => doctorInvoiceCountMap.get(doctor._id.toString()) || 0
+    );
+
+    const results = {
+      doctors: doctorNames,
+      invoiceCountByDoctor,
+      invoiceStatus: [paidInvoice, unPaidInvoice],
+      invoiceHealthInsurance: [
+        invoiceHasHealthInsurance,
+        invoiceHasNoHealthInsurance,
+      ],
+    };
+
+    return results;
+  } catch (error) {
+    console.log("Lỗi tại service getInvoiceStatsService", error);
+    throw new Error(error.message);
   }
 };
 

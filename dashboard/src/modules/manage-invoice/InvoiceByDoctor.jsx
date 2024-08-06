@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { Chart } from "primereact/chart";
 import { Skeleton } from "primereact/skeleton";
 
-const MedicineStatsLineChart = ({ labels = [], dataSet = [], loading }) => {
+const InvoiceByDoctor = ({ labels = [], dataSet = [], loading }) => {
   const documentStyle = getComputedStyle(document.documentElement);
   const textColor = documentStyle.getPropertyValue("--text-color");
   const textColorSecondary = documentStyle.getPropertyValue(
@@ -16,9 +16,9 @@ const MedicineStatsLineChart = ({ labels = [], dataSet = [], loading }) => {
       labels,
       datasets: [
         {
-          label: "Giá trung bình thuốc theo danh mục",
-          backgroundColor: documentStyle.getPropertyValue("--cyan-500"),
-          borderColor: documentStyle.getPropertyValue("--cyan-500"),
+          label: "Hóa đơn khám bệnh theo bác sĩ",
+          backgroundColor: documentStyle.getPropertyValue("--teal-500"),
+          borderColor: documentStyle.getPropertyValue("--teal-500"),
           data: dataSet,
         },
       ],
@@ -65,7 +65,7 @@ const MedicineStatsLineChart = ({ labels = [], dataSet = [], loading }) => {
   }, [textColor, textColorSecondary, surfaceBorder]);
 
   if (loading) {
-    return <Skeleton height={350}></Skeleton>;
+    return <Skeleton height={300}></Skeleton>;
   }
 
   return (
@@ -73,9 +73,9 @@ const MedicineStatsLineChart = ({ labels = [], dataSet = [], loading }) => {
       type="bar"
       data={chartData}
       options={chartOptions}
-      className="rounded-md border border-gray-200 p-5 bg-white shadow-sm flex items-center justify-center h-[350px]"
+      className="rounded-md border border-gray-200 p-5 bg-white shadow-sm flex items-center justify-center h-[300px]"
     />
   );
 };
 
-export default MedicineStatsLineChart;
+export default InvoiceByDoctor;

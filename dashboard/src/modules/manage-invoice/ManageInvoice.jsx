@@ -2,28 +2,35 @@ import useManageInvoice from "./useManageInvoice";
 import TitleSection from "../../components/TitleSection";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Tag } from "primereact/tag";
-import { LIMIT_AMOUNT, PAYMENT_STATUS } from "../../utils/constants";
-import { InputText } from "primereact/inputtext";
 import { formatCurrencyVND, formatDate } from "../../utils/helper";
 import { Fieldset } from "primereact/fieldset";
 import { Dialog } from "primereact/dialog";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
+import TableToolbar from "../../components/TableToolbar";
+import {
+  createdAtBodyTemplate,
+  healthInsuranceBodyTemplate,
+  invoiceStatusBodyTemplate,
+  priceBodyTemplate,
+  totalPriceColumn,
+} from "../../utils/columnTemplate";
+import useGetInvoiceStats from "./useGetInvoiceStats";
+import InvoiceByDoctor from "./InvoiceByDoctor";
+import InvoiceStatusChart from "./InvoiceStatusChart";
+import InvoiceHealthInsuranceChart from "./InvoiceHealthInsuranceChart";
 
 const ManageInvoice = () => {
   const navigate = useNavigate();
   const [detail, setDetail] = useState(null);
   const [visible, setVisible] = useState(false);
+  const { loadingStats, stats } = useGetInvoiceStats();
   const {
     data,
     query,
     setQuery,
     onDelete,
-    paginator,
-    onPrevPage,
-    onNextPage,
     dt,
     exportCSV,
     exportPdf,
@@ -31,54 +38,12 @@ const ManageInvoice = () => {
     onExportPDF,
   } = useManageInvoice();
 
-  const header = (
-    <div className="flex items-center justify-between">
-      <div className="p-inputgroup max-w-md">
-        <InputText
-          placeholder="Tìm kiếm"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <Button icon="pi pi-search" />
-      </div>
-
-      <div className="flex items-center flex-shrink-0  gap-5">
-        <Button
-          type="button"
-          icon="pi pi-file"
-          label="Xuất file CSV"
-          rounded
-          onClick={() => exportCSV(false)}
-          data-pr-tooltip="CSV"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-excel"
-          severity="success"
-          label="Xuất file Excel"
-          rounded
-          onClick={exportExcel}
-          data-pr-tooltip="XLS"
-        />
-        <Button
-          type="button"
-          icon="pi pi-file-pdf"
-          severity="warning"
-          label="Xuất file PDF"
-          rounded
-          onClick={exportPdf}
-          data-pr-tooltip="PDF"
-        />
-      </div>
-    </div>
-  );
-
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex items-center gap-2 ">
         <Button
           icon="pi pi-eye"
-          rounded
+          outlined
           severity="secondary"
           onClick={() => {
             setVisible(true);
@@ -87,56 +52,22 @@ const ManageInvoice = () => {
         />
         <Button
           icon="pi pi-print"
-          rounded
+          outlined
           severity="help"
           onClick={() => onExportPDF(rowData)}
         />
         <Button
           icon="pi pi-pencil"
-          rounded
+          outlined
           onClick={() => navigate(`/invoice/update/${rowData._id}`)}
         />
         <Button
           icon="pi pi-trash"
-          rounded
+          outlined
           severity="danger"
           onClick={() => onDelete(rowData._id)}
         />
       </div>
-    );
-  };
-
-  const statusBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        value={rowData.paymentStatus}
-        rounded
-        severity={
-          rowData.paymentStatus === PAYMENT_STATUS.UNPAID ? "danger" : "success"
-        }
-      />
-    );
-  };
-
-  const createdAtBodyTemplate = (rowData) => {
-    return <div>{formatDate(rowData.createdAt)}</div>;
-  };
-
-  const totalBodyTemplate = (rowData) => {
-    return <div>{formatCurrencyVND(rowData.total)}</div>;
-  };
-
-  const priceBodyTemplate = (rowData) => {
-    return <div>{formatCurrencyVND(rowData.price)}</div>;
-  };
-
-  const healthInsuranceBodyTemplate = (rowData) => {
-    return (
-      <Tag
-        value={rowData.healthInsurance ? "Có" : "Không"}
-        rounded
-        severity={rowData.healthInsurance ? "secondary" : "danger"}
-      />
     );
   };
 
@@ -151,16 +82,44 @@ const ManageInvoice = () => {
         />
       </div>
 
-      {/* Render data  */}
+      <div className="mt-5 grid grid-cols-[minmax(0,1fr),350px,350px] gap-5">
+        <InvoiceByDoctor
+          loading={loadingStats}
+          dataSet={stats?.invoiceCountByDoctor}
+          labels={stats?.doctors}
+        />
+        <InvoiceHealthInsuranceChart
+          loading={loadingStats}
+          dataSet={stats?.invoiceHealthInsurance}
+        />
+        <InvoiceStatusChart
+          loading={loadingStats}
+          dataSet={stats?.invoiceStatus}
+        />
+      </div>
+
       <div className="mt-5">
         <DataTable
           ref={dt}
           value={data}
-          header={header}
+          paginator
+          rows={5}
+          paginatorLeft
+          rowsPerPageOptions={[5, 10, 25, 50]}
           scrollable
           stripedRows
           showGridlines
           emptyMessage="Không tìm thấy dữ liệu"
+          className="bg-white border-gray-200 shadow-sm border rounded-md"
+          header={
+            <TableToolbar
+              query={query}
+              setQuery={setQuery}
+              onExportCSV={exportCSV}
+              onExportPdf={exportPdf}
+              onExportExcel={exportExcel}
+            />
+          }
         >
           <Column field="_id" header="Mã hóa đơn" sortable />
           <Column field="patient" header="Bệnh nhân" sortable />
@@ -181,13 +140,13 @@ const ManageInvoice = () => {
             field="total"
             header="Tổng tiền"
             sortable
-            body={totalBodyTemplate}
+            body={totalPriceColumn}
           />
           <Column
             field="status"
             header="Trạng thái"
             sortable
-            body={statusBodyTemplate}
+            body={invoiceStatusBodyTemplate}
           />
           <Column
             field="createdAt"
@@ -202,24 +161,6 @@ const ManageInvoice = () => {
           />
         </DataTable>
       </div>
-
-      {paginator.totalResults > LIMIT_AMOUNT && (
-        <div className="flex items-center  justify-end mt-8 gap-2">
-          <Button
-            severity="secondary"
-            onClick={onPrevPage}
-            icon="pi pi-angle-left"
-          />
-          <div className="flex items-center gap-2 text-xl font-semibold">
-            <p>{paginator.currentPage}</p> / <p>{paginator.totalPages}</p>
-          </div>
-          <Button
-            severity="secondary"
-            onClick={onNextPage}
-            icon="pi pi-angle-right"
-          />
-        </div>
-      )}
 
       <Dialog
         header={`Thông tin hóa đơn khám bệnh`}
