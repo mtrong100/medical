@@ -65,7 +65,7 @@ const MedicalServicePriceChart = ({ loading, dataSet = [], labels }) => {
   }, [textColor, textColorSecondary, surfaceBorder]);
 
   if (loading) {
-    return <Skeleton height={400}></Skeleton>;
+    return <Skeleton height={350}></Skeleton>;
   }
 
   return (
@@ -73,7 +73,7 @@ const MedicalServicePriceChart = ({ loading, dataSet = [], labels }) => {
       type="bar"
       data={chartData}
       options={chartOptions}
-      className="rounded-md border border-gray-200 p-5 bg-white shadow-sm flex items-center justify-center h-[400px]"
+      className="rounded-md border border-gray-200 p-5 bg-white shadow-sm flex items-center justify-center h-[350px]"
     />
   );
 };
