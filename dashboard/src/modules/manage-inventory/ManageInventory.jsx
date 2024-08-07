@@ -38,6 +38,8 @@ const ManageInventory = () => {
     onUpdateStatus,
   } = useManageInventory();
 
+  console.log(data);
+
   const actionBodyTemplate = (rowData) => {
     return (
       <div className="flex items-center gap-2 ">
@@ -177,6 +179,7 @@ const ManageInventory = () => {
               value={detail?.items}
             >
               <Column field="name" header="Tên" sortable />
+              <Column field="category" header="Danh mục" sortable />
               <Column
                 field="price"
                 header="Đơn giá"

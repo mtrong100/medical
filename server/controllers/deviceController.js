@@ -4,6 +4,7 @@ import {
   getDeviceCollectionService,
   getDeviceDetailService,
   getDevicesService,
+  getDeviceStatsService,
   updateDeviceService,
 } from "../services/deviceService.js";
 import mongoose from "mongoose";
@@ -42,6 +43,16 @@ export const getDeviceDetail = async (req, res) => {
     return res.status(200).json(device);
   } catch (error) {
     console.log("Lỗi tại controller getDeviceDetail", error);
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getDeviceStats = async (req, res) => {
+  try {
+    const device = await getDeviceStatsService();
+    return res.status(200).json(device);
+  } catch (error) {
+    console.log("Lỗi tại controller getDeviceStats", error);
     return res.status(500).json({ message: error.message });
   }
 };

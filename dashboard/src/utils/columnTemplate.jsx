@@ -42,7 +42,7 @@ export const itemTypeBodyTemplate = (rowData) => {
   return (
     <>
       {rowData.itemType === "Device" ? (
-        <Tag value="Thiết bị" icon="pi pi-desktop" severity="info" />
+        <Tag value="Vật tư" icon="pi pi-desktop" severity="info" />
       ) : (
         <Tag value="Thuốc" icon="pi pi-sparkles" severity="warning" />
       )}

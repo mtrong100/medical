@@ -66,7 +66,7 @@ export const SIDEBAR_LINKS = [
   },
   {
     icon: "pi pi-server",
-    name: "Thiết bị",
+    name: "Vật tư",
     link: "/device",
   },
   {

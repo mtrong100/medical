@@ -5,6 +5,7 @@ import {
   getDeviceCollection,
   getDeviceDetail,
   getDevices,
+  getDeviceStats,
   updateDevice,
 } from "../controllers/deviceController.js";
 import {
@@ -18,6 +19,8 @@ const router = express.Router();
 router.get("/collection", verifyAdmin, getDeviceCollection);
 
 router.get("/", verifyAdmin, getDevices);
+
+router.get("/stats", getDeviceStats);
 
 router.get("/:id", verifyAdmin, getDeviceDetail);
 

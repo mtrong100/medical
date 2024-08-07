@@ -1,7 +1,7 @@
 import useGetDeviceDetail from "./useGetDeviceDetail";
 import toast from "react-hot-toast";
 import TitleSection from "../../components/TitleSection";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import FieldInput from "../../components/FieldInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,10 +9,13 @@ import { useForm } from "react-hook-form";
 import { updateDeviceApi } from "../../api/deviceApi";
 import { deviceSchema } from "../../validations/deviceSchema";
 import { Button } from "primereact/button";
+import { Dropdown } from "primereact/dropdown";
+import { MATERIALS } from "../../utils/constants";
 
 const UpdateDevice = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const { detail, fetchDetail } = useGetDeviceDetail();
 
   const {
@@ -32,6 +35,7 @@ const UpdateDevice = () => {
   useEffect(() => {
     if (detail) {
       reset({ ...detail });
+      setSelectedCategory(detail?.category);
     }
   }, [detail, reset]);
 
@@ -66,15 +70,15 @@ const UpdateDevice = () => {
                 placeholder="Nhập tên thiết bị"
               />
 
-              <FieldInput
-                label="Danh mục"
-                type="text"
-                name="category"
-                htmlFor="category"
-                register={register}
-                errorMessage={errors?.category?.message}
-                placeholder="Nhập danh mục"
-              />
+              <div className="flex flex-col gap-2">
+                <label>Danh mục</label>
+                <Dropdown
+                  options={MATERIALS}
+                  placeholder="Chọn danh mục"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.value)}
+                />
+              </div>
 
               <FieldInput
                 label="Giá tiền"

@@ -15,6 +15,11 @@ export const getDeviceDetailApi = async (id) => {
   return response;
 };
 
+export const getDeviceStatsApi = async () => {
+  const response = await axios.get("/devices/stats");
+  return response;
+};
+
 export const createDeviceApi = async (data) => {
   const response = await axios.post("/devices/create", data);
   return response;

@@ -34,6 +34,7 @@ export const getInventoryService = async (page = 1, limit = 10) => {
           return {
             name: item.device.name,
             quantity: item.quantity,
+            // category: item.device.category,
             price: item.device.price,
           };
         }

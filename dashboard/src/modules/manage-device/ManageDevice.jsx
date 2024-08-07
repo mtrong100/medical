@@ -13,11 +13,15 @@ import {
   priceBodyTemplate,
   totalPriceStockTemplate,
 } from "../../utils/columnTemplate";
+import useGetDeviceStats from "./useGetDeviceStats";
+import DeviceByCategoryChart from "./DeviceByCategoryChart";
+import DeviceByCategoryPieChart from "./DeviceByCategoryPieChart";
 
 const ManageDevice = () => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [detail, setDetail] = useState(null);
+  const { loadingStats, stats } = useGetDeviceStats();
   const {
     dt,
     data,
@@ -60,20 +64,33 @@ const ManageDevice = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
-        <TitleSection>Quản lí thiết bị</TitleSection>
+        <TitleSection>Quản lí vật tư</TitleSection>
         <div className="flex items-center gap-5">
           <Button
-            label="Nhập thêm thiết bị"
+            label="Nhập thêm vật tư"
             severity="help"
             icon="pi pi-cart-plus"
             onClick={() => navigate("/inventory-device/create")}
           />
           <Button
-            label="Tạo mới thiết bị"
+            label="Tạo mới vật tư"
             icon="pi pi-plus"
             onClick={() => navigate("/device/create")}
           />
         </div>
+      </div>
+
+      <div className="mt-5 grid grid-cols-[minmax(0,_1fr)_400px] gap-5">
+        <DeviceByCategoryChart
+          loading={loadingStats}
+          labels={stats?.deviceCategories}
+          dataSet={stats?.deviceCountByCategory}
+        />
+        <DeviceByCategoryPieChart
+          loading={loadingStats}
+          labels={stats?.deviceCategories}
+          dataSet={stats?.deviceCountByCategory}
+        />
       </div>
 
       <div className="mt-5">
@@ -99,7 +116,7 @@ const ManageDevice = () => {
             />
           }
         >
-          <Column field="_id" header="Mã thiết bị" sortable />
+          <Column field="_id" header="Mã vật tư" sortable />
           <Column field="name" header="Tên" sortable />
           <Column field="category" header="Danh mục" sortable />
           <Column
@@ -119,7 +136,7 @@ const ManageDevice = () => {
       </div>
 
       <Dialog
-        header={`Thông tin thiết bị`}
+        header={`Thông tin vật tư`}
         visible={visible}
         style={{ width: "50vw" }}
         onHide={() => {

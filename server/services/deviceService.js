@@ -52,6 +52,33 @@ export const getDeviceDetailService = async (id) => {
   }
 };
 
+export const getDeviceStatsService = async () => {
+  try {
+    const deviceCategories = await Device.distinct("category");
+
+    const deviceByCategory = await Device.aggregate([
+      {
+        $group: {
+          _id: "$category",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const deviceCountByCategory = deviceByCategory.map((item) => item.count);
+
+    const results = {
+      deviceCategories,
+      deviceCountByCategory,
+    };
+
+    return results;
+  } catch (error) {
+    console.log("Lỗi tại service getDeviceStatsService", error);
+    throw new Error(error.message);
+  }
+};
+
 export const createDeviceService = async (data) => {
   try {
     const newDevice = new Device(data);

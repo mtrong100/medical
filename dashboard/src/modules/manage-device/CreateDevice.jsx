@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import TitleSection from "../../components/TitleSection";
-import React from "react";
+import React, { useState } from "react";
 import FieldInput from "../../components/FieldInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
@@ -8,9 +8,12 @@ import { useForm } from "react-hook-form";
 import { Button } from "primereact/button";
 import { deviceSchema } from "../../validations/deviceSchema";
 import { createDeviceApi } from "../../api/deviceApi";
+import { Dropdown } from "primereact/dropdown";
+import { MATERIALS } from "../../utils/constants";
 
 const CreateDevice = () => {
   const navigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   const {
     register,
@@ -38,6 +41,7 @@ const CreateDevice = () => {
       toast.error("Lỗi tạo mới");
     } finally {
       reset();
+      setSelectedCategory(null);
     }
   };
 
@@ -59,15 +63,15 @@ const CreateDevice = () => {
                 placeholder="Nhập tên thiết bị"
               />
 
-              <FieldInput
-                label="Danh mục"
-                type="text"
-                name="category"
-                htmlFor="category"
-                register={register}
-                errorMessage={errors?.category?.message}
-                placeholder="Nhập danh mục"
-              />
+              <div className="flex flex-col gap-2">
+                <label>Danh mục</label>
+                <Dropdown
+                  options={MATERIALS}
+                  placeholder="Chọn danh mục"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.value)}
+                />
+              </div>
 
               <FieldInput
                 label="Giá tiền"

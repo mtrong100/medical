@@ -5,7 +5,7 @@ import { Skeleton } from "primereact/skeleton";
 const ExpenseChart = ({ dataSet = [], loading }) => {
   const chartData = useMemo(
     () => ({
-      labels: ["Thiết bị", "Thuốc"],
+      labels: ["Vật tư", "Thuốc"],
       datasets: [
         {
           label: "Tổng chi phí",

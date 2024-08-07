@@ -6,11 +6,6 @@ export const deviceSchema = yup.object().shape({
     .min(2, "Tên phải có ít nhất 2 ký tự")
     .max(50, "Tên không được vượt quá 50 ký tự")
     .required("Tên là bắt buộc"),
-  category: yup
-    .string()
-    .min(2, "Loại phải có ít nhất 2 ký tự")
-    .max(50, "Loại phải có nhất 50 ký tự")
-    .required("Loại là bắt buộc"),
   price: yup
     .number()
     .required("Giá là bắt buộc")
